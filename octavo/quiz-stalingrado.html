@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz · Batalla de Stalingrado</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#f5f3ee; --surface:#fff; --ink:#1f2328; --muted:#5d6470; --line:#dcd8cf;
+  --c:#1f7a5c; --soft:#dcefe7; --ok:#1f7a3a; --ok-soft:#dff3e5; --bad:#b4372f; --bad-soft:#f8e1de;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#16181c; --surface:#20232a; --ink:#eceae4; --muted:#a3a9b3; --line:#343842;
+  --c:#5fc49f; --soft:#183329; --ok:#6fd38f; --ok-soft:#173222; --bad:#f08a80; --bad-soft:#3a1f1c; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:18px; line-height:1.5}
+.wrap{max-width:720px; margin:0 auto; padding:20px max(16px,env(safe-area-inset-right)) 48px max(16px,env(safe-area-inset-left))}
+a.back{display:inline-block; color:var(--ink); font-weight:700; text-decoration:none; padding:10px 16px; border:2px solid var(--line); border-radius:999px; background:var(--surface); margin-bottom:14px}
+.tag{display:inline-block; font-size:.8rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--c); background:var(--soft); padding:4px 10px; border-radius:6px}
+h1{font-family:var(--display); font-weight:800; font-size:clamp(1.8rem,7vw,2.6rem); line-height:1.08; margin:10px 0 6px; text-wrap:balance}
+.sub{color:var(--muted); margin:0 0 18px}
+.card{background:var(--surface); border:2px solid var(--line); border-radius:16px; padding:20px}
+label{font-weight:700; display:block; margin-bottom:8px}
+input{width:100%; font:inherit; font-size:1.1rem; padding:14px; border:2px solid var(--line); border-radius:12px; background:var(--bg); color:var(--ink)}
+.btn{display:block; width:100%; border:0; cursor:pointer; font:inherit; font-weight:700; font-size:1.15rem; padding:16px; border-radius:12px; background:var(--c); color:var(--surface); margin-top:16px}
+.btn:disabled{opacity:.45; cursor:default}
+.btn:focus-visible,.opt:focus-visible,input:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+.bar{height:10px; background:var(--line); border-radius:99px; overflow:hidden; margin:4px 0 16px}
+.bar i{display:block; height:100%; background:var(--c); transition:width .3s}
+.count{color:var(--muted); font-weight:700; font-variant-numeric:tabular-nums}
+.q{font-family:var(--display); font-weight:600; font-size:1.35rem; line-height:1.25; margin:6px 0 16px; text-wrap:balance}
+.opts{display:flex; flex-direction:column; gap:10px}
+.opt{text-align:left; font:inherit; font-size:1.08rem; cursor:pointer; padding:15px 16px; border:2px solid var(--line); border-radius:12px; background:var(--bg); color:var(--ink)}
+.opt.ok{border-color:var(--ok); background:var(--ok-soft)}
+.opt.bad{border-color:var(--bad); background:var(--bad-soft)}
+.opt:disabled{cursor:default}
+.fb{margin-top:14px; padding:14px 16px; border-radius:12px; background:var(--soft)}
+.fb b{display:block}
+.score{font-family:var(--display); font-weight:800; font-size:4rem; line-height:1; color:var(--c); font-variant-numeric:tabular-nums}
+.res li{margin-bottom:6px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../#octavo">← Volver a 8.º EGB</a>
+  <span class="tag">Estudios Sociales · 8.º EGB</span>
+  <h1>La Batalla de Stalingrado</h1>
+  <p class="sub">10 preguntas · Proyecto Cine creativo · Fase 1: investigar antes de filmar</p>
+  <div id="app"></div>
+</div>
+<script>
+const P = [
+ {q:"¿Dónde y cuándo ocurrió la Batalla de Stalingrado?",
+  o:["En Francia, en 1944","Junto al río Volga (Unión Soviética), de 1942 a 1943","En Berlín, en 1945","En Polonia, en 1939"], c:1,
+  e:"Se luchó en Stalingrado (hoy Volgogrado), a orillas del río Volga, desde agosto de 1942 hasta febrero de 1943."},
+ {q:"¿Qué dos países se enfrentaron principalmente en esta batalla?",
+  o:["Alemania y la Unión Soviética","Japón y Estados Unidos","Italia y Gran Bretaña","Francia y Alemania"], c:0,
+  e:"El ejército de la Alemania nazi atacó la ciudad y el Ejército Rojo de la Unión Soviética la defendió."},
+ {q:"¿Por qué Hitler quería tomar Stalingrado?",
+  o:["Porque allí estaba la capital soviética","Para controlar el río Volga y abrir camino al petróleo del Cáucaso","Porque tenía un puerto en el océano Atlántico","Para firmar la paz con Stalin"], c:1,
+  e:"El Volga era una ruta clave de transporte y el petróleo del Cáucaso era vital para la guerra. Además, la ciudad llevaba el nombre de Stalin: tomarla tenía un gran valor simbólico."},
+ {q:"Los soldados llamaron a la lucha dentro de la ciudad “guerra de ratas”. ¿Qué significa?",
+  o:["Que había plagas de ratas en los cuarteles","Que se peleaba calle por calle, entre ruinas, sótanos y edificios destruidos","Que solo combatían por la noche","Que usaban animales como espías"], c:1,
+  e:"La ciudad quedó en ruinas y se combatía casa por casa y piso por piso, muchas veces a pocos metros del enemigo."},
+ {q:"¿Qué fue la Operación Urano (noviembre de 1942)?",
+  o:["Un bombardeo alemán sobre Moscú","El contraataque soviético que rodeó al 6.º Ejército alemán dentro de la ciudad","Un tratado de paz","Una evacuación de civiles hacia Siberia"], c:1,
+  e:"El Ejército Rojo atacó por los flancos y cerró un cerco alrededor de las tropas del general Paulus, que quedaron atrapadas sin suministros."},
+ {q:"Además del enemigo, ¿qué otro factor golpeó duramente a los soldados alemanes cercados?",
+  o:["El calor del desierto","El invierno ruso extremo y la falta de comida y municiones","Las inundaciones del mar","Una erupción volcánica"], c:1,
+  e:"Con temperaturas bajo cero y sin suficiente abastecimiento por aire, miles de soldados murieron de frío, hambre y enfermedades."},
+ {q:"¿Por qué se dice que Stalingrado fue un punto de quiebre de la Segunda Guerra Mundial?",
+  o:["Porque terminó la guerra ese mismo día","Porque fue la primera gran derrota alemana y desde allí la Unión Soviética avanzó hacia Berlín","Porque Alemania conquistó toda la Unión Soviética","Porque Estados Unidos entró a la guerra allí"], c:1,
+  e:"En febrero de 1943 se rindió el 6.º Ejército alemán. Alemania perdió la iniciativa en el frente oriental y el Ejército Rojo empezó su avance hacia el oeste."},
+ {q:"Mientras se peleaba en Stalingrado, ¿qué posición tomó Ecuador frente a la guerra?",
+  o:["Se alió con Alemania","En enero de 1942 rompió relaciones con los países del Eje (Alemania, Italia y Japón)","Envió soldados a Stalingrado","No se enteró de la guerra"], c:1,
+  e:"En la Conferencia de Río de Janeiro (enero de 1942), Ecuador y otros países americanos rompieron relaciones con el Eje y se ubicaron del lado de los Aliados."},
+ {q:"¿Qué huella dejó la Segunda Guerra Mundial en las islas Galápagos?",
+  o:["Una base militar de Estados Unidos en la isla Baltra para proteger el Canal de Panamá","Una fábrica de tanques alemanes","Una batalla naval entre Ecuador y Japón","Un campo de prisioneros soviéticos"], c:0,
+  e:"Estados Unidos instaló una base aérea en Baltra para vigilar el Pacífico y el Canal de Panamá. Hoy esa pista es el aeropuerto de Baltra."},
+ {q:"Para el guion del cortometraje necesitas datos confiables. ¿Cuál fuente es mejor?",
+  o:["Un video sin autor en redes sociales","Un comentario en un foro de videojuegos","La página de un museo, una universidad o una enciclopedia reconocida, revisando más de una","Lo que recuerda un amigo de una película"], c:2,
+  e:"Una buena investigación usa fuentes con autor o institución responsable y compara al menos dos de ellas antes de escribir."}
+];
+
+const app = document.getElementById("app");
+let nombre = "", i = 0, aciertos = 0, fallos = [];
+
+function inicio(){
+  app.innerHTML = `<div class="card">
+    <label for="nom">Escribe tu nombre y apellido</label>
+    <input id="nom" autocomplete="name" placeholder="Ej.: Mateo Guamán">
+    <button class="btn" id="go" disabled>Empezar</button></div>`;
+  const inp = document.getElementById("nom"), go = document.getElementById("go");
+  inp.oninput = () => go.disabled = inp.value.trim().length < 3;
+  go.onclick = () => { nombre = inp.value.trim(); pregunta(); };
+}
+
+function pregunta(){
+  const p = P[i];
+  app.innerHTML = `<div class="card">
+    <span class="count">Pregunta ${i+1} de ${P.length}</span>
+    <div class="bar"><i style="width:${(i/P.length)*100}%"></i></div>
+    <p class="q">${p.q}</p>
+    <div class="opts">${p.o.map((t,k)=>`<button class="opt" data-k="${k}">${t}</button>`).join("")}</div>
+    <div id="fb"></div></div>`;
+  app.querySelectorAll(".opt").forEach(b => b.onclick = () => responder(+b.dataset.k));
+  window.scrollTo(0,0);
+}
+
+function responder(k){
+  const p = P[i], bien = k === p.c, bs = app.querySelectorAll(".opt");
+  bs.forEach(b => b.disabled = true);
+  bs[p.c].classList.add("ok");
+  if (bien) aciertos++; else { bs[k].classList.add("bad"); fallos.push(i); }
+  document.getElementById("fb").innerHTML = `<div class="fb"><b>${bien ? "¡Correcto!" : "No es esa."}</b>${p.e}</div>
+    <button class="btn" id="next">${i < P.length-1 ? "Siguiente" : "Ver mi resultado"}</button>`;
+  document.getElementById("next").onclick = () => { i++; i < P.length ? pregunta() : final(); };
+}
+
+function final(){
+  const nota = (aciertos / P.length * 10).toFixed(1).replace(".0","");
+  const msg = aciertos >= 9 ? "Excelente investigación." : aciertos >= 7 ? "Muy bien, ya tienes la base para el guion." : "Repasa las preguntas que fallaste antes de la próxima clase.";
+  app.innerHTML = `<div class="card">
+    <span class="count">${nombre}</span>
+    <div class="score">${nota}<span style="font-size:1.5rem">/10</span></div>
+    <p><b>${aciertos} de ${P.length} correctas.</b> ${msg}</p>
+    ${fallos.length ? `<p><b>Para repasar:</b></p><ul class="res">${fallos.map(n=>`<li>${P[n].q}<br><span style="color:var(--muted)">${P[n].o[P[n].c]}</span></li>`).join("")}</ul>` : ""}
+    <p style="color:var(--muted)">Toma una captura de esta pantalla y envíala al docente.</p>
+    <button class="btn" id="re">Intentar de nuevo</button></div>`;
+  document.getElementById("re").onclick = () => { i = 0; aciertos = 0; fallos = []; pregunta(); };
+  window.scrollTo(0,0);
+}
+inicio();
+</script>
+</body>
+</html>
