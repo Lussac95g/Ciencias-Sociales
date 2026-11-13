@@ -1,0 +1,318 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script src="../js/registro.js"></script></head><body>
+<title>Estaciones de Historia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Concepto: recorrido por estaciones, una tarjeta por pregunta, nota grande al final */
+:root{--bg:#f1f5f2;--fg:#14241f;--mut:#52645d;--card:#ffffff;--line:#d3e0d9;--ac:#0b6b5d;--acfg:#fff;--ac2:#c46a14;--soft:#e0efe9;--ok:#157347;--okbg:#e2f4ea;--bad:#b3261e;--badbg:#fbe7e5;--warn:#8a5a00;--warnbg:#fff1d6;
+--fd:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;--fb:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b17;--fg:#e6f3ee;--mut:#9bb5aa;--card:#172721;--line:#28413a;--ac:#5fd3bd;--acfg:#08201b;--ac2:#f0a24d;--soft:#1e362f;--ok:#6ed19a;--okbg:#10301f;--bad:#ff9d94;--badbg:#3a1714;--warn:#f1c36b;--warnbg:#33260a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1b17;--fg:#e6f3ee;--mut:#9bb5aa;--card:#172721;--line:#28413a;--ac:#5fd3bd;--acfg:#08201b;--ac2:#f0a24d;--soft:#1e362f;--ok:#6ed19a;--okbg:#10301f;--bad:#ff9d94;--badbg:#3a1714;--warn:#f1c36b;--warnbg:#33260a;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.55 var(--fb);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+.wrap{max-width:780px;margin:0 auto;padding-block:20px 56px;display:flex;flex-direction:column;gap:18px;min-width:0}
+h1,h2,h3{font-family:var(--fd);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,7vw,46px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(23px,5vw,30px);font-weight:800}
+h3{font-size:19px;font-weight:600}
+p{margin:0}
+.mut{color:var(--mut)}.sm{font-size:15px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.btn{font:600 18px var(--fb);min-height:54px;border-radius:14px;border:0;background:var(--ac);color:var(--acfg);padding:12px 22px;cursor:pointer;width:100%}
+.btn.alt{background:transparent;color:var(--ac);border:2px solid var(--ac)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.opt:focus-visible,select:focus-visible,input:focus-visible,.seg button:focus-visible,.mv button:focus-visible,.st:focus-visible{outline:3px solid var(--ac2);outline-offset:2px}
+.row2{display:flex;gap:12px;flex-wrap:wrap}.row2>*{flex:1 1 220px}
+label{font-weight:600;font-size:15px;display:flex;flex-direction:column;gap:6px}
+input,select{font:17px var(--fb);min-height:50px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);padding:8px 12px;width:100%;min-width:0}
+.sts{display:grid;gap:12px}
+.st{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;font:inherit;color:inherit;width:100%}
+.st:hover{border-color:var(--ac)}
+.num{width:46px;height:46px;border-radius:50%;background:var(--soft);color:var(--ac);display:grid;place-items:center;font:800 21px var(--fd)}
+.st .t{display:flex;flex-direction:column;gap:2px;min-width:0}.st .t b{font:600 18px var(--fd)}
+.nota{font:800 26px var(--fd);color:var(--ac);white-space:nowrap}.nota small{font-size:14px;color:var(--mut);font-weight:600}
+.pill{font-size:13px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--ac);white-space:nowrap}
+.top{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:10px;z-index:5;display:flex;flex-direction:column;gap:8px}
+.bar{height:8px;border-radius:9px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;background:var(--ac);transition:width .3s}
+.tr{display:flex;justify-content:space-between;gap:10px;font-size:14px;color:var(--mut)}
+.pts{align-self:flex-start;font-size:13px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--soft);color:var(--ac)}
+.q{font:600 20px/1.4 var(--fd)}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:500 17px/1.4 var(--fb);text-align:left;min-height:54px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer;width:100%}
+.opt.sel{border-color:var(--ac);background:var(--soft)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}.opt.bad{border-color:var(--bad);background:var(--badbg)}.opt.miss{border-color:var(--ok);border-style:dashed}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;flex-direction:column;gap:8px;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg)}
+.row.ok{border-color:var(--ok);background:var(--okbg)}.row.bad{border-color:var(--bad);background:var(--badbg)}
+.legend{display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:12px;background:var(--soft);font-size:16px}
+.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{flex:1 1 130px;min-height:48px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);font:500 16px var(--fb);cursor:pointer;padding:8px}
+.seg button.sel{background:var(--ac);color:var(--acfg);border-color:var(--ac)}
+.ordrow{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center}
+.mv{display:flex;gap:6px}.mv button{width:46px;height:46px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--fg);font-size:18px;cursor:pointer}.mv button:disabled{opacity:.3}
+.fillp{line-height:2.4}.fillp select{width:auto;min-width:150px;display:inline-block;min-height:44px;margin-inline:4px}.fillp select.ok{border-color:var(--ok);background:var(--okbg)}.fillp select.bad{border-color:var(--bad);background:var(--badbg)}
+.fb{padding:14px;border-radius:12px;display:flex;flex-direction:column;gap:6px}
+.fb.ok{background:var(--okbg);color:var(--ok)}.fb.bad{background:var(--badbg)}.fb.part{background:var(--warnbg);color:var(--warn)}
+.fb.bad,.fb.ok,.fb.part{border:1px solid var(--line)}
+.fb b{font-family:var(--fd);font-size:18px}.fb p{color:var(--fg);font-size:16px}
+.know{padding:14px;border-radius:12px;background:var(--soft);font-size:16px}.know b{color:var(--ac)}
+.repaso ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.cert{border:2px solid var(--ac);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:12px;background:var(--card);align-items:center;text-align:center}
+.big{font:800 clamp(64px,22vw,110px)/1 var(--fd);color:var(--ac)}.big small{font-size:.32em;color:var(--mut)}
+.scale{font-weight:600;padding:6px 14px;border-radius:99px;background:var(--soft);color:var(--ac)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:15px;text-align:left;width:100%;max-width:420px}.meta dt{color:var(--mut)}.meta dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.shot{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:14px;background:var(--warnbg);border:2px dashed var(--warn);color:var(--fg)}
+.shot b{display:block;font-family:var(--fd);font-size:19px;margin-bottom:4px}.shot span.ico{font-size:30px;line-height:1}
+.rev{display:flex;flex-direction:column;gap:8px}.rev div{display:flex;gap:10px;font-size:15px;align-items:flex-start}.rev .d{width:12px;height:12px;border-radius:50%;margin-top:6px;flex:none}
+.d.ok{background:var(--ok)}.d.bad{background:var(--bad)}.d.part{background:var(--warn)}
+.tblw{overflow-x:auto}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (min-width:700px){.card{padding:24px}.sts{grid-template-columns:1fr 1fr}.sts .st{grid-template-columns:auto 1fr}.sts .st .nota,.sts .st .pill{grid-column:2}}
+</style>
+<div class="wrap" id="app"></div>
+<script>
+const CFG={"key": "est-hist-1bgu", "title": "Estaciones de Historia", "eyebrow": "Historia · Primero BGU", "intro": "Repasa cada tema, practica con preguntas y consigue una nota sobre 10 en cada estación.", "how": ["Cada estación es un tema distinto y tiene su propia nota sobre 10.", "Lee el repaso, responde las preguntas y mira la explicación después de cada una.", "Al terminar verás tu nota. Puedes repetir la estación para mejorarla; vale el último intento.", "Toma una captura de pantalla de tu nota y envíala por la plataforma."], "asig": "Historia"};
+/* constructores de preguntas */
+const mc=(q,o,a,e,w=1)=>({t:"mc",q,o,a,e,w});
+const multi=(q,o,a,e,w=1)=>({t:"multi",q,o,a,e,w});
+const match=(q,l,r,a,e,w=1)=>({t:"match",q,l,r,a,e,w});
+const classify=(q,cats,items,e,w=1)=>({t:"classify",q,cats,items,e,w});
+const order=(q,items,e,w=1)=>({t:"order",q,items,e,w});
+const fill=(q,_,a,bank,e,w=1)=>({t:"fill",q:"Completa el texto con las palabras de la lista.",text:q.replace(/^Completa:\s*/,""),a,bank,e,w});
+const ST=[
+{id:"h1",name:"El Paleolítico y sus herramientas",sub:"Nómadas, piedra tallada, fuego y arte rupestre",
+repaso:[
+"Paleolítico: significa «piedra antigua». Es la etapa más larga de la historia humana: desde hace unos 2,5 millones de años hasta cerca del 10 000 a. C.",
+"Modo de vida: grupos pequeños y nómadas que se desplazaban siguiendo a los animales y a las plantas de cada estación. Vivían de la caza, la pesca y la recolección.",
+"Materias primas: piedra (sílex, obsidiana), hueso, madera y pieles. Con ellas hacían cuchillos, puntas, agujas, lanzas, abrigos y tiendas.",
+"El fuego: daba calor, permitía cocinar, protegía de los animales y reunía al grupo.",
+"Arte rupestre: pinturas y grabados en cuevas, hechos con pigmentos minerales. Pudo servir para rituales, comunicación o registro de la caza.",
+"Ecuador: el sitio El Inga (Pichincha) conserva puntas de obsidiana. También hay huellas de cazadores-recolectores en Chobshi (Azuay), Cubilán (Loja) y Las Vegas (Santa Elena).",
+"Fuentes: como no había escritura, conocemos esa época por restos arqueológicos: herramientas, huesos, pinturas y huellas."],
+qs:[
+mc("La palabra «Paleolítico» significa…",["Piedra antigua","Edad del metal","Tiempo de las ciudades","Era de los reyes"],0,"Paleo significa antiguo y lithos significa piedra: la etapa en que se tallaba la piedra para fabricar herramientas."),
+match("Relaciona cada recurso con el uso que se le daba en el Paleolítico.",["Obsidiana","Hueso","Fuego","Pieles de animales"],["Agujas y punzones para coser","Abrigo y tiendas","Puntas y cuchillos muy cortantes","Cocinar, dar calor y ahuyentar animales"],[2,0,3,1],"La obsidiana es un vidrio volcánico que se talla en filos muy agudos. En Ecuador se explotaba en canteras de los Andes.",2),
+classify("¿Qué característica corresponde al Paleolítico y cuál al Neolítico?",["Paleolítico","Neolítico"],[["Grupos nómadas que seguían la caza.",0],["Aldeas donde se cultivaban plantas.",1],["Herramientas de piedra tallada.",0],["Cerámica para guardar granos.",1],["Pinturas de animales en cuevas.",0]],"El paso del Paleolítico al Neolítico marcó el cambio de apropiarse de la naturaleza a producir alimentos.",2),
+multi("¿Qué actividades eran propias de los grupos paleolíticos?",["Caza de animales","Recolección de frutos y raíces","Pesca","Construcción de grandes ciudades","Cultivo de maíz en terrazas"],[0,1,2],"Aprovechaban lo que la naturaleza ofrecía. Las ciudades y la agricultura vinieron después."),
+mc("Una cueva conserva pinturas de venados y manos humanas hechas con pigmentos minerales. ¿Qué podemos concluir con más cuidado?",["Que ese grupo daba importancia a los animales y comunicaba ideas mediante imágenes","Que ya existían escuelas","Que usaban escritura alfabética","Que vivían en grandes ciudades"],0,"El arte rupestre es una fuente. No sabemos con certeza su función, pero muestra creencias, vida cotidiana y capacidad de simbolizar."),
+mc("El sitio arqueológico El Inga, en Pichincha, es importante porque…",["Conserva puntas de obsidiana usadas por cazadores-recolectores","Es una ciudad inca","Tiene pirámides de barro","Es un puerto colonial"],0,"Allí se encontraron talleres y puntas de proyectil. Ayuda a conocer cómo vivían los primeros pobladores de los Andes ecuatorianos."),
+order("Ordena estos hechos de la prehistoria, del más antiguo al más reciente.",["Se fabrican las primeras herramientas de piedra","Se aprende a controlar el fuego","Se tallan puntas más finas de piedra","Aparece el arte rupestre"],"Los avances tecnológicos y culturales se fueron acumulando durante miles de generaciones."),
+fill("Completa: los grupos paleolíticos eran ___ porque seguían a los animales; vivían de la ___ de animales y de la ___ de frutos.","___",["nómadas","caza","recolección"],["nómadas","caza","recolección","agricultura","sedentarios"],"Su modo de vida dependía de lo que encontraban. Por eso se movían con las estaciones.",1),
+mc("¿Por qué el control del fuego fue tan importante?",["Daba calor y protección, y permitía cocinar los alimentos","Servía solo para decorar","Les permitía construir casas de ladrillo","Permitía fabricar monedas"],0,"Cocinar facilita la digestión y aprovecha mejor los alimentos. Además, reunía al grupo alrededor del calor."),
+mc("Como en el Paleolítico no existía la escritura, ¿cómo conocemos esa época?",["Por restos arqueológicos como herramientas, huesos y pinturas","Por cartas de los cazadores","Por libros de historia de la época","Por registros de una cancillería"],0,"Los arqueólogos estudian restos materiales. Esas son las fuentes de la prehistoria.")
+]},
+{id:"h2",name:"La revolución neolítica",sub:"Agricultura, ganadería, aldeas y excedente",
+repaso:[
+"Neolítico: «piedra nueva». Hacia el 10 000 a. C. algunos grupos empezaron a cultivar plantas y a criar animales. Es la «revolución neolítica».",
+"Sedentarismo: al producir su alimento, las familias se quedaron en un lugar. Surgieron aldeas con casas, graneros y campos.",
+"Excedente: producción sobrante que se almacena y puede intercambiarse. Permitió que algunas personas se dedicaran a otros oficios.",
+"Nuevas técnicas: herramientas de piedra pulida, cerámica, tejido y almacenamiento de granos.",
+"Riesgos: dependencia de las lluvias, enfermedades por convivir con animales, disputas por tierras y cosechas.",
+"Ecuador: la cultura Valdivia (Santa Elena, desde hace más de 5 000 años) tuvo agricultura y cerámica entre las más antiguas de América. En los Andes se domesticaron la papa, la quinua, la llama y el cuy."],
+qs:[
+mc("¿Qué cambio define a la revolución neolítica?",["El paso de recolectar y cazar a producir alimentos con agricultura y ganadería","El descubrimiento de la escritura","La invención de la moneda","La aparición de los imperios"],0,"Se llama revolución porque transformó profundamente la vida humana, aunque ocurrió durante miles de años."),
+order("Ordena este proceso en una aldea neolítica.",["Se siembran semillas","Se cosecha y se almacena el grano","Queda un grano sobrante, o excedente","Aparecen oficios especializados, como alfareros y tejedores"],"La agricultura produjo excedentes y los excedentes permitieron que algunas personas dejaran de producir alimentos para dedicarse a otras tareas."),
+match("Relaciona cada elemento con su aporte andino o ecuatoriano.",["Cultura Valdivia","Papa","Llama","Cuy"],["Animal andino usado para el transporte de carga","Tubérculo domesticado en los Andes","Cerámica y agricultura muy tempranas en Santa Elena","Animal criado para alimentación en los Andes"],[2,1,0,3],"Los Andes y la costa del actual Ecuador fueron centros de domesticación de plantas y animales, tan importantes como los del Medio Oriente.",2),
+multi("¿Cuáles fueron consecuencias del sedentarismo?",["Aparecieron aldeas permanentes","Creció la población","Se establecieron graneros","Desapareció toda forma de agricultura"],[0,1,2],"Quedarse en un lugar permitió almacenar alimentos y sostener más personas."),
+classify("Clasifica como ventaja o riesgo de la vida agrícola.",["Ventaja","Riesgo o problema"],[["Se podía guardar comida para épocas de sequía.",0],["Las enfermedades se contagiaban con más facilidad al convivir con animales.",1],["Se dependía de que lloviera para tener cosecha.",1],["Se producía más alimento en menos espacio.",0]],"Todo cambio histórico trae ventajas y problemas nuevos. La agricultura permitió crecer, pero creó nuevas dependencias.",2),
+mc("¿Qué es el excedente?",["La producción que sobra después de cubrir las necesidades y puede guardarse o intercambiarse","El hambre en épocas de sequía","Una herramienta de piedra pulida","Una aldea abandonada"],0,"El excedente es la base de muchos cambios posteriores: oficios, comercio, propiedad y desigualdad social."),
+fill("Completa: la ___ y la ganadería permitieron vivir en un lugar fijo, es decir, una vida ___; así surgieron las ___.","___",["agricultura","sedentaria","aldeas"],["agricultura","sedentaria","aldeas","nómada","caza"],"La producción de alimento y la vida sedentaria son inseparables en la revolución neolítica.",1),
+mc("¿Para qué servía principalmente la cerámica en el Neolítico?",["Para guardar granos, cocinar y transportar agua","Para escribir mensajes","Para cazar mamuts","Para fabricar espadas de hierro"],0,"La cerámica resolvió un problema nuevo: almacenar alimentos y líquidos sin que se echaran a perder."),
+mc("¿Qué muestra la cultura Valdivia, en la costa de Santa Elena?",["Que hace más de 5 000 años ya existían aldeas, agricultura y cerámica en el actual Ecuador","Que el Neolítico solo ocurrió en Europa","Que no hubo agricultura en América","Que los primeros pueblos eran solo cazadores"],0,"El actual territorio ecuatoriano fue escenario de procesos neolíticos propios, no solo del Medio Oriente."),
+mc("¿Por qué se la llama «revolución» si duró miles de años?",["Por la profundidad de sus cambios en la vida humana","Porque fue una guerra","Porque duró un solo día","Porque la dirigió un rey"],0,"En historia, «revolución» puede significar un cambio profundo y duradero, no necesariamente rápido.")
+]},
+{id:"h3",name:"Del excedente a la sociedad dividida",sub:"Propiedad privada, clases sociales y castas",
+repaso:[
+"Cadena de cambios: excedente → acumulación en pocas manos → propiedad privada → desigualdad → clases sociales.",
+"Propiedad privada: tierras, animales, talleres o personas que pertenecen a una persona o familia, y no a toda la comunidad.",
+"Clases sociales: grupos de personas que ocupan lugares distintos según su propiedad, su riqueza y su trabajo. Hay clases dominantes (propietarios, sacerdotes, jefes guerreros) y dominadas (campesinos, artesanos, esclavizados).",
+"Castas: grupos cerrados que se heredan y de los que no se puede cambiar. Ejemplo: los varnas de la India antigua.",
+"Primeras ciudades y Estado: templos, ejércitos, escritura, tributos. Los tributos eran entregas obligatorias de productos o trabajo.",
+"Ecuador: durante mucho tiempo hubo haciendas con grandes propiedades y trabajadores huasipungueros. El sistema terminó con las reformas agrarias de 1964 y 1973."],
+qs:[
+mc("¿Qué es una clase social?",["Un grupo de personas que ocupa un lugar semejante según su propiedad, riqueza y trabajo","Un curso escolar","Un grupo de amigos","Un equipo deportivo"],0,"Las clases sociales aparecen cuando la propiedad se concentra y el trabajo se divide."),
+match("Relaciona cada concepto con su definición.",["Propiedad privada","Clase social","Casta","Tributo"],["Grupo cerrado, que se hereda y no cambia","Entrega obligatoria de productos o trabajo a un poder","Tierras o bienes que pertenecen a una persona o familia","Grupo con un lugar semejante en la sociedad según su riqueza y trabajo"],[2,3,0,1],"Cuatro ideas que explican cómo se organizaron las primeras sociedades desiguales.",2),
+order("Ordena el proceso que lleva a la sociedad dividida en clases.",["Hay excedente de producción","Algunas familias acumulan más que otras","Se establece la propiedad privada de la tierra","Surgen clases sociales con intereses distintos"],"Cada paso fue haciendo más desigual el acceso a la riqueza."),
+classify("¿Cuáles personas pertenecen a la clase dominante y cuáles a la dominada?",["Dominante","Dominada"],[["Sacerdote que controla los graneros del templo.",0],["Campesino que entrega parte de su cosecha.",1],["Prisionero de guerra obligado a trabajar.",1],["Gran propietario de tierras y talleres.",0],["Jefe guerrero que cobra tributos.",0],["Artesano que paga tributo.",1]],"Quienes controlan los medios de producción y los excedentes forman la clase dominante. Quienes trabajan para otros forman la dominada.",3),
+mc("¿Cuál es la diferencia entre clase y casta?",["La casta se hereda y no puede cambiarse; la clase puede cambiar con el tiempo","La clase es religiosa y la casta es económica","No hay diferencia","La clase no existe en la Antigüedad"],0,"En las castas, el nacimiento decide el lugar de por vida. En las clases, aunque es difícil, hay posibilidad de ascenso o descenso."),
+mc("¿Por qué el excedente generó desigualdad?",["Porque no todos tuvieron el mismo acceso a él y algunos lo controlaron","Porque nadie lo quería","Porque destruyó las cosechas","Porque desapareció la agricultura"],0,"Quien controla el excedente controla el poder. Ese fue el origen de la riqueza concentrada."),
+multi("¿Qué instituciones aparecieron en las primeras ciudades?",["Estado o gobierno","Escritura","Templos","Ejército","Bandas nómadas de cazadores"],[0,1,2,3],"Las ciudades necesitaron organizarse: administrar tributos, registrar cuentas y defender sus recursos."),
+fill("Completa: el grano sobrante se llama ___; cuando unos pocos lo controlan aparece la ___ privada y las ___ sociales.","___",["excedente","propiedad","clases"],["excedente","propiedad","clases","tribu","nomadismo"],"Tres conceptos clave encadenados en la explicación histórica.",1),
+mc("El sistema de varnas de la India antigua es un ejemplo de…",["Castas","Democracia directa","Nomadismo","Comunidad igualitaria"],0,"Brahmanes, chatrias, vaisias y sudras: grupos cerrados que se heredaban."),
+mc("En el Ecuador, grandes haciendas concentraban la tierra y familias de trabajadores vivían como huasipungueros. ¿Qué muestra esto?",["Que la concentración de la propiedad crea relaciones de dependencia entre clases","Que todas las personas eran propietarias","Que no existían diferencias sociales","Que la agricultura no importaba"],0,"Es un ejemplo cercano de la misma lógica histórica: quien posee la tierra controla el trabajo de quienes no la tienen.")
+]},
+{id:"h4",name:"Mujeres, herencia, propiedad y esclavitud",sub:"Cambios en el rol de las mujeres y la persona convertida en mercancía",
+repaso:[
+"Comunidad matriarcal: según el planteamiento histórico que estudiamos, en muchas comunidades antiguas la descendencia se contaba por la madre (matrilineal) y las mujeres tenían un papel central.",
+"Cambio: con la propiedad privada y la herencia, los varones pasaron a controlar los bienes y el mando familiar. Se controló el matrimonio para asegurar herederos.",
+"Trabajo invisible: el cuidado de la familia suele quedar sin pago ni reconocimiento. Los roles de género cambian con la historia; no son «naturales».",
+"Esclavitud: una persona es tratada como cosa o mercancía, se compra, se vende y se hereda. Sus vías: captura en una guerra, deuda y nacimiento de madre esclavizada.",
+"Razón económica: el trabajo esclavizado producía riqueza sin salario para los propietarios.",
+"Ecuador: la esclavitud se abolió en 1851. Matilde Hidalgo fue en 1924 la primera mujer en votar en el Ecuador y en América Latina."],
+qs:[
+mc("¿Qué significa que una comunidad sea matrilineal?",["Que la descendencia y la herencia se cuentan por la línea de la madre","Que solo gobiernan los hombres","Que no existen familias","Que se vive en ciudades"],0,"Muchas sociedades antiguas se organizaban por parentesco materno antes de que se impusiera la herencia por el padre."),
+order("Ordena este proceso de cambio en el rol de las mujeres según el planteamiento estudiado.",["Se acumulan bienes como tierras y animales","Surge el interés de dejar herencia a hijos reconocidos","Se controlan el matrimonio y la vida de las mujeres","El mando de la familia pasa a los varones"],"La herencia y la propiedad modificaron relaciones familiares que antes eran distintas."),
+match("Relaciona cada concepto con su significado.",["Herencia","Patriarcado","Trabajo doméstico no pagado","Esclavitud"],["Persona tratada como cosa o mercancía","Sistema donde el mando y la propiedad quedan en manos de los varones","Traspaso de bienes a los descendientes","Cuidado del hogar sin salario ni reconocimiento social"],[2,1,3,0],"Cuatro conceptos que ayudan a analizar la historia de las desigualdades.",2),
+multi("¿Por qué vías podía una persona llegar a ser esclavizada?",["Ser capturada en una guerra","No pagar una deuda","Nacer de una madre esclavizada","Obtener una beca de estudio"],[0,1,2],"La esclavitud se sostuvo en la violencia, en la deuda y en la herencia de la condición."),
+classify("¿A quién se trata como mercancía y a quién como persona con derechos?",["Trato de mercancía","Trato de persona con derechos"],[["Se vendía junto con la tierra.",0],["Podía casarse y heredar libremente.",1],["Se heredaba como un bien más.",0],["Su trabajo se pagaba con salario.",1]],"La esclavitud negaba la condición de persona: el esclavizado era propiedad.",2),
+mc("¿Por qué se trataba a las personas esclavizadas como mercancía?",["Por una razón económica: su trabajo era gratuito y daba riqueza al propietario","Porque eran extranjeros","Porque eran enfermos","Porque querían serlo"],0,"La esclavitud fue ante todo un sistema económico de explotación del trabajo."),
+classify("Indica si cada afirmación es verdadera o falsa.",["Verdadera","Falsa"],[["El cuidado de la familia suele quedar sin salario y poco valorado.",0],["Los roles de género son naturales y nunca cambiaron en la historia.",1],["La propiedad privada y la herencia influyeron en los cambios de roles, según el planteamiento estudiado.",0],["En todas las sociedades las mujeres tuvieron siempre el mismo rol.",1]],"Los roles son construcciones históricas: cambian según las condiciones económicas, sociales y culturales.",2),
+fill("Completa: con la ___ privada, los bienes pasaron a los hijos por ___; así el mando recayó en los varones.","___",["propiedad","herencia"],["propiedad","herencia","tribu","minga"],"Propiedad y herencia son las claves del cambio en la organización familiar.",1),
+mc("¿En qué año se abolió la esclavitud en el Ecuador?",["1851","1830","1900","1944"],0,"La abolición fue en el gobierno de José María Urbina. Aun después, quedaron formas de explotación y desigualdad racial."),
+mc("¿Qué ejemplo ecuatoriano muestra que los roles de género cambian con la historia?",["En 1924 Matilde Hidalgo fue la primera mujer en votar en el Ecuador y en América Latina","Que las mujeres siempre votaron","Que los hombres nunca trabajaron en casa","Que la historia nunca cambia"],0,"Su voto abrió el camino al derecho al sufragio femenino, reconocido en la Constitución de 1929.")
+]}
+
+];
+/* utilidades */
+const LET="abcdefgh";
+const app=document.getElementById("app");
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+const fmt=n=>(Math.round(n*100)/100).toFixed(2).replace(".",",").replace(/,00$/,"").replace(/(,\d)0$/,"$1");
+const shuffle=a=>{const b=a.map((v,i)=>[v,i]);for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+const scale=n=>n>=9?"Domina los aprendizajes (DAR)":n>=7?"Alcanza los aprendizajes (AAR)":n>4?"Está próximo a alcanzar (PAAR)":"No alcanza los aprendizajes (NAAR)";
+let U={name:"",curso:""},S={};
+try{const r=JSON.parse(localStorage.getItem(CFG.key)||"{}");U=r.U||U;S=r.S||S}catch(e){}
+const save=()=>{try{localStorage.setItem(CFG.key,JSON.stringify({U,S}))}catch(e){}};
+let run=null;
+/* pantalla de inicio */
+function home(){
+  app.replaceChildren();window.scrollTo(0,0);
+  const hd=el("div");hd.style.cssText="display:flex;flex-direction:column;gap:10px;padding-top:12px";
+  hd.append(el("span","eyebrow",CFG.eyebrow),el("h1",null,CFG.title),el("p","mut",CFG.intro));
+  const who=el("div","card");
+  who.append(el("h3",null,"Tus datos"));
+  const r=el("div","row2");
+  const l1=el("label",null,"Nombres y apellidos");const i1=el("input");i1.id="nm";i1.autocomplete="name";i1.value=U.name;i1.placeholder="Ej.: María Fernanda Andrade";l1.append(i1);
+  const l2=el("label",null,"Paralelo");const s2=el("select");s2.id="cs";[["","Elige tu paralelo"],["1 BGU A","Primero BGU A"],["1 BGU B","Primero BGU B"]].forEach(([v,t])=>{const o=el("option",null,t);o.value=v;s2.append(o)});s2.value=U.curso;l2.append(s2);
+  r.append(l1,l2);who.append(r);
+  const msg=el("p","sm mut","Escribe tu nombre completo. Aparecerá en la nota que enviarás.");who.append(msg);
+  const sync=()=>{U={name:i1.value.trim(),curso:s2.value};save();msg.style.color="";msg.textContent="Escribe tu nombre completo. Aparecerá en la nota que enviarás."};
+  i1.oninput=sync;s2.onchange=sync;
+  const list=el("div","sts");
+  ST.forEach((s,i)=>{
+    const b=el("button","st");b.type="button";
+    const n=el("span","num",String(i+1));
+    const t=el("span","t");t.append(el("b",null,s.name),el("span","sm mut",s.sub+" · "+s.qs.length+" preguntas"));
+    const d=S[s.id];
+    let right;
+    if(d){right=el("span","nota");right.append(document.createTextNode(fmt(d.nota)),Object.assign(el("small"),{textContent:" / 10"}))}else right=el("span","pill","Por hacer");
+    b.append(n,t,right);
+    b.onclick=()=>{sync();if(!U.name||U.name.length<5||!U.curso){msg.textContent="Antes de empezar, escribe tu nombre completo y elige tu paralelo.";msg.style.color="var(--bad)";(U.name.length<5?i1:s2).focus();return}intro(i)};
+    list.append(b);
+  });
+  const how=el("div","card");
+  how.append(el("h3",null,"Cómo funciona"));
+  const ul=el("ul");ul.style.cssText="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px";
+  CFG.how.forEach(x=>ul.append(el("li",null,x)));how.append(ul);
+  app.append(hd,who,list,how);
+}
+/* repaso de la estación */
+function intro(i){
+  app.replaceChildren();window.scrollTo(0,0);
+  const s=ST[i];
+  const h=el("div");h.style.cssText="display:flex;flex-direction:column;gap:8px;padding-top:12px";
+  h.append(el("span","eyebrow","Estación "+(i+1)+" de "+ST.length),el("h2",null,s.name),el("p","mut",s.sub));
+  const c=el("div","card repaso");c.append(el("h3",null,"Repaso antes de empezar"));
+  const ul=el("ul");s.repaso.forEach(x=>{const li=el("li");const k=x.indexOf(":");if(k>0&&k<40){li.append(Object.assign(el("b"),{textContent:x.slice(0,k+1)}),document.createTextNode(x.slice(k+1)))}else li.textContent=x;ul.append(li)});c.append(ul);
+  const go=el("button","btn","Empezar la estación");go.type="button";go.onclick=()=>start(i);
+  const bk=el("button","btn alt","Volver a las estaciones");bk.type="button";bk.onclick=home;
+  app.append(h,c,go,bk);
+}
+function start(i){
+  const s=ST[i];const tw=s.qs.reduce((a,q)=>a+q.w,0);
+  run={i,k:0,res:[],tw};render();
+}
+/* constructores de interfaz por tipo; devuelven {box,ready(),check(),lock()} */
+function build(q){
+  const box=el("div","rows");let done=false;
+  if(q.t==="mc"){
+    const op=shuffle(q.o);let sel=null;const ob=el("div","opts");const bs=[];
+    op.forEach(([txt],k)=>{const b=el("button","opt",txt);b.type="button";b.onclick=()=>{if(done)return;sel=k;bs.forEach(x=>x.classList.remove("sel"));b.classList.add("sel");ready()};bs.push(b);ob.append(b)});
+    box.append(ob);
+    return{box,get:()=>sel!==null,check:()=>{done=true;const ok=op[sel][1]===q.a;bs.forEach((b,k)=>{if(op[k][1]===q.a)b.classList.add("ok");else if(k===sel)b.classList.add("bad")});return{f:ok?1:0,note:ok?null:"Respuesta correcta: "+q.o[q.a]}}};
+  }
+  if(q.t==="multi"){
+    const op=shuffle(q.o);const on=op.map(()=>false);const bs=[];const ob=el("div","opts");
+    box.append(el("p","sm mut","Marca todas las que correspondan."));
+    op.forEach(([txt],k)=>{const b=el("button","opt",txt);b.type="button";b.onclick=()=>{if(done)return;on[k]=!on[k];b.classList.toggle("sel",on[k]);ready()};bs.push(b);ob.append(b)});
+    box.append(ob);
+    return{box,get:()=>on.some(Boolean),check:()=>{done=true;let right=0,wrong=0,miss=[];op.forEach(([txt,orig],k)=>{const ok=q.a.includes(orig);bs[k].classList.remove("sel");if(ok&&on[k]){right++;bs[k].classList.add("ok")}else if(ok){miss.push(txt);bs[k].classList.add("miss")}else if(on[k]){wrong++;bs[k].classList.add("bad")}});const f=Math.max(0,(right-wrong)/q.a.length);return{f,note:miss.length?"Faltó marcar: "+miss.join("; "):(wrong?"Marcaste opciones que no corresponden.":null)}}};
+  }
+  if(q.t==="match"){
+    const lg=el("div","legend");q.r.forEach((t,k)=>lg.append(el("span",null,LET[k]+") "+t)));box.append(lg);
+    const sels=[],rows=[];
+    q.l.forEach((t,k)=>{const r=el("div","row");r.append(el("span",null,(k+1)+". "+t));const s=el("select");s.id="m"+run.i+"_"+run.k+"_"+k;s.setAttribute("aria-label","Respuesta para "+t);const o0=el("option",null,"Elige");o0.value="";s.append(o0);q.r.forEach((_,j)=>{const o=el("option",null,LET[j]+")");o.value=j;s.append(o)});s.onchange=()=>ready();r.append(s);sels.push(s);rows.push(r);box.append(r)});
+    return{box,get:()=>sels.every(s=>s.value!==""),check:()=>{done=true;let n=0;sels.forEach((s,k)=>{s.disabled=true;const ok=+s.value===q.a[k];if(ok)n++;rows[k].classList.add(ok?"ok":"bad");if(!ok){const c=el("span","sm","Correcta: "+LET[q.a[k]]+") "+q.r[q.a[k]]);c.style.fontWeight="600";rows[k].append(c)}});return{f:n/q.l.length,note:null}}};
+  }
+  if(q.t==="classify"){
+    const pick=q.items.map(()=>null),rows=[];
+    q.items.forEach(([t,a],k)=>{const r=el("div","row");r.append(el("span",null,t));const sg=el("div","seg");q.cats.forEach((c,j)=>{const b=el("button",null,c);b.type="button";b.onclick=()=>{if(done)return;pick[k]=j;[...sg.children].forEach(x=>x.classList.remove("sel"));b.classList.add("sel");ready()};sg.append(b)});r.append(sg);rows.push(r);box.append(r)});
+    return{box,get:()=>pick.every(p=>p!==null),check:()=>{done=true;let n=0;q.items.forEach(([t,a],k)=>{const ok=pick[k]===a;if(ok)n++;rows[k].classList.add(ok?"ok":"bad");if(!ok){const c=el("span","sm","Correcta: "+q.cats[a]);c.style.fontWeight="600";rows[k].append(c)}});return{f:n/q.items.length,note:null}}};
+  }
+  if(q.t==="order"){
+    let ord=shuffle(q.items).map(x=>x[0]);const list=el("div","rows");box.append(el("p","sm mut","Usa las flechas para poner el orden correcto, del primero al último."));
+    const draw=()=>{list.replaceChildren();ord.forEach((v,pos)=>{const r=el("div","row ordrow");r.append(el("b",null,String(pos+1)),el("span",null,v));if(!done){const mv=el("div","mv"),u=el("button",null,"▲"),d=el("button",null,"▼");u.type=d.type="button";u.setAttribute("aria-label","Subir");d.setAttribute("aria-label","Bajar");u.disabled=pos===0;d.disabled=pos===ord.length-1;u.onclick=()=>{[ord[pos-1],ord[pos]]=[ord[pos],ord[pos-1]];draw()};d.onclick=()=>{[ord[pos+1],ord[pos]]=[ord[pos],ord[pos+1]];draw()};mv.append(u,d);r.append(mv)}list.append(r)})};
+    draw();box.append(list);
+    return{box,get:()=>true,check:()=>{done=true;let n=0;const rs=[...list.children];ord.forEach((v,pos)=>{const ok=v===q.items[pos];if(ok)n++;rs[pos].classList.add(ok?"ok":"bad")});draw();const rs2=[...list.children];ord.forEach((v,pos)=>rs2[pos].classList.add(v===q.items[pos]?"ok":"bad"));return{f:n/q.items.length,note:n<q.items.length?"Orden correcto: "+q.items.map((x,i)=>(i+1)+") "+x).join("  ·  "):null}}};
+  }
+  if(q.t==="fill"){
+    box.append(Object.assign(el("div","legend"),{textContent:"Palabras disponibles: "+q.bank.join(" · ")}));
+    const p=el("p","fillp");const sels=[];const parts=q.text.split("___");
+    parts.forEach((seg,k)=>{p.append(document.createTextNode(seg));if(k<parts.length-1){const s=el("select");s.id="f"+run.i+"_"+run.k+"_"+k;s.setAttribute("aria-label","Espacio "+(k+1));const o0=el("option",null,"Elige");o0.value="";s.append(o0);shuffle(q.bank).forEach(([b])=>{const o=el("option",null,b);o.value=b;s.append(o)});s.onchange=()=>ready();sels.push(s);p.append(s)}});
+    box.append(p);
+    return{box,get:()=>sels.every(s=>s.value),check:()=>{done=true;let n=0,bad=[];sels.forEach((s,k)=>{s.disabled=true;const ok=s.value===q.a[k];if(ok)n++;else bad.push(q.a[k]);s.classList.add(ok?"ok":"bad")});return{f:n/sels.length,note:bad.length?"Debía ir: "+q.a.join(" · "):null}}};
+  }
+}
+let ready=()=>{};
+/* pregunta */
+function render(){
+  app.replaceChildren();window.scrollTo(0,0);
+  const s=ST[run.i],q=s.qs[run.k];
+  const top=el("div","top"),tr=el("div","tr");tr.append(el("span",null,"Estación "+(run.i+1)+" · "+s.name),el("span",null,(run.k+1)+" de "+s.qs.length));
+  const bar=el("div","bar"),fill=el("i");bar.append(fill);fill.style.width=(run.k/s.qs.length*100)+"%";top.append(tr,bar);
+  const card=el("div","card");
+  const pv=10*q.w/run.tw;
+  card.append(el("span","pts","Vale "+fmt(pv)+" pts"),el("p","q",q.q));
+  const B=build(q);card.append(B.box);
+  const fbw=el("div");fbw.style.cssText="display:flex;flex-direction:column;gap:12px";
+  const btn=el("button","btn","Comprobar");btn.type="button";btn.disabled=!B.get();
+  ready=()=>{if(!btn.dataset.done)btn.disabled=!B.get()};
+  btn.onclick=()=>{
+    if(btn.dataset.done){if(run.k===s.qs.length-1)result();else{run.k++;render()}return}
+    const r=B.check();btn.dataset.done="1";run.res.push({f:r.f,w:q.w,q:q.q});
+    const cls=r.f>=0.999?"ok":r.f>0?"part":"bad";
+    const fb=el("div","fb "+cls);fb.append(el("b",null,cls==="ok"?"¡Correcto! +"+fmt(pv)+" pts":cls==="part"?"Casi. +"+fmt(pv*r.f)+" de "+fmt(pv)+" pts":"Todavía no. +0 pts"));
+    if(r.note)fb.append(el("p",null,r.note));
+    const kn=el("div","know");kn.append(Object.assign(el("b"),{textContent:"Para recordar: "}),document.createTextNode(q.e));
+    fbw.append(fb,kn);
+    btn.textContent=run.k===s.qs.length-1?"Ver mi nota":"Siguiente";btn.disabled=false;btn.scrollIntoView({block:"nearest",behavior:"smooth"});
+  };
+  app.append(top,card,fbw,btn);
+}
+/* resultado */
+function result(){
+  const s=ST[run.i];const earned=run.res.reduce((a,r)=>a+r.w*r.f,0);
+  const nota=Math.round(10*earned/run.tw*100)/100;
+  const prev=S[s.id];const intento=(prev?prev.intento:0)+1;
+  const now=new Date();const fecha=now.toLocaleString("es-EC",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
+  S[s.id]={nota,intento,fecha};save();
+  try{if(window.registrarNota)registrarNota({curso:"1.º BGU Historia",grupo:String(U.curso).replace(/^1 BGU\s*/,""),evaluacion:s.name,nombre:U.name,nota,intento})}catch(_e){}
+  app.replaceChildren();window.scrollTo(0,0);
+  const h=el("div");h.style.cssText="display:flex;flex-direction:column;gap:6px;padding-top:12px";
+  h.append(el("span","eyebrow","Estación "+(run.i+1)+" terminada"),el("h2",null,s.name));
+  const cert=el("div","cert");cert.append(el("span","eyebrow",CFG.asig+" · Primero BGU"));
+  const big=el("div","big");big.append(document.createTextNode(fmt(nota)),Object.assign(el("small"),{textContent:" / 10"}));
+  cert.append(big,el("span","scale",scale(nota)));
+  const dl=el("dl","meta");[["Estudiante",U.name],["Paralelo",U.curso],["Estación",(run.i+1)+". "+s.name],["Intento",String(intento)],["Fecha y hora",fecha]].forEach(([a,b])=>{dl.append(el("dt",null,a),el("dd",null,b))});cert.append(dl);
+  const shot=el("div","shot");const ico=el("span","ico","📸");const tx=el("div");tx.append(el("b",null,"Toma una captura de pantalla de esta nota"),el("span",null,"Envíala por la plataforma. Debe verse tu nombre, la estación, la nota y la fecha."));shot.append(ico,tx);
+  const rv=el("div","card");rv.append(el("h3",null,"Cómo te fue en cada pregunta"));
+  const rl=el("div","rev");run.res.forEach((r,k)=>{const d=el("div");const c=r.f>=0.999?"ok":r.f>0?"part":"bad";d.append(Object.assign(el("span","d "+c)),el("span",null,(k+1)+". "+r.q));rl.append(d)});rv.append(rl);
+  rv.append(el("p","sm mut","Verde: bien. Amarillo: a medias. Rojo: para repasar. Puedes repetir la estación para mejorar tu nota; vale el último intento."));
+  const again=el("button","btn alt","Repetir esta estación");again.type="button";again.onclick=()=>intro(run.i);
+  const back=el("button","btn","Volver a las estaciones");back.type="button";back.onclick=home;
+  app.append(h,cert,shot,rv,again,back);
+}
+home();
+</script>
+
+</body></html>
