@@ -1,0 +1,635 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>2 · Museo del Tiempo: Estaciones 3 y 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Lexend:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#F4ECD9;--paper:#FFFBF1;--ink:#1E2A44;--muted:#566079;--terra:#B8472C;--aegean:#2A6F97;--olive:#566F2E;--gold:#D8A032;--line:#D8CBA9;--sea:#BFDCE8;--land:#EADFC2;--ok:#2B7F52;--okbg:#DDF1E4;--bad:#B8472C;--badbg:#F8E2DB;--warn:#8A5A00;--warnbg:#FFF1CC;--sel:#E4F0F6}
+:root{color-scheme:light}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 19px/1.5 Lexend,"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+.meander{height:14px;margin:0 calc(-1*max(16px,env(safe-area-inset-left,0px)));background:repeating-linear-gradient(90deg,var(--ink) 0 14px,var(--gold) 14px 18px,var(--ink) 18px 32px,var(--bg) 32px 40px);opacity:.9}
+#app{max-width:860px;margin:0 auto;padding:18px 0 56px}
+h1,h2,h3{font-family:Cinzel,Georgia,"Times New Roman",serif;line-height:1.2;margin:0;text-wrap:balance}
+h1{font-size:clamp(28px,6vw,42px);letter-spacing:.5px}
+h2{font-size:clamp(22px,4.6vw,30px)}
+h3{font-size:21px}
+p{margin:0}
+.tag{display:inline-block;font:600 13px/1 Lexend,Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:var(--terra);border-radius:999px;padding:7px 12px}
+.muted{color:var(--muted)}
+.small{font-size:16px}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:18px;padding:20px;min-width:0}
+.stack{display:flex;flex-direction:column;gap:16px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{font:600 19px/1.2 Lexend,Arial,sans-serif;min-height:56px;padding:12px 22px;border-radius:14px;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+.btn:hover{filter:brightness(1.15)}
+.btn.alt{background:var(--paper);color:var(--ink)}
+.btn.alt:hover{background:var(--sel)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;filter:none}
+.btn.go{background:var(--olive);border-color:var(--olive)}
+.hero{display:flex;flex-direction:column;gap:12px;padding:8px 0 4px}
+.hero p{font-size:20px}
+.rules{display:grid;grid-template-columns:1fr;gap:10px;margin:0;padding:0;list-style:none}
+.rules li{padding-left:34px;position:relative}
+.rules li:before{content:"";position:absolute;left:4px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px #F3DFA8}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:720px){.grid{grid-template-columns:1fr 1fr}.rules{grid-template-columns:1fr}}
+.sala{display:flex;flex-direction:column;gap:10px;border-left-width:10px;cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.sala:hover{background:#FFF6DF}
+.sala .num{font:700 40px/1 Cinzel,Georgia,serif}
+.sala .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.sala .pts{font:600 15px Lexend,Arial,sans-serif;background:var(--land);border-radius:10px;padding:6px 10px;white-space:nowrap}
+.bar{height:12px;background:var(--land);border-radius:999px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--olive);border-radius:999px;transition:width .4s}
+.c1{border-left-color:#B8472C}.c2{border-left-color:#2A6F97}.c3{border-left-color:#566F2E}.c4{border-left-color:#8A5A9E}.c5{border-left-color:#8A8A8A}
+.n1{color:#B8472C}.n2{color:#2A6F97}.n3{color:#566F2E}.n4{color:#8A5A9E}.n5{color:#6C6C6C}
+.top-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.crumb{font-size:16px;color:var(--muted)}
+.qhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chip{font:600 14px/1 Lexend,Arial,sans-serif;background:var(--land);border-radius:999px;padding:7px 12px}
+.chip.pts{background:#F3DFA8}
+.prog{display:flex;gap:6px;margin:4px 0 16px}
+.prog i{flex:1;height:10px;border-radius:6px;background:var(--line)}
+.prog i.d{background:var(--olive)}.prog i.p{background:var(--gold)}.prog i.b{background:var(--terra)}.prog i.cur{outline:3px solid var(--ink);outline-offset:1px}
+.qtext{font-size:21px;font-weight:500;margin-bottom:14px}
+.ctx{background:var(--land);border-left:6px solid var(--gold);border-radius:10px;padding:14px 16px;margin-bottom:14px;font-size:18px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;font:500 19px/1.4 Lexend,Arial,sans-serif;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 16px;min-height:56px;cursor:pointer}
+.opt:hover:not([disabled]){border-color:var(--aegean);background:var(--sel)}
+.opt b{flex:none;width:32px;height:32px;border-radius:50%;background:var(--land);display:flex;align-items:center;justify-content:center;font:700 16px Lexend,Arial,sans-serif}
+.opt.sel{border-color:var(--aegean);background:var(--sel)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.ok b{background:var(--ok);color:#fff}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.opt.bad b{background:var(--bad);color:#fff}
+.opt[disabled]{cursor:default}
+.fb{margin-top:16px;border-radius:14px;padding:16px 18px;border-left:10px solid var(--line);background:var(--paper)}
+.fb.ok{background:var(--okbg);border-color:var(--ok)}.fb.part{background:var(--warnbg);border-color:var(--gold)}.fb.bad{background:var(--badbg);border-color:var(--bad)}
+.fb h3{font-family:Lexend,Arial,sans-serif;font-size:19px;margin-bottom:6px}
+.fb ul{margin:8px 0 0;padding-left:0;list-style:none}.fb ul li{margin-bottom:6px}.fb ol{margin:8px 0;padding-left:24px}
+.fb .nb{margin-top:10px;font-size:16px;color:var(--muted)}
+.tfrow{border-top:1px solid var(--line);padding:12px 0;display:flex;flex-direction:column;gap:10px}
+.tfrow:first-child{border-top:0;padding-top:0}
+.tfbtns{display:flex;gap:10px}
+.tfbtns .opt{justify-content:center;align-items:center}
+.ord{display:flex;flex-direction:column;gap:10px}
+.ord .opt{align-items:center}
+.ord .opt b{width:40px;height:40px;font-size:20px;background:#fff;border:2px dashed var(--muted)}
+.ord .opt.sel b{background:var(--aegean);color:#fff;border:2px solid var(--aegean)}
+.ord .opt.ok b{background:var(--ok);color:#fff;border:2px solid var(--ok)}
+.ord .opt.bad b{background:var(--bad);color:#fff;border:2px solid var(--bad)}
+.sel-wrap{display:flex;flex-direction:column;gap:6px}
+select{font:500 18px Lexend,Arial,sans-serif;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 10px;min-height:52px;width:100%;max-width:100%}
+select.ok{border-color:var(--ok);background:var(--okbg)}select.bad{border-color:var(--bad);background:var(--badbg)}
+.defs{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:8px}
+.defs li{display:flex;gap:10px;align-items:flex-start}
+.defs b{flex:none;width:32px;height:32px;border-radius:50%;background:var(--aegean);color:#fff;display:flex;align-items:center;justify-content:center;font:700 16px Lexend,Arial,sans-serif}
+.mrow{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-top:1px solid var(--line)}
+@media(min-width:600px){.mrow{grid-template-columns:1fr 1fr;align-items:center;gap:14px}}
+.mrow label{font-weight:600}
+.mapbox{border:2px solid var(--line);border-radius:14px;overflow-x:auto;background:var(--land);margin-bottom:12px;-webkit-overflow-scrolling:touch}
+.mapbox svg{display:block;width:100%;min-width:680px;height:auto}
+.maphint{display:none}
+@media(max-width:760px){.maphint{display:block}}
+.cuadro .crit{border-top:1px solid var(--line);padding:12px 0;display:flex;flex-direction:column;gap:8px}
+.cuadro .crit h4{margin:0;font:700 16px Lexend,Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.cuadro .two{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:700px){.cuadro .two{grid-template-columns:1fr 1fr;align-items:start}}
+.cell{display:flex;flex-direction:column;gap:8px}
+.cell .opt{font-size:17px;padding:10px 12px;min-height:48px}
+.cell .opt b{width:28px;height:28px;font-size:14px}
+.cuadro label{font-weight:600;font-size:16px;display:block;margin-bottom:4px}
+textarea{font:400 18px/1.5 Lexend,Arial,sans-serif;width:100%;min-height:140px;border:2px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);background:#fff;resize:vertical}
+.model{background:#fff;border:2px solid var(--gold);border-radius:14px;padding:14px 16px;margin-top:14px}
+.model h3{font-family:Lexend,Arial,sans-serif;font-size:17px;margin-bottom:6px}
+.crit-list{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.crit-list label{display:flex;gap:12px;align-items:flex-start;background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}
+.crit-list input{flex:none;width:26px;height:26px;margin-top:2px;accent-color:var(--olive)}
+.navq{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+.score{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:24px 16px}
+.score .big{font:700 clamp(54px,14vw,88px)/1 Cinzel,Georgia,serif}
+.level{display:inline-block;font-weight:700;border-radius:999px;padding:8px 16px;font-size:17px}
+.lv-ok{background:var(--okbg);color:var(--ok)}.lv-part{background:var(--warnbg);color:var(--warn)}.lv-bad{background:var(--badbg);color:var(--bad)}
+.res{display:flex;flex-direction:column;gap:10px}
+.res .line{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+details{border-top:1px solid var(--line);padding-top:10px}
+summary{cursor:pointer;font-weight:600;min-height:40px;display:flex;align-items:center}
+details ul{margin:6px 0 0;padding-left:22px}
+details li{margin-bottom:6px}
+.miss{display:flex;flex-direction:column;gap:6px;margin:6px 0 0;padding:0;list-style:none}
+.miss button{font:500 16px Lexend,Arial,sans-serif;background:none;border:0;color:var(--aegean);text-decoration:underline;cursor:pointer;text-align:left;padding:4px 0;min-height:36px}
+.sem{display:flex;gap:6px;align-items:center}
+.dot{width:20px;height:20px;border-radius:50%;display:inline-block;flex:none}
+.d-v{background:var(--ok)}.d-a{background:var(--gold)}.d-r{background:var(--bad)}
+.note-box{background:var(--warnbg);border-left:8px solid var(--gold);border-radius:12px;padding:14px 16px}
+:focus-visible{outline:3px solid var(--aegean);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ---- estudio con nota ---- */
+.study{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:760px){.study{grid-template-columns:1fr 1fr}}
+.sc{background:#fff;border:2px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.sc h3{font-family:Lexend,Arial,sans-serif;font-size:19px;color:var(--ink)}
+.sc h3 span{display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--ink);align-items:center;justify-content:center;font-size:15px;margin-right:8px;vertical-align:middle}
+.sc p{font-size:18px}
+.sc.wide{grid-column:1/-1;background:#FFF6DF;border-color:var(--gold)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:600;font-size:16px}
+input[type=text]{font:500 19px Lexend,Arial,sans-serif;color:var(--ink);background:#fff;border:2px solid var(--line);border-radius:12px;padding:12px 14px;min-height:54px;width:100%}
+.two2{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:620px){.two2{grid-template-columns:2fr 1fr}}
+.xtra{margin-top:10px;background:#fff;border:2px dashed var(--gold);border-radius:12px;padding:12px 14px;font-size:17px}
+.sortbtns{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:620px){.sortbtns{grid-template-columns:1fr 1fr}}
+.sortbtns .opt{justify-content:center;align-items:center;text-align:center}
+.nota{border:3px solid var(--ink);border-radius:18px;background:var(--paper);overflow:hidden}
+.nota .nh{background:var(--ink);color:#fff;padding:12px 16px;font-size:14px;line-height:1.35;letter-spacing:.4px}
+.nota .nb2{padding:16px;display:flex;flex-direction:column;gap:12px}
+.nota .info{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:17px}
+.nota .info b{color:var(--muted);font-weight:600}
+.nota .score{padding:6px 0}
+.cap{border:3px dashed var(--terra);background:#FFF1EC;border-radius:14px;padding:14px 16px;font-weight:600;font-size:18px}
+.hist{font-size:16px;color:var(--muted)}
+.cardh{display:flex;gap:14px;align-items:center}
+.cardh .num{font:700 40px/1 Cinzel,Georgia,serif}
+
+.pp{white-space:nowrap;font-weight:500}
+.rc{margin-top:8px;font-size:17px}
+.nota .nb2{padding:14px;gap:10px}
+.nota .nh{padding:10px 14px;font-size:13px}
+.nota .info{font-size:16px;gap:2px 12px}
+.nota .score{padding:0;gap:4px}
+.nota .score .big{font-size:clamp(46px,13vw,76px)}
+.nota h2{font-size:clamp(19px,5vw,26px)}
+.cap{padding:12px 14px;font-size:16px;line-height:1.4}
+/* respaldo para celulares que no soportan gap en flexbox */
+.nogap .stack>*+*{margin-top:16px}
+.nogap .opts>*+*,.nogap .ord>*+*,.nogap .sortbtns>*+*,.nogap .defs>*+*,.nogap .miss>*+*,.nogap .res>*+*,.nogap .cell>*+*,.nogap .crit>*+*,.nogap .tfrow>*+*,.nogap .sc>*+*{margin-top:10px}
+.nogap .tfbtns>*+*{margin-left:10px}
+.nogap .row>*,.nogap .navq>*,.nogap .qhead>*,.nogap .top-nav>*{margin:0 12px 12px 0}
+.nogap .qhead>*{margin:0 8px 8px 0}
+.nogap .grid>*{margin-bottom:14px}
+.nogap .study>*{margin-bottom:12px}
+.nogap .cardh>*+*{margin-left:14px}
+.nogap .prog>*+*{margin-left:6px}
+.nogap .field>*+*{margin-top:6px}
+.nogap .two2>*{margin-bottom:12px}
+.nogap .sala>*+*{margin-top:10px}
+.nogap .opt>*+*{margin-left:12px}
+.nogap .defs li>*+*{margin-left:10px}
+.nogap .rules>*+*{margin-top:10px}
+.nogap .hero>*+*{margin-top:12px}
+@media (max-height:620px){
+.nota .nb2{padding:10px 12px;gap:6px}
+.nota .nh{padding:8px 12px;font-size:12px}
+.nota .info{font-size:14px;gap:0 10px}
+.nota .score .big{font-size:42px}
+.nota h2{font-size:18px}
+.cap{padding:8px 12px;font-size:14px;line-height:1.3}
+}
+[hidden]{display:none!important}
+.ghback{display:block;max-width:860px;margin:0 auto;padding:12px 0 0}
+.ghback a{display:inline-block;font:600 16px Lexend,"Segoe UI",Arial,sans-serif;color:var(--ink);text-decoration:none;background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:10px 16px}
+.ghback a:focus-visible{outline:3px solid var(--aegean);outline-offset:2px}
+</style></head><body>
+<div class="meander" aria-hidden="true"></div>
+<nav class="ghback"><a href="../index.html#octavo">← Rincón de Sociales</a></nav>
+<main id="app"></main>
+<script>
+/* Museo del Tiempo · Estudio con nota · Estaciones 3 y 4 (Octavo EGB). Cada estación suma 10 puntos. */
+function mc(id,pts,q,right,wrongs,why,x,ctx){return {id:id,type:'mc',kind:'Selección múltiple',pts:pts,q:q,ctx:ctx||'',o:[right].concat(wrongs),why:why,x:x||''}}
+var PART={key:'museo_notas_p2_v1',label:'Estaciones 3 y 4',ST:[
+{id:'s3',n:3,name:'Sala del Pensamiento',sub:'La plaza de las ideas',
+ study:[
+  {t:'El Mediterráneo, cuna de culturas',p:'Alrededor del mar Mediterráneo florecieron pueblos que influyeron en el mundo: los <b>fenicios</b> (navegantes y comerciantes; su alfabeto fue base de los alfabetos griego y latino), los <b>griegos</b> (democracia y filosofía), los <b>romanos</b> (leyes, latín e imperio) y los <b>hebreos</b> (de su región nació el cristianismo).'},
+  {t:'Grecia: ciudades-Estado',p:'Los griegos vivían en <b>polis</b> (ciudades-Estado) independientes. Las más famosas: <b>Atenas</b>, que desarrolló la democracia, las artes y la filosofía, y <b>Esparta</b>, que educaba a sus jóvenes para la guerra. De Grecia vienen también el teatro y los <b>Juegos Olímpicos</b>.'},
+  {t:'La democracia ateniense',p:'«Democracia» viene de <i>demos</i> (pueblo) y <i>kratos</i> (poder): gobierno del pueblo. En Atenas los ciudadanos debatían y votaban en la asamblea, en una plaza pública llamada <b>ágora</b>. Pero solo votaban los <b>varones adultos ciudadanos</b>: quedaban fuera las mujeres, los extranjeros y los esclavos. Hoy votan hombres y mujeres adultos; en el Ecuador el voto es obligatorio de 18 a 64 años. Matilde Hidalgo, en 1924, fue la primera mujer en votar en el país.'},
+  {t:'La filosofía: de los mitos a la razón',p:'<b>Filosofía</b> significa «amor por la sabiduría». Los filósofos griegos empezaron a explicar el mundo con preguntas y razones, no solo con mitos. <b>Tales de Mileto</b> pensaba que el agua era el origen de todo. <b>Sócrates</b> dialogaba y preguntaba en el ágora. <b>Platón</b> escribió <i>La República</i> y fundó la Academia. <b>Aristóteles</b> fundó el Liceo, estudió la naturaleza y la lógica, y fue maestro de Alejandro Magno.'},
+  {t:'Roma y su herencia',p:'Roma pasó de ser una ciudad a un gran imperio. Dejó el <b>latín</b> (del que nace el español), el <b>derecho romano</b> (base de muchas leyes actuales) y obras como <b>acueductos y calzadas</b>. Su unidad facilitó que nuevas ideas, como el cristianismo, viajaran por todo el Mediterráneo.'},
+  {t:'El cristianismo en el Imperio romano',p:'El cristianismo nació en <b>Judea</b>, provincia romana. Jesús de Nazaret enseñó el amor al prójimo y que todas las personas tienen la misma dignidad. Las primeras comunidades ayudaban a los pobres, y entre ellas había esclavos y mujeres. Las autoridades romanas los veían como un problema porque <b>no rendían culto al emperador ni a los dioses romanos</b> y predicaban la igualdad.'},
+  {t:'De la persecución a la religión oficial',p:'Nerón culpó a los cristianos del incendio de Roma (año 64). Diocleciano ordenó una gran persecución (303). El emperador Constantino dio <b>libertad de culto</b> con el <b>Edicto de Milán</b> (313). Con el Edicto de Tesalónica, el emperador Teodosio hizo del cristianismo la religión oficial (380).'},
+  {t:'Humanismo y respeto a la diversidad',wide:true,p:'El <b>humanismo</b> pone a la persona en el centro: toda persona tiene <b>dignidad</b> y valor. De Grecia heredamos el diálogo y la razón; del cristianismo, la igualdad y la solidaridad. Estas ideas son base de la <b>tolerancia</b>. La Constitución del Ecuador reconoce la libertad de creencias y define al Estado como intercultural, plurinacional y laico.'}],
+ qs:[
+  {id:'3a',type:'order',kind:'Ordenamiento',pts:1.0,q:'Ordena la cadena de maestros: cada uno fue maestro del siguiente. Empieza por el más antiguo (1).',
+   items:['Sócrates','Platón','Aristóteles','Alejandro Magno'],
+   why:'Sócrates fue maestro de Platón; Platón, de Aristóteles; y Aristóteles, de Alejandro Magno.',
+   x:'Platón fundó la Academia y Aristóteles el Liceo: de ahí viene la idea de «escuela».'},
+  mc('3b',0.6,'Los fenicios eran grandes navegantes y comerciantes del Mediterráneo. ¿Qué aporte suyo seguimos usando hoy?','Su alfabeto, que fue base de los alfabetos griego y latino',['La democracia','El Código de Hammurabi','Los números romanos'],
+     'Los fenicios difundieron un alfabeto sencillo con signos para sonidos, muy fácil de aprender.',
+     'Gracias a su comercio, ese alfabeto viajó por todo el Mediterráneo.'),
+  mc('3c',0.6,'¿Qué distinguía a Atenas de Esparta?','Atenas desarrolló la democracia, las artes y la filosofía; Esparta educaba a sus jóvenes para la guerra',['Atenas educaba a sus jóvenes para la guerra y Esparta desarrolló la democracia','Las dos tenían el mismo gobierno y la misma educación','Esparta inventó la filosofía y Atenas el cristianismo'],
+     'Eran ciudades griegas muy distintas: Atenas, más abierta al debate y a las artes; Esparta, muy militar.',
+     'Atenas era la ciudad de la diosa Atenea, de ahí su nombre.'),
+  mc('3d',0.6,'En la ágora de Atenas, un ciudadano propone una ley y los demás debaten y votan. ¿Qué forma de gobierno se practicaba?','Democracia: los ciudadanos participaban y decidían con su voto',['Teocracia: gobernaban los sacerdotes','Monarquía: mandaba un solo rey por herencia','Oligarquía: decidían pocas familias ricas'],
+     'La democracia ateniense era directa: los ciudadanos votaban las decisiones en la asamblea.',
+     'Aun así, no todos eran ciudadanos: mujeres, extranjeros y esclavos no votaban.'),
+  mc('3e',0.6,'En Atenas votaba solo una parte de la población. En el Ecuador de hoy, ¿quiénes votan?','Hombres y mujeres adultos: el voto es obligatorio de 18 a 64 años',['Solo los hombres con dinero','Solo los nacidos en Quito','Solo quienes tienen título universitario'],
+     'La democracia moderna amplió el derecho al voto a mujeres y hombres. En el Ecuador, a los 16 y 17 años y desde los 65 el voto es opcional.',
+     'Matilde Hidalgo votó en Machala en 1924: fue la primera mujer ecuatoriana en hacerlo.'),
+  mc('3f',0.6,'¿Qué cambio trajo la filosofía griega?','Empezar a explicar el mundo con preguntas y razones, no solo con mitos',['Dejar de usar el diálogo','Prohibir toda pregunta','Aceptar sin dudar lo que dijeran los reyes'],
+     'Los filósofos observaron, preguntaron y argumentaron: así nació el pensamiento racional.',
+     'Muchas ciencias actuales nacieron de preguntas de los filósofos griegos.'),
+  {id:'3g',type:'match',kind:'Relacionar columnas',pts:1.0,q:'Escribe la letra de la descripción que corresponde a cada pensador. Sobra una letra.',
+   letters:['A','B','C','D','E'],
+   defs:[{k:'A',t:'Dialogaba y preguntaba en el ágora; no dejó libros escritos'},{k:'B',t:'Fundó el Liceo y estudió la naturaleza y la lógica'},{k:'C',t:'Escribió La República y fundó la Academia'},{k:'D',t:'Pensaba que el agua era el origen de todas las cosas'},{k:'E',t:'Emperador que dio libertad de culto a los cristianos'}],
+   rows:[{t:'Tales de Mileto',a:'D'},{t:'Sócrates',a:'A'},{t:'Platón',a:'C'},{t:'Aristóteles',a:'B'}],
+   why:'Sobra la E: es Constantino, el emperador del Edicto de Milán.'},
+  {id:'3h',type:'sort',kind:'Clasificar',pts:1.0,q:'Clasifica cada herencia: ¿viene de Grecia o de Roma? Toca la columna correcta.',
+   cats:['Herencia de Grecia','Herencia de Roma'],
+   items:[{t:'La democracia',c:0},{t:'La filosofía',c:0},{t:'El teatro y los Juegos Olímpicos',c:0},{t:'El derecho romano',c:1},{t:'El latín, base del español',c:1},{t:'Calzadas y acueductos',c:1}],
+   why:'Grecia nos dejó la democracia, la filosofía, el teatro y los Juegos Olímpicos. Roma, el derecho, el latín y las grandes obras de ingeniería.',
+   x:'El ecuatoriano Jefferson Pérez ganó la primera medalla de oro olímpica del Ecuador en Atlanta 1996, una tradición que nació en Grecia.'},
+  mc('3i',0.6,'El cristianismo nació en Judea. ¿Qué mensaje central enseñaba Jesús en las primeras comunidades?','El amor al prójimo y que todas las personas tienen la misma dignidad',['Que había que obedecer sin pensar al emperador','Que solo los ricos merecían respeto','Que la guerra era el único camino'],
+     'Ese mensaje de igualdad atrajo a muchas personas, incluidos esclavos y mujeres.',
+     'Judea era una provincia del Imperio romano.'),
+  {id:'3j',type:'tf',kind:'Verdadero o falso',pts:1.0,q:'Marca verdadero o falso en cada frase.',
+   items:[
+    {t:'Roma siempre aceptó a los cristianos.',v:false,why:'Fueron perseguidos en varios momentos, por ejemplo con Nerón y Diocleciano.'},
+    {t:'El Edicto de Milán (313) permitió la libertad de culto.',v:true,why:'Lo promovió el emperador Constantino.'},
+    {t:'Nerón culpó a los cristianos del incendio de Roma.',v:true,why:'Ocurrió en el año 64.'},
+    {t:'El cristianismo nació en Atenas.',v:false,why:'Nació en Judea, una provincia romana.'},
+    {t:'En el año 380 el cristianismo pasó a ser la religión oficial del Imperio.',v:true,why:'Fue con el Edicto de Tesalónica del emperador Teodosio.'}]},
+  mc('3k',0.6,'Un gobernador romano escribe: «Estos cristianos no ofrecen incienso al emperador». ¿Por qué esto era un problema para Roma?','Porque negarse a rendir culto al emperador se veía como una amenaza al orden y al poder',['Porque el incienso era muy caro','Porque los cristianos no pagaban el agua','Porque hablaban griego y no latín'],
+     'Para Roma, adorar al emperador era señal de lealtad al Estado; negarse se consideraba peligroso.',
+     'Muchos cristianos de los primeros siglos fueron perseguidos por mantener su fe.'),
+  mc('3l',0.6,'¿Qué decidió el Edicto de Milán, en el año 313?','Dio libertad de culto a los cristianos',['Prohibió el cristianismo','Hizo del latín la lengua oficial','Terminó la esclavitud en Roma'],
+     'Constantino permitió que cada persona practicara su religión sin ser perseguida.',
+     'Fue un paso hacia la libertad de creencias, aunque después, en 380, el cristianismo se volvió religión oficial.'),
+  mc('3m',0.6,'¿Qué idea expresa mejor el humanismo?','Toda persona tiene dignidad y valor, y debe ser respetada',['Solo los poderosos merecen respeto','Las personas valen según su riqueza','Lo único importante es obedecer'],
+     'El humanismo pone a la persona en el centro: su dignidad, su razón y su libertad.',
+     'Estas ideas inspiraron después los derechos humanos.'),
+  mc('3n',0.6,'En una fiesta de tu barrio en Quito conviven personas católicas, evangélicas y sin religión. ¿Qué valor permite convivir sin pelear?','La tolerancia y el respeto a la diversidad',['La burla a quien piensa distinto','La imposición de una sola creencia','La indiferencia ante los demás'],
+     'Respetar las creencias de los demás es una herencia del diálogo griego y de la dignidad humana.',
+     'La Constitución del Ecuador reconoce la libertad de creencias y define al Estado como laico.')
+ ]},
+
+{id:'s4',n:4,name:'Sala del Medioevo',sub:'El feudo y el cambio',
+ study:[
+  {t:'Del Imperio romano al feudalismo',p:'En el año 476 cayó el Imperio romano de Occidente. Siguieron años de invasiones e inseguridad: las personas buscaban protección. Los reyes eran débiles y el poder quedó en manos de los grandes propietarios de tierras, los <b>señores feudales</b>. Así nació el <b>feudalismo</b>.'},
+  {t:'Feudo, señor y vasallo',p:'Un <b>feudo</b> era una tierra que un señor entregaba a un <b>vasallo</b> a cambio de fidelidad y ayuda militar. El señor daba <b>tierra y protección</b>; el vasallo juraba <b>fidelidad y servicio</b> en la guerra. Los vasallos más conocidos eran los <b>caballeros</b>, guerreros a caballo.'},
+  {t:'La sociedad feudal',p:'Se decía que había tres grupos: «los que rezan» (el <b>clero</b>), «los que luchan» (los nobles y caballeros) y «los que trabajan» (los <b>campesinos y siervos</b>). En la cima estaban el rey y los grandes señores; en la base, los siervos. Casi todos vivían en el campo, en aldeas.'},
+  {t:'El siervo: trabajo y obligaciones',p:'El <b>siervo</b> trabajaba la tierra del señor y no podía abandonarla. Debía entregar parte de la cosecha, trabajar gratis algunos días en las tierras del señor (llamado <b>corvea</b>) y pagar por usar el molino o el horno del señor. Vivía en una casa pequeña y comía sobre todo pan y sopa. A cambio recibía protección y un pedazo de tierra para sobrevivir.'},
+  {t:'El poder de la Iglesia',p:'El <b>clero</b> tenía gran poder: poseía tierras, dirigía la vida religiosa y cobraba el <b>diezmo</b> (la décima parte de la cosecha). En los <b>monasterios</b>, los monjes rezaban, enseñaban y copiaban libros a mano, y así se conservó mucho conocimiento antiguo.'},
+  {t:'El castillo y la vida en el feudo',p:'El <b>castillo</b> era la casa del señor, un refugio en caso de ataque y el centro del poder. Alrededor se extendían los campos, el bosque, el molino y la aldea. Era una economía de <b>autoabastecimiento</b>: casi todo se producía en el propio feudo y se comerciaba muy poco.'},
+  {t:'¿Por qué hablamos de explotación?',p:'Porque quien trabajaba no decidía ni recibía un pago justo: la mayor parte del beneficio quedaba para el señor y para la Iglesia. La relación era <b>desigual</b>, sostenida por la tierra y por la fuerza.'},
+  {t:'Mirando al Ecuador',wide:true,p:'En muchas haciendas de la Sierra ecuatoriana existieron relaciones parecidas: familias que trabajaban para el dueño de la tierra a cambio de un pequeño terreno (huasipungo) o quedaban atadas a la hacienda por deudas. La Ley de Reforma Agraria de 1964 buscó terminar con estos sistemas. Comparar épocas distintas nos ayuda a reconocer cuando una relación es injusta.'}],
+ qs:[
+  {id:'4a',type:'order',kind:'Ordenamiento',pts:1.0,q:'Ordena cómo se formó el feudalismo, del primer hecho (1) al último (4).',
+   items:['Cae el Imperio romano de Occidente','Hay invasiones y mucha inseguridad','Las personas buscan la protección de los señores dueños de tierras','Se forman feudos y relaciones de vasallaje'],
+   why:'Cae Roma → invasiones e inseguridad → se busca protección en los señores → nacen los feudos y el vasallaje.',
+   x:'La fecha tradicional de la caída del Imperio romano de Occidente es el año 476.'},
+  mc('4b',0.6,'Después de la caída del Imperio romano de Occidente, Europa vivió años de inseguridad. ¿Qué pasó con el poder?','Se fragmentó: quedó en manos de grandes propietarios de tierras, los señores feudales',['Se concentró en un solo emperador mundial','Pasó a manos de los comerciantes de las ciudades','Se repartió por votación entre todos los habitantes'],
+     'Sin un Estado fuerte, la gente buscó protección en los señores que tenían tierras y soldados.',
+     'Por eso el castillo era tan importante: protegía a quienes vivían cerca.'),
+  mc('4c',0.6,'¿Qué era un feudo?','Una tierra que un señor entregaba a un vasallo a cambio de fidelidad y ayuda militar',['Una ciudad amurallada llena de comerciantes','Un impuesto que se pagaba a Roma','Una escuela de monjes'],
+     'El feudo era la base del sistema: se intercambiaba tierra por fidelidad.',
+     'La palabra «feudalismo» viene de «feudo».'),
+  {id:'4d',type:'tf',kind:'Verdadero o falso',pts:1.0,q:'Marca verdadero o falso en cada frase.',
+   items:[
+    {t:'El siervo podía irse del feudo cuando quisiera.',v:false,why:'Estaba atado a la tierra y no podía abandonarla.'},
+    {t:'El señor protegía a sus vasallos y a cambio recibía fidelidad.',v:true,why:'Ese era el pacto del vasallaje.'},
+    {t:'El clero (la Iglesia) tenía mucho poder y muchas tierras.',v:true,why:'Poseía tierras y cobraba el diezmo.'},
+    {t:'En la Edad Media la mayoría de la gente vivía en grandes ciudades.',v:false,why:'Casi todos vivían en el campo, en aldeas.'},
+    {t:'El castillo servía de refugio y de centro de poder.',v:true,why:'Era la casa del señor y un lugar para defenderse.'}]},
+  {id:'4e',type:'sort',kind:'Clasificar',pts:1.0,q:'¿Quién tenía cada obligación? Toca la columna correcta.',
+   cats:['Obligación del siervo','Obligación del señor'],
+   items:[{t:'Trabajar las tierras del señor',c:0},{t:'Entregar parte de la cosecha',c:0},{t:'Dar protección a quienes vivían en su feudo',c:1},{t:'Pagar por usar el molino del señor',c:0},{t:'Entregar un feudo a su vasallo',c:1},{t:'Defender el territorio con sus soldados',c:1}],
+   why:'El siervo daba trabajo y parte de la cosecha; el señor ofrecía tierra y protección.',
+   x:'Algunos días a la semana, el siervo trabajaba gratis en las tierras del señor.'},
+  mc('4f',0.6,'Un cronista medieval dijo que la sociedad tenía «los que rezan, los que luchan y los que trabajan». ¿A quiénes se refería con «los que trabajan»?','A los campesinos y siervos',['Al clero','A los caballeros','Al rey'],
+     'Los campesinos y siervos producían los alimentos que sostenían a todos los demás.',
+     'Los tres grupos tenían funciones distintas, pero no los mismos derechos ni el mismo poder.'),
+  mc('4g',0.6,'¿Qué hacía un caballero en la sociedad feudal?','Era un guerrero a caballo, vasallo que servía a su señor en la guerra',['Cultivaba la tierra del señor','Vendía productos en la ciudad','Copiaba libros en un monasterio'],
+     'Los caballeros juraban fidelidad al señor y lo ayudaban en la guerra.',
+     'Los caballeros recibían un feudo a cambio de su servicio militar.'),
+  {id:'4h',type:'match',kind:'Relacionar columnas',pts:1.0,q:'Escribe la letra del significado que corresponde a cada palabra. Sobra una letra.',
+   letters:['A','B','C','D','E'],
+   defs:[{k:'A',t:'Tierra que el señor entregaba a un vasallo'},{k:'B',t:'Persona que juraba fidelidad y servicio a un señor'},{k:'C',t:'La décima parte de la cosecha que se entregaba a la Iglesia'},{k:'D',t:'Trabajo gratuito del siervo en las tierras del señor'},{k:'E',t:'Persona que compra y vende productos en la ciudad'}],
+   rows:[{t:'Feudo',a:'A'},{t:'Vasallo',a:'B'},{t:'Diezmo',a:'C'},{t:'Trabajo gratuito (corvea)',a:'D'}],
+   why:'Sobra la E: es el mercader, que se vuelve importante con el comercio y las ciudades.'},
+  mc('4i',0.6,'¿Cómo vivía un siervo?','Trabajaba la tierra del señor, le daba parte de la cosecha y no podía irse del feudo',['Vendía telas en una ciudad rica','Daba órdenes a los caballeros','Viajaba libremente de feudo en feudo'],
+     'Su vida era dura: trabajo constante, casa pequeña y pocos derechos.',
+     'Comía sobre todo pan, sopa y verduras.'),
+  mc('4j',0.6,'¿Qué era el diezmo?','La décima parte de la cosecha que se entregaba a la Iglesia',['Un castigo para los caballeros','Un impuesto que cobraban los comerciantes','El nombre de un castillo'],
+     'El diezmo sostenía a la Iglesia y reforzaba su poder.',
+     'La palabra viene de «diez».'),
+  mc('4k',0.6,'¿Por qué decimos que la relación entre el señor y el siervo era de explotación?','Porque el beneficio quedaba para el señor y quien trabajaba no decidía ni recibía un pago justo',['Porque el siervo mandaba sobre el señor','Porque el siervo era dueño de toda la tierra','Porque no se trabajaba en el feudo'],
+     'Había intercambio, pero muy desigual: quien trabajaba tenía pocos derechos.',
+     'La explotación se da cuando alguien se beneficia del trabajo de otro sin pagarle de forma justa.'),
+  mc('4l',0.6,'En una hacienda de la Sierra ecuatoriana, una familia debía trabajar para el dueño y no podía irse por sus deudas. ¿Qué parecido tiene con la servidumbre feudal?','Quien trabajaba dependía de la tierra y del dueño y no era realmente libre',['Los trabajadores mandaban en la hacienda','Los trabajadores recibían sueldos muy altos','Todos eran dueños de la tierra'],
+     'En ambos casos el trabajador estaba atado a la tierra y al dueño, y tenía pocos derechos.',
+     'La Reforma Agraria de 1964 buscó terminar con estas relaciones en el campo.'),
+  mc('4n',0.6,'¿Para qué servía el castillo en un feudo?','Era la casa del señor, un refugio ante los ataques y el centro del poder',['Era un mercado donde se vendía a gran escala','Era una escuela para los siervos','Era un puerto para barcos de comercio'],
+     'Desde el castillo el señor gobernaba el feudo y protegía a su gente.',
+     'Casi todo lo que se necesitaba se producía dentro del propio feudo.'),
+  mc('4m',0.6,'¿Qué hacían los monjes en los monasterios medievales?','Rezaban, enseñaban y copiaban libros a mano',['Cobraban impuestos a los comerciantes','Comandaban los ejércitos del rey','Fabricaban armas para los siervos'],
+     'Gracias a los monasterios se conservaron muchos libros antiguos.',
+     'Copiar un libro a mano podía tomar meses o años.')
+ ]}
+]};
+var COAST=[[-6,36],[-4.5,36.7],[-2.2,36.8],[-0.5,38.3],[0.2,38.8],[0,39.5],[0.9,40.7],[3.2,41.8],[3.1,43],[5,43.3],[7.5,43.8],[9,44.4],[10.2,43.6],[10.7,42.8],[12.2,41.8],[13.7,41.2],[15.5,40],[16,39],[15.7,37.95],[16.5,38.4],[17.1,39.1],[16.6,40.4],[18.5,40.1],[17.2,40.9],[16,41.9],[14.2,42.3],[12.5,43.8],[12.3,45],[13.7,45.6],[15,44],[16.5,43],[18.5,42.4],[19.5,41.8],[19.5,40.5],[20,39.7],[20.7,38.8],[21.3,38.4],[21.7,37.9],[21.2,37.4],[21.7,36.8],[22.5,36.4],[23,36.5],[22.9,37.5],[23,38],[24,37.7],[24,38.2],[23.5,38.4],[22.9,39],[22.9,40.5],[24.5,40.8],[26,40.8],[26.5,40.2],[26.2,39.5],[26.7,38.3],[27.2,37.5],[27.5,37],[28.2,36.7],[29.5,36.2],[30.7,36.8],[32.5,36.1],[34,36.3],[35.5,36.7],[36,36.6],[35.8,35.5],[35.5,33.9],[35,32.9],[34.5,31.9],[34.3,31.3],[33,31],[32.3,31.3],[30,31.1],[28,30.9],[25,31.7],[23,32.5],[22,32.9],[20,32],[19,30.7],[17.5,30.6],[15.2,32.3],[13.2,32.9],[11,33.3],[10,33.9],[10.8,34.7],[10.6,35.8],[11,37.1],[9.9,37.3],[8.5,36.9],[7,37],[5,36.8],[3,36.8],[1,36.5],[-1,35.7],[-2.5,35.2],[-5.3,35.9],[-6,35.8]];
+var SEAS=[
+ COAST,
+ [[27.8,41.9],[28,43.5],[29.6,45.2],[31,46.6],[33.5,46.1],[32.5,45.3],[33.8,44.4],[35.5,45.2],[37.5,44.8],[38,46.8],[39.5,43.5],[41.5,41.8],[40,41],[36.5,41.3],[33,42],[31,41.2],[29,41.2]],
+ [[46.8,44.8],[47.5,46.7],[49.5,46.5],[51,47],[53,46.5],[52.5,44],[51.2,43],[52.8,41.8],[53.3,40],[53.9,37.3],[53,36.8],[51,36.7],[50.2,37.5],[49,38.5],[49,40.5],[50.3,40.4],[49.5,41.5],[48.3,42.5],[47.5,43.5]],
+ [[48,30],[50.3,29.8],[51,27.8],[53,26.8],[56.2,27],[56.8,26],[56.3,24.9],[54,24.2],[51.7,24.4],[51.2,26],[50,26.3],[49,28.5]],
+ [[32.5,29.9],[33.8,27.5],[35.4,24],[37.2,20.5],[38.6,18],[40,15.5],[41.8,13.6],[43.2,12.5],[43.5,13],[42.8,15.5],[41.5,18.5],[39.3,21.8],[37,25.5],[35,28],[34.9,29.6],[33.2,30]],
+ [[43.3,12.7],[45,12.8],[48,14],[52,16],[55,17.5],[57.5,20],[59.7,22.5],[58.5,23.7],[57,25.5],[58.5,25.6],[61.5,25.2],[66.5,25.2],[68.5,23.5],[70.2,21],[72.7,21.2],[72.8,19],[73.7,16],[74.8,13],[75.5,12],[75.5,5],[43.3,5]],
+ [[80.3,12],[80.1,13.8],[80.2,15.7],[82.3,17],[84.5,18.8],[86.8,20.5],[87,21.7],[89,21.7],[91.8,22.7],[92.4,21],[93.7,19],[94.4,16.5],[95.4,15.8],[97.4,16.5],[97.8,15.5],[98.2,14],[98.6,12.5],[98.6,5],[80.3,5]],
+ [[105,12],[109.3,12],[109,14],[108,16],[106.6,18.5],[105.8,19.5],[106.7,20.5],[108.2,21.5],[109.8,21.3],[110.6,21],[111.5,21.6],[113.5,22.2],[115,22.8],[117.2,23.5],[119,25.3],[120,26.5],[121.2,28.2],[121.8,30],[121.8,31.3],[120.8,32.3],[119.7,34.4],[120.8,35.8],[122.5,37],[130,37],[130,12]]
+];
+var RIVERS=[
+ [[31,22],[31.2,26],[31.3,30],[31.8,31.4]],
+ [[38,36.5],[40,35],[43,33],[46.5,31],[48,30]],
+ [[41,37.5],[43.5,35],[44.4,33.3],[47.5,31]],
+ [[72,34],[71,29],[68,25.3],[67.6,24.2]],
+ [[78.5,30.5],[80,26],[84,25.5],[88,24],[89,22]],
+ [[101,35.5],[105,36],[108,40],[111,35],[115,35],[118.5,37.8]],
+ [[101,28],[104,29],[108,30.7],[112,30.5],[117,31],[121.5,31.5]]
+];
+var VX0=-4,VX1=121,VY0=12,VY1=50,KX=9,KY=13;
+function px(lon){return (lon-VX0)*KX}
+function py(lat){return (VY1-lat)*KY}
+function pts(a){return a.map(function(p){return px(p[0]).toFixed(1)+','+py(p[1]).toFixed(1)}).join(' ')}
+function mapSVG(MARK){
+  var W=(VX1-VX0)*KX,H=(VY1-VY0)*KY,s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Mapa esquemático de Europa, África y Asia con cinco letras" xmlns="http://www.w3.org/2000/svg"><rect width="'+W+'" height="'+H+'" fill="#EADFC2"/>';
+  SEAS.forEach(function(a){s+='<polygon points="'+pts(a)+'" fill="#BFDCE8" stroke="#9DB9C6" stroke-width="2"/>'});
+  RIVERS.forEach(function(a){s+='<polyline points="'+pts(a)+'" fill="none" stroke="#6FA6C4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'});
+  function t(txt,lon,lat,sz,fill,it){s+='<text x="'+px(lon).toFixed(0)+'" y="'+py(lat).toFixed(0)+'" font-family="Lexend,Arial,sans-serif" font-size="'+sz+'" fill="'+fill+'"'+(it?' font-style="italic"':'')+' font-weight="600">'+txt+'</text>'}
+  t('EUROPA',5,48,34,'#B2A47C');t('ÁFRICA',2,22,34,'#B2A47C');t('ASIA',70,45,38,'#B2A47C');
+  t('Mar Mediterráneo',16,34.2,26,'#7E9AA8',1);t('Océano Índico',63,15,30,'#7E9AA8',1);t('Mar Caspio',45.5,48,22,'#7E9AA8',1);
+  Object.keys(MARK).forEach(function(k){var x=px(MARK[k][0]),y=py(MARK[k][1]);s+='<circle cx="'+x.toFixed(0)+'" cy="'+y.toFixed(0)+'" r="38" fill="#B8472C" stroke="#fff" stroke-width="5"/><text x="'+x.toFixed(0)+'" y="'+(y+17).toFixed(0)+'" text-anchor="middle" font-family="Lexend,Arial,sans-serif" font-size="50" font-weight="700" fill="#fff">'+k+'</text>'});
+  return s+'</svg>'}
+(function(){
+'use strict';
+var ST=PART.ST,KEY=PART.key,L='ABCDEF';
+var S={me:{n:'',c:''},st:{}};
+try{var raw=localStorage.getItem(KEY);if(raw){var p=JSON.parse(raw);if(p&&p.st){S=p;if(!S.me)S.me={n:'',c:''}}}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var app=document.getElementById('app');
+(function(){try{var d=document.createElement('div');d.style.cssText='display:flex;flex-direction:column;gap:1px;position:absolute;visibility:hidden';var a=document.createElement('i'),b=document.createElement('i');a.style.height=b.style.height='1px';d.appendChild(a);d.appendChild(b);document.body.appendChild(d);var ok=d.offsetHeight===3;document.body.removeChild(d);if(!ok)document.documentElement.className+=' nogap'}catch(x){}})();
+
+/* ---------- utilidades ---------- */
+function h(tag,props,kids){
+  var e=document.createElement(tag),k;
+  if(props){for(k in props){if(!Object.prototype.hasOwnProperty.call(props,k))continue;var v=props[k];
+    if(k==='class')e.className=v;else if(k==='html')e.innerHTML=v;else if(k.slice(0,2)==='on')e[k]=v;else if(v===true)e.setAttribute(k,'');else if(v!==false&&v!=null)e.setAttribute(k,v)}}
+  (kids||[]).forEach(function(c){if(c==null||c===false)return;e.appendChild(typeof c==='string'||typeof c==='number'?document.createTextNode(String(c)):c)});
+  return e}
+function fm(n){return (Math.round(n*100)/100).toFixed(2).replace('.',',')}
+function r2(n){return Math.round(n*100)/100}
+function rng(seed){var s=0,i;for(i=0;i<seed.length;i++)s=(s*31+seed.charCodeAt(i))>>>0;return function(){s=(s+0x6D2B79F5)>>>0;var t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
+function shuffle(a,seed){var r=rng(seed),b=a.slice(),i,j,t;for(i=b.length-1;i>0;i--){j=Math.floor(r()*(i+1));t=b[i];b[i]=b[j];b[j]=t}return b}
+function seq(n){var a=[],i;for(i=0;i<n;i++)a.push(i);return a}
+function newSeed(){return Math.random().toString(36).slice(2,8)}
+function clear(){while(app.firstChild)app.removeChild(app.firstChild)}
+function top(){try{window.scrollTo(0,0)}catch(e){}}
+function z(n){return (n<10?'0':'')+n}
+function fmtDate(ts){var d=new Date(ts);return z(d.getDate())+'/'+z(d.getMonth()+1)+'/'+d.getFullYear()+' '+z(d.getHours())+':'+z(d.getMinutes())}
+function mkCode(s){var x=5381,i;for(i=0;i<s.length;i++)x=((x<<5)+x+s.charCodeAt(i))>>>0;return x.toString(36).toUpperCase().slice(-6)}
+function lvl(f){return f>=0.8?{c:'lv-ok',t:'Logrado'}:f>=0.6?{c:'lv-part',t:'En proceso'}:{c:'lv-bad',t:'Necesito repasar'}}
+function sd(st){if(!S.st[st.id])S.st[st.id]={att:1,seed:newSeed(),q:{},hist:[],cur:null};return S.st[st.id]}
+function stOf(st){var tot=0,got=0,done=0,q=sd(st).q;st.qs.forEach(function(x){tot+=x.pts;var r=q[x.id];if(r){done++;got+=x.pts*r.f}});return {tot:r2(tot),got:r2(got),done:done,n:st.qs.length}}
+function nota(st){var o=stOf(st);return r2(o.tot?10*o.got/o.tot:0)}
+function ready(){return S.me.n&&S.me.n.replace(/\s/g,'').length>=3&&S.me.c}
+
+/* ---------- mapa ---------- */
+var T={};
+
+/* ---------- retroalimentación ---------- */
+function fbBox(q,f,extraHtml){
+  var cls=f>=0.999?'ok':f>0?'part':'bad',tit=f>=0.999?'¡Muy bien!':f>0?'Parcialmente correcto':'A repasar';
+  var html='<h3>'+tit+' <span class="pp">('+fm(q.pts*f)+' de '+fm(q.pts)+' pts)</span></h3>'+(extraHtml||'');
+  if(f<0.999)html+='<p class="nb">✏️ Anótalo en tu cuaderno para repasarlo.</p>';
+  return h('div',{class:'fb '+cls,html:html,role:'status'})}
+function finish(st,q,f,html,host,onNext){
+  var full=html+(q.x?'<div class="xtra">💡 <b>Dato extra:</b> '+q.x+'</div>':'');
+  sd(st).q[q.id]={f:f,fb:full};save();
+  var box=fbBox(q,f,full);host.appendChild(box);
+  if(onNext)onNext();
+  try{box.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){}}
+
+/* ---------- tipos de pregunta ---------- */
+T.mc=function(q,host,done,st){
+  var perm=shuffle(seq(q.o.length),sd(st).seed+q.id),opts=perm.map(function(k){return q.o[k]}),ok=perm.indexOf(0);
+  var box=h('div',{class:'opts'}),btns=[];
+  opts.forEach(function(o,i){
+    var b=h('button',{class:'opt',type:'button'},[h('b',{},[L[i]]),h('span',{},[o])]);
+    b.onclick=function(){
+      btns.forEach(function(x,j){x.disabled=true;if(j===ok)x.className='opt ok'});
+      if(i!==ok)b.className='opt bad';
+      var f=i===ok?1:0;
+      done(f,'<p>'+q.why+'</p>'+(f?'':'<p class="rc"><b>Respuesta correcta:</b> '+L[ok]+'. '+opts[ok]+'</p>'))};
+    btns.push(b);box.appendChild(b)});
+  host.appendChild(box)};
+
+T.tf=function(q,host,done){
+  var wrap=h('div'),ans=q.items.map(function(){return null}),rows=[];
+  var check=h('button',{class:'btn',type:'button',disabled:true},['Comprobar']);
+  q.items.forEach(function(it,i){
+    var yes=h('button',{class:'opt',type:'button'},['Verdadero']),no=h('button',{class:'opt',type:'button'},['Falso']);
+    function pick(v){ans[i]=v;yes.className='opt'+(v===true?' sel':'');no.className='opt'+(v===false?' sel':'');check.disabled=ans.indexOf(null)>=0}
+    yes.onclick=function(){pick(true)};no.onclick=function(){pick(false)};
+    rows.push({yes:yes,no:no});
+    wrap.appendChild(h('div',{class:'tfrow'},[h('div',{},[it.t]),h('div',{class:'tfbtns'},[yes,no])]))});
+  check.onclick=function(){
+    var ok=0,html='<ul>';
+    q.items.forEach(function(it,i){var good=ans[i]===it.v;if(good)ok++;
+      var r=rows[i],c=good?'opt ok':'opt bad';r.yes.disabled=r.no.disabled=true;
+      (ans[i]?r.yes:r.no).className=c;if(!good)(it.v?r.yes:r.no).className='opt ok';
+      html+='<li>'+(good?'✔ ':'✖ ')+it.t+' <b>'+(it.v?'Verdadero':'Falso')+'.</b> '+it.why+'</li>'});
+    check.disabled=true;check.style.display='none';
+    done(ok/q.items.length,html+'</ul>')};
+  wrap.appendChild(h('div',{class:'row',style:'margin-top:12px'},[check]));host.appendChild(wrap)};
+
+T.order=function(q,host,done,st){
+  var n=q.items.length,order=shuffle(seq(n),sd(st).seed+q.id),num=seq(n).map(function(){return 0}),btns=[],next=1;
+  if(order.every(function(v,i){return v===i})){var t=order[0];order[0]=order[1];order[1]=t}
+  var wrap=h('div',{class:'ord'});
+  var check=h('button',{class:'btn',type:'button',disabled:true},['Comprobar']);
+  var reset=h('button',{class:'btn alt',type:'button'},['Borrar mi orden']);
+  function paint(){btns.forEach(function(b){var i=b._i;b.firstChild.textContent=num[i]?num[i]:'·';b.className='opt'+(num[i]?' sel':'')});check.disabled=num.indexOf(0)>=0}
+  order.forEach(function(i){
+    var b=h('button',{class:'opt',type:'button'},[h('b',{},['·']),h('span',{},[q.items[i]])]);b._i=i;
+    b.onclick=function(){
+      if(num[i]){var v=num[i];num[i]=0;for(var k=0;k<n;k++)if(num[k]>v)num[k]--;next--}else{num[i]=next;next++}
+      paint()};
+    btns.push(b);wrap.appendChild(b)});
+  reset.onclick=function(){num=num.map(function(){return 0});next=1;paint()};
+  check.onclick=function(){
+    var good=0,k;for(k=0;k<n;k++)if(num[k]===k+1)good++;
+    btns.forEach(function(b){b.disabled=true;b.className='opt '+(num[b._i]===b._i+1?'ok':'bad')});
+    check.style.display='none';reset.style.display='none';
+    var html='<p><b>Orden correcto:</b></p><ol>'+q.items.map(function(t){return '<li>'+t+'</li>'}).join('')+'</ol><p>'+q.why+'</p>';
+    done(good/n,html)};
+  host.appendChild(wrap);host.appendChild(h('div',{class:'row',style:'margin-top:12px'},[check,reset]))};
+
+T.sort=function(q,host,done,st){
+  var order=shuffle(seq(q.items.length),sd(st).seed+q.id),ans={},rows={};
+  var check=h('button',{class:'btn',type:'button',disabled:true},['Comprobar']);
+  var wrap=h('div');
+  order.forEach(function(i){
+    var it=q.items[i],bs=q.cats.map(function(c,k){
+      var b=h('button',{class:'opt',type:'button'},[c]);
+      b.onclick=function(){ans[i]=k;bs.forEach(function(x,j){x.className='opt'+(j===k?' sel':'')});check.disabled=Object.keys(ans).length<q.items.length};
+      return b});
+    rows[i]=bs;
+    wrap.appendChild(h('div',{class:'tfrow'},[h('div',{},[it.t]),h('div',{class:'sortbtns'},bs)]))});
+  check.onclick=function(){
+    var ok=0,html='<ul>';
+    q.items.forEach(function(it,i){var good=ans[i]===it.c;if(good)ok++;
+      rows[i].forEach(function(b,k){b.disabled=true;if(k===it.c)b.className='opt ok';else if(k===ans[i])b.className='opt bad'});
+      html+='<li>'+(good?'✔ ':'✖ ')+it.t+' → <b>'+q.cats[it.c]+'</b></li>'});
+    check.style.display='none';
+    done(ok/q.items.length,html+'</ul>'+(q.why?'<p>'+q.why+'</p>':''))};
+  host.appendChild(wrap);host.appendChild(h('div',{class:'row',style:'margin-top:12px'},[check]))};
+
+T.match=function(q,host,done){
+  if(q.pre)host.appendChild(q.pre);
+  if(q.defs){var ul=h('ul',{class:'defs'});q.defs.forEach(function(d){ul.appendChild(h('li',{},[h('b',{},[d.k]),h('span',{},[d.t])]))});host.appendChild(ul)}
+  var sels=[],check=h('button',{class:'btn',type:'button',disabled:true},['Comprobar']);
+  function upd(){check.disabled=sels.some(function(s){return !s.value})}
+  var list=h('div');
+  q.rows.forEach(function(r){
+    var s=h('select',{'aria-label':r.t});s.appendChild(h('option',{value:''},['Elige una letra…']));
+    q.letters.forEach(function(l){s.appendChild(h('option',{value:l},[l]))});
+    s.onchange=upd;sels.push(s);
+    list.appendChild(h('div',{class:'mrow'},[h('label',{},[r.t]),s]))});
+  check.onclick=function(){
+    var ok=0,html='<ul>';
+    q.rows.forEach(function(r,i){var good=sels[i].value===r.a;if(good)ok++;sels[i].disabled=true;sels[i].className=good?'ok':'bad';
+      html+='<li>'+(good?'✔ ':'✖ ')+'<b>'+r.t+'</b>: '+r.a+(good?'':' (elegiste '+sels[i].value+')')+'</li>'});
+    check.style.display='none';
+    done(ok/q.rows.length,html+'</ul>'+(q.why?'<p>'+q.why+'</p>':''))};
+  host.appendChild(list);host.appendChild(h('div',{class:'row',style:'margin-top:12px'},[check]))};
+
+T.map=function(q,host,done,st){
+  var m=h('div',{class:'mapbox',html:mapSVG(q.marks)});
+  host.appendChild(h('p',{class:'small muted',style:'margin-bottom:8px'},['Mapa esquemático: las líneas azules son ríos importantes.']));
+  host.appendChild(h('p',{class:'small maphint',style:'margin-bottom:8px;font-weight:600'},['👉 Desliza el mapa hacia los lados para verlo completo.']));
+  q.pre=m;T.match(q,host,done,st)};
+
+/* ---------- vistas ---------- */
+function studyCards(st){
+  var g=h('div',{class:'study'});
+  st.study.forEach(function(c,i){g.appendChild(h('div',{class:'sc'+(c.wide?' wide':'')},[h('h3',{html:'<span>'+(i+1)+'</span>'+c.t}),h('p',{html:c.p})]))});
+  return g}
+
+function hub(){
+  clear();top();
+  app.appendChild(h('div',{class:'hero'},[
+    h('span',{class:'tag',style:'align-self:flex-start'},['Estudio con nota · Octavo EGB']),
+    h('h1',{},['Museo del Tiempo']),
+    h('p',{},[PART.label+' · Estudios Sociales']),
+    h('p',{class:'muted'},['Estudia, practica y gana tu nota: cada estación vale 10 puntos.'])]));
+  var nm=h('input',{type:'text',id:'nm',placeholder:'Escribe tus nombres y apellidos',autocomplete:'name','aria-label':'Nombres y apellidos'});
+  nm.value=S.me.n||'';
+  var cs=h('select',{id:'cs','aria-label':'Curso'});
+  [['','Elige tu curso…'],['Octavo A','Octavo A'],['Octavo B','Octavo B']].forEach(function(o){cs.appendChild(h('option',{value:o[0]},[o[1]]))});
+  cs.value=S.me.c||'';
+  var warn=h('p',{class:'note-box',style:'display:none',role:'alert'},['Primero escribe tu nombre completo y elige tu curso: saldrán en tu nota.']);
+  nm.oninput=function(){S.me.n=nm.value;save();if(ready())warn.style.display='none'};
+  cs.onchange=function(){S.me.c=cs.value;save();if(ready())warn.style.display='none'};
+  app.appendChild(h('div',{class:'card',style:'margin-top:14px'},[h('div',{class:'stack'},[
+    h('h3',{},['¿Quién eres?']),
+    h('div',{class:'two2'},[h('div',{class:'field'},[h('label',{for:'nm'},['Nombres y apellidos']),nm]),h('div',{class:'field'},[h('label',{for:'cs'},['Curso']),cs])]),warn])]));
+  app.appendChild(h('div',{class:'card',style:'margin-top:14px'},[
+    h('ul',{class:'rules'},[
+      h('li',{html:'<b>Primero estudia:</b> en cada estación hay apuntes con lo más importante. Léelos y luego responde el quiz.'}),
+      h('li',{html:'<b>Cada estación te da una nota sobre 10.</b> Al terminar, toma una <b>captura de pantalla</b> de tu nota y envíala por la plataforma.'}),
+      h('li',{html:'<b>Aprende de cada respuesta:</b> después de contestar verás la explicación y un dato extra. Anota en tu cuaderno lo que falles.'}),
+      h('li',{html:'Si quieres mejorar, puedes hacer otro intento: en tu nota aparece el número de intento.'}),
+      h('li',{html:'Trabaja solo y sin prisa. Puedes empezar por la estación que prefieras.'})])]));
+  var grid=h('div',{class:'grid',style:'margin-top:16px'});
+  ST.forEach(function(st){
+    var o=stOf(st),s=sd(st),fin=s.cur&&s.cur.att===s.att&&o.done===o.n;
+    var b=h('button',{class:'card sala c'+st.n,type:'button',onclick:function(){if(!ready()){warn.style.display='block';(S.me.n?cs:nm).focus();try{warn.scrollIntoView({block:'center'})}catch(e){}return}intro(st)}},[
+      h('div',{class:'top'},[h('div',{class:'num n'+st.n},[String(st.n)]),h('span',{class:'pts'},['Vale 10 pts'])]),
+      h('h3',{},[st.name]),h('div',{class:'muted small'},[st.sub]),
+      h('div',{class:'bar'},[h('i',{style:'width:'+Math.round(o.done/o.n*100)+'%'})]),
+      h('div',{class:'small'},[o.done+' de '+o.n+' preguntas · intento '+s.att]),
+      h('div',{class:'small',style:'font-weight:700'},[fin?'Nota: '+fm(nota(st))+' / 10':(o.done?'En curso…':'Sin empezar')])]);
+    grid.appendChild(b)});
+  app.appendChild(grid);
+  app.appendChild(h('div',{class:'row',style:'margin-top:22px'},[h('button',{class:'btn alt',type:'button',id:'reset'},['Borrar mi progreso'])]));
+  var rb=document.getElementById('reset');
+  rb.onclick=function(){rb.textContent='¿Seguro? Toca otra vez para borrar todo';rb.onclick=function(){S.st={};save();hub()}}}
+
+function intro(st){
+  clear();top();
+  var o=stOf(st),s=sd(st);
+  app.appendChild(h('div',{class:'top-nav'},[h('button',{class:'btn alt',type:'button',onclick:hub},['← Inicio']),h('span',{class:'crumb'},['Estación '+st.n+' · intento '+s.att])]));
+  app.appendChild(h('div',{class:'card c'+st.n,style:'border-left-width:10px'},[h('div',{class:'stack'},[
+    h('div',{class:'cardh'},[h('div',{class:'num n'+st.n},[String(st.n)]),h('div',{},[h('h2',{},[st.name]),h('p',{class:'muted'},[st.sub])])]),
+    h('p',{html:'<b>Paso 1.</b> Lee con calma los apuntes de abajo.<br><b>Paso 2.</b> Responde las '+st.qs.length+' preguntas. Al final recibirás tu nota sobre 10.'}),
+    h('p',{class:'muted'},[o.done?'Ya respondiste '+o.done+' de '+o.n+'.':'Tómate el tiempo que necesites.'])])]));
+  app.appendChild(h('h3',{style:'margin:20px 0 10px'},['📖 Apuntes de estudio']));
+  app.appendChild(studyCards(st));
+  app.appendChild(h('div',{class:'row',style:'margin-top:20px'},[h('button',{class:'btn go',type:'button',onclick:function(){var first=0;for(var i=0;i<st.qs.length;i++){if(!sd(st).q[st.qs[i].id]){first=i;break}}question(st,first)}},[o.done?'Continuar el quiz':'Ya estudié: empezar el quiz'])]))}
+
+function question(st,i){
+  clear();top();
+  var q=st.qs[i],s=sd(st);
+  app.appendChild(h('div',{class:'top-nav'},[h('button',{class:'btn alt',type:'button',onclick:hub},['← Inicio']),h('span',{class:'crumb'},['Estación '+st.n+' · pregunta '+(i+1)+' de '+st.qs.length])]));
+  var panel=h('div',{class:'card',style:'display:none;margin-bottom:14px'},[h('h3',{style:'margin-bottom:10px'},['📖 Apuntes de estudio']),studyCards(st)]);
+  var tog=h('button',{class:'btn alt',type:'button',style:'min-height:48px;font-size:17px;margin-bottom:12px'},['📖 Ver apuntes']);
+  tog.onclick=function(){var open=panel.style.display==='none';panel.style.display=open?'block':'none';tog.textContent=open?'Ocultar apuntes':'📖 Ver apuntes'};
+  app.appendChild(tog);app.appendChild(panel);
+  var prog=h('div',{class:'prog'});
+  st.qs.forEach(function(x,k){var r=s.q[x.id],c='';if(r)c=r.f>=0.999?'d':r.f>0?'p':'b';if(k===i)c+=' cur';prog.appendChild(h('i',{class:c.trim()}))});
+  app.appendChild(prog);
+  var card=h('div',{class:'card'});
+  card.appendChild(h('div',{class:'qhead'},[h('span',{class:'chip'},[q.kind]),h('span',{class:'chip pts'},['Vale '+fm(q.pts)+' pts'])]));
+  if(q.ctx)card.appendChild(h('div',{class:'ctx'},[q.ctx]));
+  card.appendChild(h('div',{class:'qtext'},[q.q]));
+  var body=h('div');card.appendChild(body);app.appendChild(card);
+  var nav=h('div',{class:'navq'}),prev=h('button',{class:'btn alt',type:'button',disabled:i===0,onclick:function(){question(st,i-1)}},['← Anterior']);
+  var last=i===st.qs.length-1;
+  var nxt=h('button',{class:'btn'+(last?' go':''),type:'button',onclick:function(){last?stationEnd(st):question(st,i+1)}},[last?'Ver mi nota':'Siguiente →']);
+  nav.appendChild(prev);nav.appendChild(nxt);
+  var rec=s.q[q.id];
+  if(rec){
+    body.appendChild(h('p',{class:'muted'},['Ya respondiste esta pregunta.']));
+    card.appendChild(fbBox(q,rec.f,rec.fb||''));
+  }else{
+    T[q.type](q,body,function(f,html){finish(st,q,f,html,card,function(){nxt.classList.add('pulse')})},st);
+  }
+  app.appendChild(nav)}
+
+function stationEnd(st){
+  clear();top();
+  var o=stOf(st),s=sd(st),nx=ST[ST.indexOf(st)+1];
+  app.appendChild(h('div',{class:'top-nav'},[h('button',{class:'btn alt',type:'button',onclick:hub},['← Inicio']),h('span',{class:'crumb'},['Estación '+st.n])]));
+  if(o.done<o.n){
+    app.appendChild(h('div',{class:'card c'+st.n,style:'border-left-width:10px'},[h('div',{class:'stack'},[
+      h('h2',{},['Aún no terminas']),
+      h('p',{class:'note-box'},['Te faltan '+(o.n-o.done)+' preguntas por responder. Tu nota aparecerá cuando termines todas.']),
+      h('div',{class:'row'},[h('button',{class:'btn go',type:'button',onclick:function(){var f=0;for(var i=0;i<st.qs.length;i++){if(!s.q[st.qs[i].id]){f=i;break}}question(st,f)}},['Ir a la pregunta que falta'])])])]));
+    return}
+  var nt=nota(st);
+  if(!s.cur||s.cur.att!==s.att){var ts=Date.now();s.cur={att:s.att,nota:nt,ts:ts,n:S.me.n,c:S.me.c,code:mkCode([S.me.n,st.id,s.att,nt,ts].join('|'))};s.hist.push(s.cur);save()}
+  var c=s.cur,lv=lvl(nt/10);
+  app.appendChild(h('div',{class:'nota'},[
+    h('div',{class:'nh'},[h('div',{},['UNIDAD EDUCATIVA PARTICULAR «NUESTRA SEÑORA DEL ROSARIO»']),h('div',{},['Estudios Sociales · Octavo EGB · Museo del Tiempo'])]),
+    h('div',{class:'nb2'},[
+      h('h2',{class:'n'+st.n},['Estación '+st.n+': '+st.name]),
+      h('div',{class:'info'},[h('b',{},['Estudiante']),h('span',{},[c.n||'(sin nombre)']),h('b',{},['Curso']),h('span',{},[c.c||'—']),h('b',{},['Fecha']),h('span',{},[fmtDate(c.ts)]),h('b',{},['Intento']),h('span',{},[String(c.att)]),h('b',{},['Código']),h('span',{style:'font-weight:700;letter-spacing:1px'},[c.code])]),
+      h('div',{class:'score'},[h('div',{class:'big n'+st.n},[fm(c.nota)+' / 10']),h('span',{class:'level '+lv.c},[lv.t])]),
+      h('div',{class:'cap'},['📸 Toma una captura de pantalla de esta nota y envíala por la plataforma. Haz una captura por cada estación.'])])]));
+  var wrap=h('div',{class:'stack',style:'margin-top:16px'});
+  var miss=st.qs.filter(function(q){return !s.q[q.id]||s.q[q.id].f<0.999});
+  if(miss.length){var ul=h('ul',{class:'miss'});miss.forEach(function(q){var i=st.qs.indexOf(q);ul.appendChild(h('li',{},[h('button',{type:'button',onclick:function(){question(st,i)}},['Repasar pregunta '+(i+1)+' · '+q.kind])]))});wrap.appendChild(h('div',{class:'card'},[h('b',{},['Para repasar:']),ul]))}
+  else wrap.appendChild(h('div',{class:'card'},[h('b',{},['¡Perfecto! Respondiste todo bien.'])]));
+  if(s.hist.length>1)wrap.appendChild(h('p',{class:'hist'},['Tus intentos: '+s.hist.map(function(x){return x.att+'.° '+fm(x.nota)}).join(' · ')]));
+  var row=[h('button',{class:'btn alt',type:'button',onclick:function(){intro(st)}},['📖 Volver a los apuntes']),
+    h('button',{class:'btn alt',type:'button',id:'again'},['Hacer otro intento'])];
+  if(nx)row.push(h('button',{class:'btn go',type:'button',onclick:function(){intro(nx)}},['Ir a la estación '+nx.n]));
+  else row.push(h('button',{class:'btn go',type:'button',onclick:hub},['Volver al inicio']));
+  wrap.appendChild(h('div',{class:'row'},row));
+  app.appendChild(wrap);
+  var ag=document.getElementById('again');
+  ag.onclick=function(){ag.textContent='¿Seguro? Se borran estas respuestas. Toca otra vez';ag.onclick=function(){s.att++;s.seed=newSeed();s.q={};s.cur=null;save();intro(st)}}}
+
+window.__quiz={ST:ST,S:function(){return S},nota:nota,sd:sd};
+hub();
+})();
+</script></body></html>
