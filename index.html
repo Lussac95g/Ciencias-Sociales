@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rincón de Sociales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: cabecera tipo cuaderno, cursos agrupados por nivel en tarjetas grandes táctiles; cada curso abre su lista de actividades (#ruta) */
+:root{
+  --bg:#f5f3ee; --surface:#ffffff; --ink:#1f2328; --muted:#5d6470; --line:#dcd8cf;
+  --hist:#b4472f; --hist-soft:#f6e3dd;
+  --filo:#3d4fa8; --filo-soft:#e2e5f6;
+  --soc:#1f7a5c;  --soc-soft:#dcefe7;
+  --flag:#f2c230;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#16181c; --surface:#20232a; --ink:#eceae4; --muted:#a3a9b3; --line:#343842;
+  --hist:#e8836b; --hist-soft:#3a2520; --filo:#97a6f0; --filo-soft:#23284a;
+  --soc:#5fc49f; --soc-soft:#183329; --flag:#f2c230; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#16181c; --surface:#20232a; --ink:#eceae4; --muted:#a3a9b3; --line:#343842;
+  --hist:#e8836b; --hist-soft:#3a2520; --filo:#97a6f0; --filo-soft:#23284a;
+  --soc:#5fc49f; --soc-soft:#183329; --flag:#f2c230; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.5}
+.wrap{max-width:880px; margin:0 auto; padding-block:20px 48px;
+  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+
+header.top{display:flex; flex-direction:column; gap:6px; padding-block:12px 22px; border-bottom:2px solid var(--line); margin-bottom:22px}
+.tricolor{display:flex; height:6px; width:84px; border-radius:3px; overflow:hidden}
+.tricolor i{flex:2; background:var(--flag)} .tricolor i:nth-child(2){flex:1; background:#2b5aa8} .tricolor i:nth-child(3){flex:1; background:#c8323a}
+h1{font-family:var(--display); font-weight:800; font-size:clamp(2rem, 7vw, 3rem); line-height:1.05; margin:6px 0 0; text-wrap:balance; letter-spacing:-.01em}
+.sub{color:var(--muted); margin:0}
+
+.level{margin-bottom:26px}
+.level h2{font-family:var(--display); font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:0 0 10px}
+.grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:12px}
+
+.course{all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:center; gap:14px;
+  background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:16px 18px; min-height:84px;
+  transition:transform .15s, border-color .15s}
+.course:hover{border-color:var(--c); transform:translateY(-2px)}
+.course:focus-visible{outline:3px solid var(--c); outline-offset:2px}
+.badge{flex:none; width:52px; height:52px; border-radius:12px; display:grid; place-items:center;
+  background:var(--soft); color:var(--c); font-family:var(--display); font-weight:800; font-size:1.25rem}
+.course .t{display:flex; flex-direction:column; min-width:0}
+.course .subj{font-family:var(--display); font-weight:800; font-size:1.3rem; color:var(--c); line-height:1.15}
+.course .meta{color:var(--muted); font-size:.95rem}
+.hist{--c:var(--hist); --soft:var(--hist-soft)} .filo{--c:var(--filo); --soft:var(--filo-soft)} .soc{--c:var(--soc); --soft:var(--soc-soft)}
+
+/* Vista de curso */
+.back{all:unset; cursor:pointer; display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--ink);
+  padding:12px 18px; border-radius:999px; background:var(--surface); border:2px solid var(--line); margin-bottom:18px}
+.back:focus-visible{outline:3px solid var(--ink)}
+.chead{display:flex; align-items:center; gap:14px; margin-bottom:6px}
+.chead h1{font-size:clamp(1.8rem,6vw,2.6rem); color:var(--c); margin:0}
+.filters{display:flex; gap:8px; flex-wrap:wrap; margin:16px 0}
+.chip{all:unset; cursor:pointer; padding:10px 18px; border-radius:999px; border:2px solid var(--line); background:var(--surface); font-weight:700}
+.chip[aria-pressed="true"]{background:var(--c); border-color:var(--c); color:var(--surface)}
+.chip:focus-visible{outline:3px solid var(--c); outline-offset:2px}
+
+.list{display:flex; flex-direction:column; gap:12px}
+.act{display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:16px 18px}
+.act .info{flex:1 1 260px; min-width:0}
+.act .kind{display:inline-block; font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; padding:3px 10px; border-radius:6px; background:var(--soft); color:var(--c)}
+.act h3{font-family:var(--display); font-weight:600; font-size:1.2rem; margin:6px 0 2px; text-wrap:balance}
+.act .when{color:var(--muted); font-size:.95rem; font-variant-numeric:tabular-nums}
+.open{all:unset; cursor:pointer; text-align:center; background:var(--c); color:var(--surface); font-weight:700; font-size:1.1rem;
+  padding:14px 26px; border-radius:12px; flex:0 0 auto}
+.open:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
+@media (max-width:520px){ .open{flex:1 1 100%} }
+.empty{color:var(--muted); background:var(--surface); border:2px dashed var(--line); border-radius:14px; padding:22px; text-align:center}
+.note{margin-top:28px; font-size:.92rem; color:var(--muted); border-top:1px solid var(--line); padding-top:14px}
+.ex{font-size:.75rem; font-weight:700; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:2px 8px; margin-left:6px; vertical-align:middle}
+
+#toast{position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%);
+  background:var(--ink); color:var(--bg); padding:12px 18px; border-radius:12px; font-weight:700; max-width:calc(100% - 32px); text-align:center}
+@media (prefers-reduced-motion: reduce){ .course{transition:none} .course:hover{transform:none} }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="app"></div>
+<div id="toast" hidden></div>
+
+<script>
+/* =====================================================================
+   CURSOS. No hace falta tocarlos.
+   ===================================================================== */
+const CURSOS = [
+  { id:"octavo",            nivel:"Educación General Básica", nombre:"8.º EGB",  materia:"Estudios Sociales", clase:"soc",  sigla:"8" },
+  { id:"primero-historia",  nivel:"Primero de Bachillerato",   nombre:"1.º BGU",  materia:"Historia",          clase:"hist", sigla:"1" },
+  { id:"primero-filosofia", nivel:"Primero de Bachillerato",   nombre:"1.º BGU",  materia:"Filosofía",         clase:"filo", sigla:"1" },
+  { id:"segundo-historia",  nivel:"Segundo de Bachillerato",   nombre:"2.º BGU",  materia:"Historia",          clase:"hist", sigla:"2" },
+  { id:"segundo-filosofia", nivel:"Segundo de Bachillerato",   nombre:"2.º BGU",  materia:"Filosofía",         clase:"filo", sigla:"2" },
+  { id:"tercero-historia",  nivel:"Tercero de Bachillerato",   nombre:"3.º BGU",  materia:"Historia",          clase:"hist", sigla:"3" },
+];
+
+/* =====================================================================
+   ACTIVIDADES. Para agregar un quiz nuevo:
+   1) Sube el archivo .html a la carpeta del curso en GitHub (ej. octavo/).
+   2) Copia una línea y cambia título, fecha, tipo y archivo.
+   paralelo: "A", "B" o "AB" (para ambos).
+   Las líneas con ejemplo:true son de muestra: bórralas al subir las reales.
+   ===================================================================== */
+const ACTIVIDADES = {
+  "octavo": [
+    { titulo:"Booms del cacao y del banano", tipo:"Quiz", fecha:"2026-11-12", paralelo:"AB", archivo:"octavo/quiz-booms.html", ejemplo:true },
+    { titulo:"Regiones naturales del Ecuador", tipo:"Clase interactiva", fecha:"2026-11-05", paralelo:"AB", archivo:"octavo/clase-regiones.html", ejemplo:true },
+  ],
+  "primero-historia": [
+    { titulo:"Del Paleolítico al Neolítico", tipo:"Clase interactiva", fecha:"2026-11-11", paralelo:"AB", archivo:"primero-historia/paleolitico.html", ejemplo:true },
+  ],
+  "primero-filosofia": [
+    { titulo:"Pensamiento cotidiano, filosófico y científico", tipo:"Quiz", fecha:"2026-11-10", paralelo:"A", archivo:"primero-filosofia/tipos-pensamiento.html", ejemplo:true },
+  ],
+  "segundo-historia": [
+    { titulo:"La mujer en la Edad Media", tipo:"Quiz", fecha:"2026-11-06", paralelo:"A", archivo:"segundo-historia/mujer-edad-media.html", ejemplo:true },
+  ],
+  "segundo-filosofia": [],
+  "tercero-historia": [
+    { titulo:"Mercantilismo y mundo precolombino", tipo:"Quiz", fecha:"2026-11-09", paralelo:"AB", archivo:"tercero-historia/mercantilismo.html", ejemplo:true },
+  ],
+};
+
+/* ===================================================================== */
+const app = document.getElementById("app");
+const toast = document.getElementById("toast");
+let filtro = "todos";
+const MESES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const fmt = f => { const [y,m,d] = f.split("-"); return `${+d} ${MESES[+m-1]} ${y}`; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function aviso(t){ toast.textContent=t; toast.hidden=false; clearTimeout(aviso.t); aviso.t=setTimeout(()=>toast.hidden=true,2600); }
+
+function inicio(){
+  const niveles = [...new Set(CURSOS.map(c=>c.nivel))];
+  app.innerHTML = `
+    <header class="top">
+      <div class="tricolor" aria-hidden="true"><i></i><i></i><i></i></div>
+      <h1>Rincón de Sociales</h1>
+      <p class="sub">Quizzes y clases interactivas · U.E. Nuestra Señora del Rosario · Lic. Isaac Pérez</p>
+    </header>
+    ${niveles.map(n => `
+      <section class="level">
+        <h2>${n}</h2>
+        <div class="grid">
+          ${CURSOS.filter(c=>c.nivel===n).map(c => {
+            const k = (ACTIVIDADES[c.id]||[]).length;
+            return `<button class="course ${c.clase}" data-id="${c.id}">
+              <span class="badge" aria-hidden="true">${c.sigla}</span>
+              <span class="t"><span class="subj">${c.materia}</span>
+              <span class="meta">${c.nombre} · ${k} ${k===1?"actividad":"actividades"}</span></span>
+            </button>`;}).join("")}
+        </div>
+      </section>`).join("")}
+    <p class="note">Toca tu curso y luego “Abrir”. Funciona en celular y computadora, sin descargar nada.</p>`;
+  app.querySelectorAll(".course").forEach(b => b.onclick = () => { location.hash = b.dataset.id; });
+}
+
+function curso(c){
+  const todas = (ACTIVIDADES[c.id]||[]).slice().sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  const lista = todas.filter(a => filtro==="todos" || a.paralelo.includes(filtro));
+  app.innerHTML = `
+    <div class="${c.clase}">
+      <button class="back" id="volver">← Todos los cursos</button>
+      <div class="chead"><span class="badge" aria-hidden="true">${c.sigla}</span>
+        <div><h1>${c.materia}</h1><p class="sub">${c.nombre} · ${c.nivel}</p></div></div>
+      <div class="filters" role="group" aria-label="Paralelo">
+        ${[["todos","Todos"],["A","Paralelo A"],["B","Paralelo B"]].map(([v,t]) =>
+          `<button class="chip" data-f="${v}" aria-pressed="${filtro===v}">${t}</button>`).join("")}
+      </div>
+      <div class="list">
+        ${lista.length ? lista.map(a => `
+          <article class="act">
+            <div class="info">
+              <span class="kind">${esc(a.tipo)}</span>${a.ejemplo?'<span class="ex">Ejemplo</span>':""}
+              <h3>${esc(a.titulo)}</h3>
+              <span class="when">${fmt(a.fecha)} · ${a.paralelo==="AB"?"Paralelos A y B":"Paralelo "+a.paralelo}</span>
+            </div>
+            <a class="open" href="${esc(a.archivo)}" data-ej="${a.ejemplo?1:""}">Abrir</a>
+          </article>`).join("")
+        : `<div class="empty">Todavía no hay actividades publicadas para este curso.</div>`}
+      </div>
+    </div>`;
+  document.getElementById("volver").onclick = () => { location.hash = ""; };
+  app.querySelectorAll(".chip").forEach(b => b.onclick = () => { filtro = b.dataset.f; curso(c); });
+  app.querySelectorAll(".open").forEach(a => a.onclick = e => {
+    if (a.dataset.ej){ e.preventDefault(); aviso("Actividad de ejemplo: aquí se abrirá el quiz real."); }
+  });
+}
+
+function ruta(){
+  const c = CURSOS.find(x => x.id === location.hash.slice(1));
+  if (c) curso(c); else inicio();
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", ruta);
+ruta();
+</script>
+</body>
+</html>
