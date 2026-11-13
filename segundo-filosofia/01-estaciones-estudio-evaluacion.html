@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de estudio Filosofía 2 BGU</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Concepto: quiz de estudio por estaciones. Una pregunta por pantalla, nota sobre 10 por estación y una tarjeta de resultado pensada para capturar y enviar por la plataforma. */
+:root{--bg:#F3F4F8;--surface:#FFFFFF;--fg:#15192B;--muted:#586079;--line:#CCD2E0;--accent:#3A4EA3;--accent-soft:#DFE5F7;--ok:#1E7B46;--ok-soft:#DCF0E3;--bad:#B3321F;--bad-soft:#F8DED9;--warm:#8F5A06;--warm-soft:#F7EACB;--onacc:#FFFFFF;
+--font:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--serif:Georgia,"Times New Roman",serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1422;--surface:#181F33;--fg:#ECEFF7;--muted:#A9B2C7;--line:#2D3855;--accent:#8FA8F5;--accent-soft:#1F2D52;--ok:#6CD39A;--ok-soft:#173A27;--bad:#F2876F;--bad-soft:#3A1D18;--warm:#E9B04F;--warm-soft:#3B2D12;--onacc:#0F1422;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1422;--surface:#181F33;--fg:#ECEFF7;--muted:#A9B2C7;--line:#2D3855;--accent:#8FA8F5;--accent-soft:#1F2D52;--ok:#6CD39A;--ok-soft:#173A27;--bad:#F2876F;--bad-soft:#3A1D18;--warm:#E9B04F;--warm-soft:#3B2D12;--onacc:#0F1422;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:clamp(17px,2.6vw,20px);line-height:1.45;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 48px}
+#app{max-width:780px;margin:0 auto}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;margin:.2em 0 .4em;text-wrap:balance}h1{font-size:1.8em}h2{font-size:1.4em}h3{font-size:1.1em}
+p{margin:.45em 0}.muted{color:var(--muted)}.small{font-size:.82em}
+.tag{font-size:.74em;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--warm);margin:0}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:.45em 0 .9em}.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:.8em 1em;margin:.7em 0}
+button,input{font:inherit;color:var(--fg)}
+button{cursor:pointer;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:.6em .9em;min-height:48px;text-align:left}
+button:hover:not(:disabled){border-color:var(--accent)}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+button.pri{background:var(--accent);border-color:var(--accent);color:var(--onacc);font-weight:700;text-align:center}
+button:disabled{opacity:.5;cursor:not-allowed}
+.op{display:block;width:100%;margin:.45em 0}.op.ok{background:var(--ok-soft);border-color:var(--ok)}.op.bad{background:var(--bad-soft);border-color:var(--bad)}
+.row{display:flex;gap:.6em;flex-wrap:wrap;align-items:center;margin:.6em 0}.row>*{min-width:0}
+.tfrow{display:grid;grid-template-columns:1fr 1fr;gap:.6em}.tfrow button{text-align:center;font-weight:700}
+input[type=text]{width:100%;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:.6em .8em;min-height:48px}
+label{display:block;font-weight:700;font-size:.9em;margin:.7em 0 .2em}
+.fb{border-radius:12px;padding:.6em .9em;margin:.7em 0;font-size:.95em}.fb.ok{background:var(--ok-soft);border:2px solid var(--ok)}.fb.bad{background:var(--bad-soft);border:2px solid var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:.5em;margin:.5em 0}.chips button{flex:1 1 100%}
+.seq{counter-reset:s;display:grid;gap:.4em;margin:.5em 0;min-height:52px;border:2px dashed var(--line);border-radius:12px;padding:.5em}
+.seq button{counter-increment:s;background:var(--accent-soft);border-color:var(--accent)}.seq button::before{content:counter(s) ". ";font-weight:700}
+.st{display:grid;grid-template-columns:1fr auto;gap:.6em;align-items:center}
+.score{font-family:var(--serif);font-size:2.4em;font-weight:700;line-height:1;white-space:nowrap}
+.cap{border:3px solid var(--accent);border-radius:16px;background:var(--surface);padding:1em 1.1em;margin:.7em 0}
+.cap .big{font-family:var(--serif);font-size:3.4em;font-weight:700;line-height:1;color:var(--accent)}
+.lv{display:inline-block;font-weight:700;border-radius:999px;padding:.15em .8em;font-size:.85em}.s-hi{background:var(--ok-soft);color:var(--ok)}.s-mid{background:var(--warm-soft);color:var(--warm)}.s-lo{background:var(--bad-soft);color:var(--bad)}
+.alert{background:var(--warm-soft);border:2px solid var(--warm);border-radius:12px;padding:.7em .9em;font-weight:700;margin:.7em 0}
+details{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:.4em 1em;margin:.7em 0}summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+details ul{margin:.3em 0 .6em;padding-left:1.2em}details li{margin:.4em 0}
+table{width:100%;border-collapse:collapse;font-size:.92em}th,td{padding:.45em .5em;border-bottom:1px solid var(--line);text-align:left}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.miss{border-top:2px solid var(--line);padding:.5em 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (min-width:700px){.chips button{flex:1 1 45%}}
+</style>
+
+</head>
+<body>
+<div id="app"></div>
+<script>
+var DATA={id:"filo",nombre:"Filosofía",curso:"2 BGU",titulo:"Quiz de estudio de Filosofía",sub:"Tratado europeo y ensayo latinoamericano: objetividad, identidad, otredad, decolonialidad y diálogo socrático",st:[
+{n:"Tratado, ensayo, objetividad y subjetividad",tag:"Estación 1",repaso:[
+"Tratado: texto sistemático e impersonal, organizado en definiciones, proposiciones y demostraciones. Ejemplos: la Ética de Spinoza (“demostrada según el orden geométrico”), el Tratado de la naturaleza humana de Hume.",
+"Ensayo: texto libre y personal que “ensaya” o prueba ideas. Lo creó Montaigne con sus Ensayos (1580). Avanza con preguntas, dudas y experiencia.",
+"Ensayo latinoamericano: “Nuestra América” de José Martí (1891), “Ariel” de José Enrique Rodó (1900), “Siete ensayos de interpretación de la realidad peruana” de Mariátegui (1928), “El laberinto de la soledad” de Octavio Paz (1950).",
+"Objetividad: pretensión de describir algo sin depender de quien lo mira. Subjetividad: parte de la experiencia, las valoraciones y el punto de vista de quien escribe.",
+"Objetividad no es lo mismo que neutralidad: todo texto se escribe desde un lugar y un tiempo, aunque pretenda no tenerlos.",
+"Argumento: premisas que llevan a una conclusión. Tesis: la idea principal que se defiende. Un ensayo también argumenta, aunque con libertad de forma.",
+"Contexto: el tratado europeo moderno busca el rigor del sistema; el ensayo latinoamericano suele pensar una realidad concreta y urgente (identidad, desigualdad, cultura).",
+"Estructura básica de un buen ensayo: tesis, argumentos con ejemplos, contraargumento y conclusión."],
+qs:[
+{t:"mc",q:"Un tratado se caracteriza por…",o:["organizarse en proposiciones y demostraciones","tener estructura libre y voz personal","contar solo anécdotas","no tener argumentos"],e:"El tratado busca un sistema riguroso, impersonal y demostrativo."},
+{t:"mc",q:"Un ensayo es…",o:["un texto libre y personal que prueba ideas","un manual de instrucciones","una demostración matemática","un acta de reunión"],e:"“Ensayar” significa probar, tantear ideas."},
+{t:"mc",q:"¿Quién creó el género del ensayo con sus “Ensayos” (1580)?",o:["Montaigne","Spinoza","Descartes","Kant"],e:"Michel de Montaigne dio su forma moderna al ensayo."},
+{t:"tf",q:"El ensayo latinoamericano suele partir de una voz personal y de una situación histórica concreta.",a:true,e:"Sí. Piensa una realidad propia, con libertad de forma."},
+{t:"mc",q:"“Nuestra América” (1891) es un ensayo de…",o:["José Martí","Baruch Spinoza","David Hume","Aristóteles"],e:"Martí pide pensar América desde sus propias realidades."},
+{t:"mc",q:"La Ética de Spinoza, “demostrada según el orden geométrico”, es un ejemplo de…",o:["tratado","ensayo","poema","diario personal"],e:"Se organiza en definiciones, axiomas, proposiciones y demostraciones."},
+{t:"tf",q:"Un texto objetivo siempre es neutral y no tiene ningún punto de vista.",a:false,e:"Falso. Todo texto se escribe desde un lugar y un tiempo, aunque pretenda no tenerlos."},
+{t:"mc",q:"La subjetividad en un texto consiste en…",o:["incluir la experiencia y las valoraciones de quien escribe","ocultar todo punto de vista","usar solo datos numéricos","copiar a otro autor"],e:"La subjetividad no es falta de rigor: es reconocer desde dónde se piensa."},
+{t:"mc",q:"¿Cuál frase es más subjetiva?",o:["“Me parece injusto que unos piensen por todos.”","“La Tierra gira alrededor del Sol.”","“El texto tiene tres capítulos.”","“La proposición 2 se sigue de la 1.”"],e:"“Me parece” marca una valoración personal."},
+{t:"mc",q:"Una premisa es…",o:["una afirmación de la que parte un argumento","la conclusión final","una pregunta sin respuesta","un ejemplo de ficción"],e:"Las premisas sostienen la conclusión de un argumento."},
+{t:"tf",q:"Un ensayo puede argumentar con rigor aunque su estructura sea libre.",a:true,e:"Libertad de forma no significa ausencia de argumentos."},
+{t:"order",q:"Ordena la estructura de un ensayo argumentativo.",items:["Tesis","Argumentos con ejemplos","Contraargumento","Conclusión"],e:"Primero la tesis; luego se argumenta, se responde a una objeción y se cierra."},
+{t:"mc",q:"¿Por qué el ensayo fue útil para el pensamiento latinoamericano?",o:["Permitía pensar la propia realidad con libertad de forma, sin esperar sistemas ajenos","Porque prohibía opinar","Porque solo usaba fórmulas","Porque copiaba tratados europeos"],e:"Dio un espacio para pensar problemas propios con voz propia."},
+{t:"mc",q:"“Siete ensayos de interpretación de la realidad peruana” (1928) es de…",o:["José Carlos Mariátegui","Octavio Paz","José Martí","Paulo Freire"],e:"Mariátegui interpreta la economía, la tierra, la educación y la cultura del Perú."}]},
+{n:"El “yo”, el “nosotros” y la identidad",tag:"Estación 2",repaso:[
+"Descartes (1637): “pienso, luego existo”. Su punto de partida es el “yo” individual que duda y piensa. Es la base de buena parte de la filosofía moderna europea.",
+"La filosofía latinoamericana suele partir de un “nosotros”: un sujeto colectivo con historia propia de conquista, colonia, mestizaje y resistencia.",
+"Arturo Roig (Argentina–Ecuador): el pensamiento latinoamericano parte de la afirmación del propio sujeto como valioso (el “a priori antropológico”).",
+"Bolívar Echeverría (Ecuador, 1941–2010): estudió el “ethos barroco” y criticó la “blanquitud”, una idea de modernidad que toma lo blanco como ideal.",
+"Agustín Cueva (Ecuador, 1937–1992): criticó la ideología del mestizaje cuando oculta desigualdades y deja fuera a pueblos indígenas y campesinos.",
+"Leopoldo Zea (México) preguntó si existe una filosofía de nuestra América. Rodolfo Kusch (Argentina) contrastó el “ser alguien” occidental con el “estar siendo” del pensamiento popular e indígena.",
+"Mestizaje: mezcla histórica de pueblos y culturas. Criollo: descendiente de europeos nacido en América.",
+"Identidad: no es algo fijo; se construye en la historia. Pensar desde un “nosotros” también tiene el riesgo de homogeneizar y ocultar diferencias internas."],
+qs:[
+{t:"mc",q:"“Pienso, luego existo” expresa un punto de partida centrado en…",o:["el “yo” que piensa","el “nosotros” de la comunidad","la tradición oral","el Estado"],e:"Es la frase de Descartes: la certeza nace del yo que duda."},
+{t:"mc",q:"La filosofía latinoamericana suele partir de…",o:["un “nosotros” con historia propia","un “yo” sin historia","la pura matemática","la ausencia de cultura"],e:"Piensa desde una historia compartida de conquista, mestizaje y resistencia."},
+{t:"mc",q:"Arturo Roig propone que el pensamiento latinoamericano parta de…",o:["la afirmación del propio sujeto latinoamericano como valioso","copiar los sistemas europeos","negar toda tradición","la neutralidad total"],e:"Es su idea del “a priori antropológico”."},
+{t:"mc",q:"Bolívar Echeverría criticó la “blanquitud”, que es…",o:["una idea de modernidad que toma lo blanco como ideal","un color de pintura","una corriente poética","un tipo de ensayo"],e:"La blanquitud es una crítica a cierto ideal racial de la modernidad capitalista."},
+{t:"mc",q:"Agustín Cueva advirtió que la ideología del mestizaje puede…",o:["ocultar desigualdades y dejar fuera a pueblos indígenas","eliminar el racismo","probar que no hay historia","negar la identidad"],e:"Un relato de unidad puede tapar las desigualdades reales."},
+{t:"tf",q:"La identidad es algo fijo e inmutable que no cambia con la historia.",a:false,e:"Falso. La identidad se construye y se transforma históricamente."},
+{t:"mc",q:"Leopoldo Zea (México) se preguntó…",o:["si existe una filosofía de nuestra América","si Dios existe","si la matemática es útil","si Roma cayó"],e:"Su obra discute la autenticidad del pensamiento latinoamericano."},
+{t:"tf",q:"Pensar desde un “nosotros” significa que ya no importa la diversidad interna de un pueblo.",a:false,e:"Falso. Ese es justamente el riesgo: homogeneizar. Un “nosotros” debe reconocer sus diferencias."},
+{t:"mc",q:"Mestizaje es…",o:["la mezcla histórica de pueblos y culturas","un tipo de ensayo","una doctrina religiosa","un sistema económico"],e:"En América, mezcla de pueblos indígenas, europeos y africanos, con relaciones desiguales de poder."},
+{t:"mc",q:"Un criollo es…",o:["un descendiente de europeos nacido en América","un indígena originario","un esclavo africano","un misionero"],e:"Los criollos tuvieron un papel central en las independencias."},
+{t:"tf",q:"En Descartes, la certeza parte de la duda de un individuo que piensa.",a:true,e:"Sí. La duda metódica del yo es el punto de partida."},
+{t:"order",q:"Ordena estos procesos históricos.",items:["Conquista y colonización","Sociedades coloniales y mestizaje","Independencias del siglo XIX","Debates sobre identidad en el siglo XX"],e:"Conquista → colonia → independencias → búsqueda de identidad."},
+{t:"mc",q:"Rodolfo Kusch contrastó el “ser alguien” occidental con…",o:["el “estar siendo” del pensamiento popular e indígena","el “tener” del mercado","el “saber” de la ciencia","el “mandar” del Estado"],e:"Kusch quiso pensar desde la vida y la cultura popular de América."},
+{t:"mc",q:"¿Por qué la pregunta por la identidad se vuelve central después de las independencias?",o:["Porque, al dejar de ser colonias, había que definir quiénes éramos","Porque se prohibió pensar","Porque todos pensaban igual","Porque desapareció la historia"],e:"La independencia política abrió la pregunta por la identidad propia."}]},
+{n:"Otredad, liberación y decolonialidad",tag:"Estación 3",repaso:[
+"Filosofía de la liberación (años 70): Enrique Dussel, en “Filosofía de la liberación” (1977), parte del Otro, del excluido y del pobre, como punto de partida de la ética (“exterioridad”).",
+"Dussel, en “1492: el encubrimiento del Otro” (1992), sostiene que a América se la encubrió más que “descubrirla”.",
+"Paulo Freire, “Pedagogía del oprimido” (1968): educación bancaria (el docente “deposita” saberes) frente a educación problematizadora; conscientización.",
+"Libertad y liberación no son lo mismo: la libertad suele pensarse como un derecho individual; la liberación es un proceso colectivo de quienes están en situación de opresión.",
+"Aníbal Quijano: colonialidad del poder. Colonialismo es el dominio político directo; colonialidad es el patrón de poder que sigue aunque la colonia termine, sobre todo con la clasificación racial.",
+"Walter Mignolo: geopolítica del conocimiento. No da igual desde dónde se piensa; el conocimiento tiene lugar y cuerpo.",
+"Santiago Castro-Gómez: “hybris del punto cero”, la pretensión de mirar el mundo desde ningún lugar. Eurocentrismo: tomar lo europeo como medida universal.",
+"Catherine Walsh: interculturalidad crítica (cuestiona las causas de la desigualdad) frente a la funcional (incluye la diversidad sin cambiar las estructuras).",
+"Edward Said, “Orientalismo” (1978): Occidente construyó una imagen del Oriente como el “otro” inferior."],
+qs:[
+{t:"mc",q:"Para Enrique Dussel, la ética parte de…",o:["el Otro excluido","el mercado","la naturaleza","el Estado"],e:"Su filosofía de la liberación parte de la exterioridad del Otro."},
+{t:"mc",q:"“Pedagogía del oprimido” es una obra de…",o:["Paulo Freire","Walter Mignolo","Aníbal Quijano","Edward Said"],e:"Freire publicó la obra en 1968."},
+{t:"mc",q:"En la “educación bancaria” de Freire…",o:["el docente deposita saberes en estudiantes pasivos","el estudiante y el docente dialogan","se aprende en la calle","no hay evaluación"],e:"Freire la critica y propone una educación problematizadora."},
+{t:"mc",q:"La colonialidad es…",o:["el patrón de poder que continúa aunque termine la colonia","la ocupación militar directa","un tipo de ensayo","el derecho al voto"],e:"La colonialidad persiste en la clasificación racial y en el saber."},
+{t:"mc",q:"La “colonialidad del poder” fue propuesta por…",o:["Aníbal Quijano","Paulo Freire","Enrique Dussel","Octavio Paz"],e:"Quijano mostró cómo la idea de raza organizó el poder mundial."},
+{t:"mc",q:"La “geopolítica del conocimiento” de Walter Mignolo dice que…",o:["importa desde qué lugar y para quién se produce el conocimiento","el conocimiento no tiene lugar","solo la ciencia es válida","los mapas son neutrales"],e:"El saber tiene lugar, historia y poder."},
+{t:"mc",q:"La interculturalidad crítica (Catherine Walsh)…",o:["cuestiona las causas de la desigualdad entre culturas","solo celebra la diversidad","niega la identidad","evita el diálogo"],e:"No basta con incluir: hay que transformar las relaciones de poder."},
+{t:"tf",q:"La interculturalidad funcional incluye la diversidad sin cambiar las estructuras de desigualdad.",a:true,e:"Sí. Por eso Walsh la distingue de la crítica."},
+{t:"tf",q:"Libertad y liberación significan exactamente lo mismo.",a:false,e:"Falso. La liberación es un proceso colectivo desde la situación de opresión."},
+{t:"mc",q:"Eurocentrismo es…",o:["tomar lo europeo como medida universal","estudiar solo Europa","viajar por Europa","un tipo de arte europeo"],e:"Juzga a otros pueblos con la vara europea."},
+{t:"mc",q:"“Orientalismo” (1978) de Edward Said muestra que…",o:["Occidente construyó una imagen del Oriente como el “otro” inferior","Oriente conquistó Europa","Oriente no tiene historia","Europa es un mito"],e:"Es un ejemplo de cómo se fabrica la “otredad”."},
+{t:"mc",q:"Dussel, en “1492: el encubrimiento del Otro”, plantea que…",o:["a los pueblos de América se los encubrió más que “descubrirlos”","América no existía","Europa ayudó siempre","la historia no importa"],e:"Cambia la palabra “descubrimiento” por “encubrimiento”."},
+{t:"order",q:"Ordena por año de publicación (de más antigua a más reciente).",items:["Pedagogía del oprimido, Freire (1968)","Filosofía de la liberación, Dussel (1977)","Orientalismo, Said (1978)","1492: el encubrimiento del Otro, Dussel (1992)"],e:"1968 → 1977 → 1978 → 1992."},
+{t:"mc",q:"La “hybris del punto cero” (Castro-Gómez) critica…",o:["la pretensión de mirar el mundo sin lugar ni cuerpo","el amor al conocimiento","el uso de mapas","la ciencia en general"],e:"Es la ilusión de un punto de vista neutral, desde ningún lugar."}]},
+{n:"Diálogo socrático y síntesis",tag:"Estación 4",repaso:[
+"Sócrates (470–399 a. C., Atenas) no escribió nada. Conocemos su pensamiento sobre todo por los diálogos de Platón.",
+"Su método tiene dos momentos: la ironía (mostrar que no se sabe lo que se creía saber) y la mayéutica (ayudar a “dar a luz” ideas mediante preguntas; su madre era partera).",
+"Elenchos: examen o refutación de una afirmación mediante preguntas. Aporía: callejón sin salida, cuando el diálogo no llega a una respuesta cerrada.",
+"Pasos habituales: definición inicial → preguntas que la ponen a prueba → contraejemplo → nueva definición, mejor que la anterior.",
+"Contraejemplo: un caso que contradice una definición general y obliga a mejorarla.",
+"Pregunta socrática típica: “¿qué es…?” (la justicia, el valor, el buen vivir) y “¿cómo lo sabes?”.",
+"Utopía (Tomás Moro, 1516): “no lugar”. Un proyecto utópico posible es un ideal que orienta la acción aunque aún no se logre del todo.",
+"Sumak Kawsay: expresión kichwa que suele traducirse como “vida en plenitud” o “buen vivir”: armonía entre las personas, la comunidad y la naturaleza.",
+"Falacia ad hominem: atacar a la persona en lugar de responder a su argumento. Una buena tesis de síntesis reconoce lo universal y lo situado."],
+qs:[
+{t:"mc",q:"El método de Sócrates se llama…",o:["mayéutica","dialéctica hegeliana","método científico","pragmatismo"],e:"Consiste en ayudar a descubrir ideas mediante preguntas."},
+{t:"mc",q:"La mayéutica se compara con el oficio de…",o:["partera","juez","soldado","comerciante"],e:"La madre de Sócrates era partera: él ayudaba a “dar a luz” ideas."},
+{t:"tf",q:"Sócrates dejó numerosos libros escritos por él mismo.",a:false,e:"Falso. No escribió; su pensamiento llegó sobre todo por Platón."},
+{t:"mc",q:"Elenchos es…",o:["el examen de una afirmación mediante preguntas","una forma de poema","un tipo de ciudad griega","una fiesta religiosa"],e:"Busca probar si una definición resiste las preguntas."},
+{t:"mc",q:"Una aporía es…",o:["un callejón sin salida en el que el diálogo no llega a una respuesta cerrada","una respuesta definitiva","un tipo de ensayo","una demostración geométrica"],e:"Muchos diálogos de Platón terminan en aporía."},
+{t:"mc",q:"¿Cuál es una pregunta típica del diálogo socrático?",o:["“¿Qué es la justicia?”","“¿Cuánto cuesta esto?”","“¿Dónde queda la plaza?”","“¿Qué hora es?”"],e:"Pregunta por la definición de un concepto."},
+{t:"tf",q:"En un diálogo socrático, quien pregunta da la respuesta correcta desde el inicio.",a:false,e:"Falso. Se llega a la mejor respuesta preguntando y probando definiciones."},
+{t:"mc",q:"Un contraejemplo es…",o:["un caso que contradice una definición general","una cita de autoridad","una repetición de la tesis","una conclusión"],e:"Obliga a mejorar la definición."},
+{t:"order",q:"Ordena los pasos del diálogo socrático.",items:["Definición inicial","Preguntas que la ponen a prueba","Contraejemplo","Nueva definición, mejor"],e:"Definición → preguntas → contraejemplo → nueva definición."},
+{t:"mc",q:"Sumak Kawsay es una expresión kichwa que suele traducirse como…",o:["vida en plenitud o buen vivir","poder del Estado","riqueza individual","guerra justa"],e:"Propone armonía entre las personas, la comunidad y la naturaleza."},
+{t:"mc",q:"Un proyecto utópico posible es…",o:["un ideal que orienta la acción aunque aún no se logre del todo","algo imposible que no sirve","una ley vigente","un hecho ya cumplido"],e:"“Utopía” viene de “no lugar”, pero puede orientar cambios reales."},
+{t:"tf",q:"El Sumak Kawsay propone armonía entre la comunidad y la naturaleza.",a:true,e:"Sí. Es una de sus ideas centrales."},
+{t:"mc",q:"La falacia ad hominem consiste en…",o:["atacar a la persona en lugar de responder a su argumento","dar muchos ejemplos","usar una definición","hacer una pregunta"],e:"Es una forma de evitar el debate de fondo."},
+{t:"mc",q:"¿Cuál es la mejor tesis de síntesis sobre si la filosofía puede ser universal y situada?",o:["Puede aspirar a lo universal si dialoga con muchas voces situadas","Solo vale lo que dice Europa","Nada de lo europeo sirve","No existen ideas universales ni diálogo posible"],e:"Reconoce la aspiración universal y el origen situado de todo pensamiento."}]}
+]};
+
+</script>
+<script>
+var app=document.getElementById("app");
+var NQ=10;
+var S={name:"",curso:"",res:[],att:[],cur:null};
+try{S.name=localStorage.getItem("qn-name-"+DATA.id)||"";S.curso=localStorage.getItem("qn-curso-"+DATA.id)||""}catch(e){}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function sh(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function fm(x){return (Math.round(x*10)/10).toFixed(1).replace(".",",")}
+function lvl(x){if(x>=9)return["Domina los aprendizajes requeridos (DA)","s-hi"];if(x>=7)return["Alcanza los aprendizajes requeridos (AA)","s-hi"];if(x>4)return["Próximo a alcanzar los aprendizajes (PAA)","s-mid"];return["No alcanza los aprendizajes requeridos (NAA)","s-lo"]}
+function stamp(){var d=new Date();function z(n){return(n<10?"0":"")+n}return z(d.getDate())+"/"+z(d.getMonth()+1)+"/"+d.getFullYear()+" · "+z(d.getHours())+":"+z(d.getMinutes())}
+function save(){try{localStorage.setItem("qn-name-"+DATA.id,S.name);localStorage.setItem("qn-curso-"+DATA.id,S.curso)}catch(e){}}
+function head(){return'<p class="tag">'+DATA.nombre+" · "+DATA.curso+"</p>"}
+function home(msg){
+ var h=head()+"<h1>"+esc(DATA.titulo)+"</h1><p class=\"muted\">"+esc(DATA.sub)+"</p>";
+ h+='<div class="card"><label for="nm">Nombre y apellido</label><input type="text" id="nm" autocomplete="name" value="'+esc(S.name)+'"><label for="cu">Curso y paralelo (ej.: 2 BGU A)</label><input type="text" id="cu" value="'+esc(S.curso)+'">';
+ if(msg)h+='<p style="color:var(--bad);font-weight:700">'+msg+"</p>";
+ h+="</div>";
+ h+='<p class="small muted">Cada estación vale 10 puntos: 10 preguntas al azar de un banco de 14. Puedes repasar la ficha antes de empezar y repetir las veces que quieras. Al final de cada estación aparece tu nota para capturarla y enviarla por la plataforma.</p>';
+ DATA.st.forEach(function(s,i){
+  var r=S.res[i];
+  h+='<div class="card st"><div><p class="tag">'+s.tag+"</p><h3>"+esc(s.n)+'</h3><p class="small muted">'+(r!=null?"Mejor nota: "+fm(r)+" / 10 · Intentos: "+S.att[i]:"Aún sin intentar")+'</p></div><button class="pri" data-i="'+i+'" data-a="go">'+(r!=null?"Repetir":"Entrar")+"</button></div>"});
+ h+='<div class="row"><button class="pri" data-a="sum">Ver resumen de mis notas</button></div>';
+ app.innerHTML=h;
+ app.querySelectorAll("[data-a=go]").forEach(function(b){b.onclick=function(){
+  S.name=document.getElementById("nm").value.trim();S.curso=document.getElementById("cu").value.trim();save();
+  if(!S.name||!S.curso){home("Escribe tu nombre y tu curso para entrar. Aparecerán en tu nota.");return}
+  intro(+b.getAttribute("data-i"))}});
+ app.querySelector("[data-a=sum]").onclick=function(){S.name=document.getElementById("nm").value.trim();S.curso=document.getElementById("cu").value.trim();save();summary()};
+ window.scrollTo(0,0)}
+function intro(i){
+ var s=DATA.st[i];
+ var h=head()+'<p class="tag">'+s.tag+"</p><h1>"+esc(s.n)+"</h1>";
+ h+='<details open><summary>Repasa antes de empezar</summary><ul>'+s.repaso.map(function(x){return"<li>"+esc(x)+"</li>"}).join("")+"</ul></details>";
+ h+='<p class="small muted">Son 10 preguntas con retroalimentación inmediata. Cada una vale 1 punto.</p><div class="row"><button class="pri" data-a="start">Comenzar</button><button data-a="back">Volver</button></div>';
+ app.innerHTML=h;
+ app.querySelector("[data-a=start]").onclick=function(){start(i)};
+ app.querySelector("[data-a=back]").onclick=function(){home()};
+ window.scrollTo(0,0)}
+function start(i){
+ var qs=sh(DATA.st[i].qs).slice(0,NQ);
+ S.cur={i:i,qs:qs,k:0,pts:0,miss:[],done:false};ask()}
+function ask(){
+ var c=S.cur,q=c.qs[c.k];c.done=false;c.sel=[];
+ var h=head()+'<p class="tag">'+DATA.st[c.i].tag+" · Pregunta "+(c.k+1)+" de "+c.qs.length+'</p><div class="bar"><i style="width:'+Math.round(c.k/c.qs.length*100)+'%"></i></div><h2>'+esc(q.q)+"</h2>";
+ if(q.t==="mc"){c.opts=sh(q.o.map(function(t,ix){return{t:t,ok:ix===0}}));h+=c.opts.map(function(o,ix){return'<button class="op" data-o="'+ix+'">'+esc(o.t)+"</button>"}).join("")}
+ else if(q.t==="tf"){h+='<div class="tfrow"><button data-v="1">Verdadero</button><button data-v="0">Falso</button></div>'}
+ else{c.shuf=sh(q.items.map(function(t,ix){return{t:t,ix:ix}}));h+='<p class="small muted">Toca los hechos en el orden correcto, del primero al último. Toca uno de tu lista para quitarlo.</p><div class="seq" id="seq"></div><div class="chips" id="chips"></div><div class="row"><button class="pri" id="chk" disabled>Comprobar</button></div>'}
+ h+='<div id="fb"></div>';
+ app.innerHTML=h;
+ if(q.t==="mc")app.querySelectorAll(".op").forEach(function(b){b.onclick=function(){answerMc(+b.getAttribute("data-o"))}});
+ else if(q.t==="tf")app.querySelectorAll("[data-v]").forEach(function(b){b.onclick=function(){answerTf(b.getAttribute("data-v")==="1")}});
+ else drawOrder();
+ window.scrollTo(0,0)}
+function finishQ(ok,exp){
+ var c=S.cur,q=c.qs[c.k];c.done=true;if(ok)c.pts++;else c.miss.push(q);
+ var fb=document.getElementById("fb");
+ fb.innerHTML='<div class="fb '+(ok?"ok":"bad")+'"><b>'+(ok?"¡Correcto!":"Revisa esto.")+"</b> "+esc(exp)+'</div><div class="row"><button class="pri" id="nx">'+(c.k+1<c.qs.length?"Siguiente":"Ver mi nota")+"</button></div>";
+ var nx=document.getElementById("nx");nx.onclick=function(){c.k++;if(c.k<c.qs.length)ask();else result()};nx.focus()}
+function answerMc(ix){var c=S.cur,q=c.qs[c.k];if(c.done)return;
+ app.querySelectorAll(".op").forEach(function(b,j){b.disabled=true;if(c.opts[j].ok)b.classList.add("ok");else if(j===ix)b.classList.add("bad")});
+ finishQ(c.opts[ix].ok,q.e)}
+function answerTf(v){var c=S.cur,q=c.qs[c.k];if(c.done)return;
+ app.querySelectorAll("[data-v]").forEach(function(b){b.disabled=true;var bv=b.getAttribute("data-v")==="1";if(bv===q.a)b.classList.add("op","ok");else if(bv===v)b.classList.add("op","bad")});
+ finishQ(v===q.a,(v===q.a?"":"La respuesta es "+(q.a?"Verdadero":"Falso")+". ")+q.e)}
+function drawOrder(){
+ var c=S.cur,seq=document.getElementById("seq"),ch=document.getElementById("chips"),chk=document.getElementById("chk");
+ seq.innerHTML=c.sel.map(function(ix,p){return'<button data-r="'+p+'">'+esc(c.qs[c.k].items[ix])+"</button>"}).join("");
+ ch.innerHTML=c.shuf.filter(function(o){return c.sel.indexOf(o.ix)<0}).map(function(o){return'<button data-a="'+o.ix+'">'+esc(o.t)+"</button>"}).join("");
+ chk.disabled=c.sel.length!==c.shuf.length;
+ ch.querySelectorAll("button").forEach(function(b){b.onclick=function(){if(c.done)return;c.sel.push(+b.getAttribute("data-a"));drawOrder()}});
+ seq.querySelectorAll("button").forEach(function(b){b.onclick=function(){if(c.done)return;c.sel.splice(+b.getAttribute("data-r"),1);drawOrder()}});
+ chk.onclick=function(){if(c.done)return;var ok=c.sel.every(function(v,p){return v===p});
+  seq.querySelectorAll("button").forEach(function(b){b.disabled=true});chk.disabled=true;
+  var q=c.qs[c.k];finishQ(ok,(ok?"":"El orden correcto es: "+q.items.map(function(t,p){return(p+1)+") "+t}).join(" · ")+". ")+q.e)}}
+function result(){
+ var c=S.cur,i=c.i,sc=c.pts;
+ S.att[i]=(S.att[i]||0)+1;S.res[i]=S.res[i]==null?sc:Math.max(S.res[i],sc);
+ var L=lvl(sc);
+ var h='<p class="tag">'+DATA.st[i].tag+" · Resultado</p>";
+ h+='<div class="cap"><p class="tag">'+DATA.nombre+" · "+DATA.curso+"</p><h2>"+esc(DATA.st[i].n)+'</h2><p><b>Estudiante:</b> '+esc(S.name)+"<br><b>Curso:</b> "+esc(S.curso)+"<br><b>Fecha y hora:</b> "+stamp()+"<br><b>Intento:</b> "+S.att[i]+'</p><div class="big">'+sc+' <span style="font-size:.4em">/ 10</span></div><p><span class="lv '+L[1]+'">'+L[0]+"</span></p></div>";
+ h+='<div class="alert">Toma una captura de pantalla de esta nota (con tu nombre, la fecha y la hora) y envíala por la plataforma.</div>';
+ if(c.miss.length){h+="<h3>Para repasar ("+c.miss.length+")</h3><div class=\"card\">"+c.miss.map(function(q){var r=q.t==="mc"?q.o[0]:q.t==="tf"?(q.a?"Verdadero":"Falso"):q.items.map(function(t,p){return(p+1)+") "+t}).join(" · ");return'<div class="miss"><b>'+esc(q.q)+"</b><br>Respuesta: "+esc(r)+"<br><span class=\"muted\">"+esc(q.e)+"</span></div>"}).join("")+"</div>"}
+ else h+='<p><b>Sin errores.</b> Excelente repaso.</p>';
+ h+='<div class="row"><button class="pri" id="rt">Repetir con otras preguntas</button><button id="rv">Repasar la ficha</button><button id="hm">Volver a las estaciones</button></div>';
+ app.innerHTML=h;
+ document.getElementById("rt").onclick=function(){start(i)};
+ document.getElementById("rv").onclick=function(){intro(i)};
+ document.getElementById("hm").onclick=function(){home()};
+ window.scrollTo(0,0)}
+function summary(){
+ var done=0,tot=0;DATA.st.forEach(function(s,i){if(S.res[i]!=null){done++;tot+=S.res[i]}});
+ var h=head()+"<h1>Resumen de mis notas</h1>";
+ h+='<div class="cap"><p><b>Estudiante:</b> '+esc(S.name||"—")+"<br><b>Curso:</b> "+esc(S.curso||"—")+"<br><b>Fecha y hora:</b> "+stamp()+'</p><table><thead><tr><th>Estación</th><th class="n">Mejor nota</th><th class="n">Intentos</th></tr></thead><tbody>'+DATA.st.map(function(s,i){return"<tr><td>"+esc(s.n)+'</td><td class="n">'+(S.res[i]!=null?fm(S.res[i])+" / 10":"—")+'</td><td class="n">'+(S.att[i]||0)+"</td></tr>"}).join("")+"</tbody></table>"+(done?'<p><b>Promedio de las estaciones hechas ('+done+" de "+DATA.st.length+"):</b> "+fm(tot/done)+" / 10</p>":"<p class=\"muted\">Aún no has hecho ninguna estación.</p>")+"</div>";
+ h+='<div class="alert">Toma una captura de pantalla de cada estación al terminarla y envíala por la plataforma. Este resumen es solo para ti.</div><div class="row"><button class="pri" id="hm">Volver a las estaciones</button></div>';
+ app.innerHTML=h;document.getElementById("hm").onclick=function(){home()};window.scrollTo(0,0)}
+home();
+
+</script>
+</body>
+</html>

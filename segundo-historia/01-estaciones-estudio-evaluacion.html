@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz de estudio Historia 2 BGU</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Concepto: quiz de estudio por estaciones. Una pregunta por pantalla, nota sobre 10 por estación y una tarjeta de resultado pensada para capturar y enviar por la plataforma. */
+:root{--bg:#F3F4F8;--surface:#FFFFFF;--fg:#15192B;--muted:#586079;--line:#CCD2E0;--accent:#2C6B49;--accent-soft:#DCEBDD;--ok:#1E7B46;--ok-soft:#DCF0E3;--bad:#B3321F;--bad-soft:#F8DED9;--warm:#8F5A06;--warm-soft:#F7EACB;--onacc:#FFFFFF;
+--font:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--serif:Georgia,"Times New Roman",serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1422;--surface:#181F33;--fg:#ECEFF7;--muted:#A9B2C7;--line:#2D3855;--accent:#6CC391;--accent-soft:#1D3A2B;--ok:#6CD39A;--ok-soft:#173A27;--bad:#F2876F;--bad-soft:#3A1D18;--warm:#E9B04F;--warm-soft:#3B2D12;--onacc:#0F1422;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1422;--surface:#181F33;--fg:#ECEFF7;--muted:#A9B2C7;--line:#2D3855;--accent:#6CC391;--accent-soft:#1D3A2B;--ok:#6CD39A;--ok-soft:#173A27;--bad:#F2876F;--bad-soft:#3A1D18;--warm:#E9B04F;--warm-soft:#3B2D12;--onacc:#0F1422;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:clamp(17px,2.6vw,20px);line-height:1.45;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 48px}
+#app{max-width:780px;margin:0 auto}
+h1,h2,h3{font-family:var(--serif);line-height:1.15;margin:.2em 0 .4em;text-wrap:balance}h1{font-size:1.8em}h2{font-size:1.4em}h3{font-size:1.1em}
+p{margin:.45em 0}.muted{color:var(--muted)}.small{font-size:.82em}
+.tag{font-size:.74em;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--warm);margin:0}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:.45em 0 .9em}.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:.8em 1em;margin:.7em 0}
+button,input{font:inherit;color:var(--fg)}
+button{cursor:pointer;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:.6em .9em;min-height:48px;text-align:left}
+button:hover:not(:disabled){border-color:var(--accent)}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+button.pri{background:var(--accent);border-color:var(--accent);color:var(--onacc);font-weight:700;text-align:center}
+button:disabled{opacity:.5;cursor:not-allowed}
+.op{display:block;width:100%;margin:.45em 0}.op.ok{background:var(--ok-soft);border-color:var(--ok)}.op.bad{background:var(--bad-soft);border-color:var(--bad)}
+.row{display:flex;gap:.6em;flex-wrap:wrap;align-items:center;margin:.6em 0}.row>*{min-width:0}
+.tfrow{display:grid;grid-template-columns:1fr 1fr;gap:.6em}.tfrow button{text-align:center;font-weight:700}
+input[type=text]{width:100%;background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:.6em .8em;min-height:48px}
+label{display:block;font-weight:700;font-size:.9em;margin:.7em 0 .2em}
+.fb{border-radius:12px;padding:.6em .9em;margin:.7em 0;font-size:.95em}.fb.ok{background:var(--ok-soft);border:2px solid var(--ok)}.fb.bad{background:var(--bad-soft);border:2px solid var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:.5em;margin:.5em 0}.chips button{flex:1 1 100%}
+.seq{counter-reset:s;display:grid;gap:.4em;margin:.5em 0;min-height:52px;border:2px dashed var(--line);border-radius:12px;padding:.5em}
+.seq button{counter-increment:s;background:var(--accent-soft);border-color:var(--accent)}.seq button::before{content:counter(s) ". ";font-weight:700}
+.st{display:grid;grid-template-columns:1fr auto;gap:.6em;align-items:center}
+.score{font-family:var(--serif);font-size:2.4em;font-weight:700;line-height:1;white-space:nowrap}
+.cap{border:3px solid var(--accent);border-radius:16px;background:var(--surface);padding:1em 1.1em;margin:.7em 0}
+.cap .big{font-family:var(--serif);font-size:3.4em;font-weight:700;line-height:1;color:var(--accent)}
+.lv{display:inline-block;font-weight:700;border-radius:999px;padding:.15em .8em;font-size:.85em}.s-hi{background:var(--ok-soft);color:var(--ok)}.s-mid{background:var(--warm-soft);color:var(--warm)}.s-lo{background:var(--bad-soft);color:var(--bad)}
+.alert{background:var(--warm-soft);border:2px solid var(--warm);border-radius:12px;padding:.7em .9em;font-weight:700;margin:.7em 0}
+details{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:.4em 1em;margin:.7em 0}summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+details ul{margin:.3em 0 .6em;padding-left:1.2em}details li{margin:.4em 0}
+table{width:100%;border-collapse:collapse;font-size:.92em}th,td{padding:.45em .5em;border-bottom:1px solid var(--line);text-align:left}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.miss{border-top:2px solid var(--line);padding:.5em 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (min-width:700px){.chips button{flex:1 1 45%}}
+</style>
+
+</head>
+<body>
+<div id="app"></div>
+<script>
+var DATA={id:"hist",nombre:"Historia",curso:"2 BGU",titulo:"Quiz de estudio de Historia",sub:"La mujer y la fe: Mesopotamia, judeocristianismo e islam, y el origen del cristianismo y del islamismo",st:[
+{n:"La mujer en Mesopotamia",tag:"Estación 1",repaso:[
+"Mesopotamia significa “tierra entre ríos”: el Tigris y el Éufrates. Allí vivieron sumerios, acadios, babilonios y asirios.",
+"El Código de Hammurabi (c. 1750 a. C.), rey de Babilonia, está escrito en una estela de piedra y regula matrimonio, dote, herencia, deudas y castigos.",
+"La dote era un bien de la esposa: seguía siendo suya y pasaba a sus hijos. El marido podía repudiarla, pero debía devolverle la dote.",
+"El adulterio de la esposa se castigaba con la muerte, aunque el marido podía perdonarla. Eso muestra un control desigual sobre la conducta de la mujer.",
+"Enheduanna (siglo XXIII a. C.), hija de Sargón de Akkad y sacerdotisa de la diosa Nanna en Ur, firmó himnos: es la autora más antigua conocida por su nombre.",
+"Algunas sacerdotisas (entu, naditu) administraban tierras, prestaban plata y manejaban negocios del templo. Las taberneras también tenían oficio propio.",
+"Las leyes asirias medias (c. 1075 a. C.) obligaban a las mujeres casadas a cubrirse el rostro en la calle.",
+"Patriarcado: organización social en la que los varones, sobre todo el padre, concentran la autoridad. Las mujeres esclavas no eran libres.",
+"Una ley no cuenta cómo vivía toda la gente: indica qué se quería controlar o castigar. Por eso se usa junto con otras fuentes."],
+qs:[
+{t:"mc",q:"Mesopotamia significa “tierra entre ríos”. ¿Cuáles son esos ríos?",o:["Tigris y Éufrates","Nilo y Éufrates","Indo y Ganges","Jordán y Nilo"],e:"Mesopotamia se ubica entre el Tigris y el Éufrates, en el actual Irak."},
+{t:"mc",q:"Hammurabi fue rey de…",o:["Babilonia","Egipto","Roma","Persia"],e:"Hammurabi gobernó Babilonia hacia 1750 a. C. y es famoso por su código de leyes."},
+{t:"tf",q:"El Código de Hammurabi regulaba el matrimonio, la dote y la herencia.",a:true,e:"Sí. Entre sus leyes hay muchas sobre familia, dote, herencia y divorcio."},
+{t:"mc",q:"Según las leyes mesopotámicas, la dote de la esposa…",o:["seguía siendo suya y pasaba a sus hijos","pasaba al rey","se quemaba al casarse","pasaba al marido para siempre"],e:"La dote era un bien de la esposa y se heredaba a sus hijos. Era una protección económica."},
+{t:"tf",q:"Enheduanna fue una sacerdotisa de Ur cuyos himnos se conservan.",a:true,e:"Sí. Es considerada la primera autora conocida por su nombre."},
+{t:"mc",q:"Enheduanna es importante porque…",o:["es la primera autora conocida por su nombre","fue reina de Egipto","inventó el alfabeto griego","fue la primera jueza de Roma"],e:"Sus himnos a la diosa Inanna se conservan firmados, hacia el siglo XXIII a. C."},
+{t:"tf",q:"En Mesopotamia todas las mujeres tenían los mismos derechos, sin importar su clase.",a:false,e:"Falso. Las sacerdotisas, las esposas libres y las esclavas tenían situaciones muy distintas."},
+{t:"mc",q:"Las leyes asirias exigían a las mujeres casadas…",o:["cubrirse el rostro en la calle","votar en la asamblea","servir como soldados","vivir en el templo"],e:"Era una norma de control sobre la apariencia pública de la mujer casada."},
+{t:"mc",q:"El castigo del adulterio, que el marido podía perdonar, muestra sobre todo…",o:["un control desigual sobre la conducta de la esposa","igualdad total entre esposos","que no existían leyes","que la mujer decidía el castigo"],e:"La ley juzgaba distinto a esposa y esposo. Eso es una forma de control patriarcal."},
+{t:"mc",q:"Que algunas sacerdotisas administraran tierras y negocios del templo muestra que…",o:["la mujer podía tener poder económico en ciertos espacios","la mujer no podía tocar dinero","los templos no tenían tierras","solo los reyes administraban"],e:"Había espacios, como los templos, donde algunas mujeres tenían poder económico."},
+{t:"tf",q:"Patriarcado es una forma de organizar la sociedad en la que los varones, sobre todo el padre, concentran la autoridad.",a:true,e:"Así se define. Mesopotamia fue en general una sociedad patriarcal, con excepciones por clase y oficio."},
+{t:"order",q:"Ordena de más antiguo a más reciente.",items:["Enheduanna escribe himnos (siglo XXIII a. C.)","Código de Hammurabi (c. 1750 a. C.)","Leyes asirias medias (c. 1075 a. C.)","Persia conquista Babilonia (539 a. C.)"],e:"Enheduanna → Hammurabi → leyes asirias → conquista persa de Babilonia."},
+{t:"mc",q:"¿Por qué un código de leyes sirve como fuente histórica sobre las mujeres?",o:["Porque muestra qué conductas se querían regular o castigar","Porque cuenta la vida diaria de todas las mujeres","Porque lo escribieron mujeres","Porque no tiene errores"],e:"Una ley revela lo que preocupaba a quien mandaba, pero no describe toda la vida real."},
+{t:"mc",q:"Una mujer de clase humilde en Mesopotamia podía trabajar como…",o:["tabernera o tejedora","reina o sacerdotisa","juez del reino","general del ejército"],e:"Las mujeres comunes tejían, vendían, elaboraban cerveza o atendían tabernas."}]},
+{n:"La mujer en el pensamiento judeocristiano",tag:"Estación 2",repaso:[
+"Génesis 1:27 dice que Dios creó al ser humano “varón y mujer”, a su imagen. Génesis 2–3 cuenta la creación de Eva y la caída.",
+"Durante siglos, algunos autores cristianos leyeron a Eva como culpable del pecado. Un ejemplo es Tertuliano (c. 200), que llamó a la mujer “puerta del diablo”.",
+"En la Biblia hebrea hay mujeres con liderazgo: Miriam (profetisa), Débora (jueza y profetisa, Jueces 4–5), Hulda (profetisa), Rut y Ester.",
+"Proverbios 31 elogia a la mujer trabajadora que administra casa y negocios. Valora su trabajo, aunque lo ubica sobre todo en el hogar.",
+"En los evangelios, María Magdalena es la primera testigo de la resurrección (Juan 20). Jesús conversó y enseñó a mujeres como Marta y María.",
+"Pablo escribe Gálatas 3:28: “ya no hay varón ni mujer, porque todos son uno en Cristo”. Y en Romanos 16 saluda a Febe, diaconisa, y a Junia y Priscila, colaboradoras.",
+"Otros textos atribuidos a Pablo piden silencio o sumisión: 1 Corintios 14:34, Efesios 5:22 y 1 Timoteo 2:12. Hoy se discute cómo leerlos.",
+"Hermenéutica: arte de interpretar textos. La interpretación cambia según la época, la tradición y el autor.",
+"Hoy hay diversidad: muchas iglesias protestantes ordenan mujeres; la Iglesia católica y la ortodoxa no ordenan sacerdotisas; el judaísmo reformista ordena rabinas desde 1972."],
+qs:[
+{t:"mc",q:"Débora, en el libro de Jueces, fue…",o:["jueza y profetisa que lideró a Israel","reina de Persia","apóstol de Jesús","escriba de Babilonia"],e:"Jueces 4–5 la presenta dirigiendo a su pueblo."},
+{t:"tf",q:"Génesis 1:27 afirma que varón y mujer fueron creados a imagen de Dios.",a:true,e:"Sí. Este texto se usa para defender la igualdad de dignidad entre varón y mujer."},
+{t:"mc",q:"Algunos autores cristianos antiguos culparon a la mujer del pecado usando el relato de…",o:["Eva y la serpiente","Rut y Noemí","Ester y Asuero","Débora y Barac"],e:"El relato de Génesis 3 fue leído por algunos como argumento para subordinar a la mujer."},
+{t:"mc",q:"Gálatas 3:28 afirma que…",o:["en Cristo ya no hay varón ni mujer: todos son uno","las mujeres deben callar","los varones mandan en el hogar","las mujeres no pueden enseñar"],e:"Es uno de los textos más citados a favor de la igualdad."},
+{t:"tf",q:"1 Corintios 14:34 (“las mujeres callen en las asambleas”) es un texto que se cita para limitar la participación de la mujer.",a:true,e:"Sí. Se discute si era una norma local de esa comunidad o una regla para siempre."},
+{t:"mc",q:"Según los evangelios, la primera testigo de la resurrección fue…",o:["María Magdalena","Marta","Priscila","Hulda"],e:"Juan 20 cuenta que María Magdalena encontró la tumba vacía y vio a Jesús."},
+{t:"mc",q:"Febe, mencionada en Romanos 16, fue…",o:["diaconisa de la iglesia de Cencreas","reina de Israel","profetisa del Antiguo Testamento","madre de Jesús"],e:"Pablo la recomienda como diaconisa y protectora de muchos."},
+{t:"mc",q:"Hermenéutica significa…",o:["arte de interpretar textos","arte de copiar manuscritos","arte de predecir el futuro","ciencia de los números"],e:"Un mismo texto puede leerse distinto según la época y la tradición."},
+{t:"tf",q:"Todas las iglesias cristianas actuales ordenan mujeres como sacerdotisas o pastoras.",a:false,e:"Falso. Muchas iglesias protestantes sí, pero la católica y la ortodoxa no."},
+{t:"tf",q:"El judaísmo reformista ordena rabinas desde 1972.",a:true,e:"Sally Priesand fue la primera rabina ordenada en una institución rabínica de Estados Unidos, en 1972."},
+{t:"mc",q:"Proverbios 31 presenta a la mujer ideal como…",o:["trabajadora que administra casa y negocios","guerrera que lidera ejércitos","sacerdotisa del templo","persona que debe callar"],e:"Valora su trabajo y sabiduría, aunque principalmente en el ámbito del hogar."},
+{t:"order",q:"Ordena de más antiguo a más reciente.",items:["Débora lidera a Israel (Jueces)","Jesús enseña en Galilea","Cartas de Pablo a las comunidades","Tertuliano escribe contra el lujo de las mujeres"],e:"Débora → Jesús → cartas de Pablo → Tertuliano (c. 200)."},
+{t:"mc",q:"¿Por qué hay diversidad de pensamiento judeocristiano sobre la mujer?",o:["Porque los mismos textos se interpretan distinto según la época, la tradición y el autor","Porque la Biblia no habla de mujeres","Porque todos los autores pensaron igual","Porque los textos se perdieron"],e:"Hay textos que limitan y otros que valoran, y cada tradición los lee a su manera."},
+{t:"mc",q:"Misoginia es…",o:["rechazo o desprecio hacia las mujeres","amor por la sabiduría","miedo a los extranjeros","gobierno de los ancianos"],e:"Algunas lecturas históricas de Eva alimentaron actitudes misóginas, pero no todas las lecturas lo hicieron."}]},
+{n:"La mujer en el pensamiento islámico",tag:"Estación 3",repaso:[
+"El Corán es, para los musulmanes, la palabra de Dios revelada a Muhammad. El hadiz reúne dichos y hechos atribuidos a Muhammad, puestos por escrito generaciones después (colecciones de Bujari y Muslim, siglo IX).",
+"Corán 33:35 nombra por igual a hombres y mujeres creyentes y promete la misma recompensa. Corán 16:97, 3:195 y 49:13 apuntan en el mismo sentido de igualdad moral.",
+"Corán 4:4 manda dar a la mujer su dote (mahr) como bien propio. Corán 4:11 le reconoce una parte de la herencia.",
+"Antes del islam se practicaba el infanticidio de niñas en algunos grupos; el Corán lo condena (81:8-9 y 16:58-59).",
+"Jadiya, primera esposa de Muhammad, fue comerciante y la primera en creer. Aisha transmitió muchos hadices y enseñó a otros. Fátima fue hija del Profeta.",
+"Corán 4:34 es un versículo muy debatido: palabras como qawwamun y daraba se traducen de formas distintas (“protectores” o “encargados”; “golpear” o “separarse”).",
+"No todo viene del Corán: también cuentan los hadices, las interpretaciones de los juristas (escuelas hanafí, maliki, shafií y hanbalí, siglos VIII–IX) y las costumbres y leyes de cada país.",
+"La separación de espacios entre hombres y mujeres ya existía en sociedades vecinas (persa y bizantina) y se incorporó a muchas costumbres.",
+"Hoy no hay un solo modelo: las leyes de familia cambian entre países. El feminismo islámico (Amina Wadud, Fatima Mernissi) relee las fuentes desde la igualdad."],
+qs:[
+{t:"mc",q:"Para los musulmanes, el Corán es…",o:["la palabra de Dios revelada a Muhammad","un libro de leyes romanas","la biografía de Muhammad escrita por su familia","una colección de poemas de Arabia"],e:"Es el libro sagrado del islam."},
+{t:"mc",q:"El hadiz es…",o:["el conjunto de dichos y hechos atribuidos a Muhammad, escrito generaciones después","el primer capítulo del Corán","un tipo de oración","una ciudad santa"],e:"Se puso por escrito en los siglos VIII–IX; por eso se estudia su autenticidad."},
+{t:"mc",q:"Corán 33:35 expresa…",o:["igual recompensa moral para hombres y mujeres creyentes","que la mujer debe obedecer sin preguntar","que la herencia es solo para varones","que las mujeres no deben estudiar"],e:"Nombra por pares a los creyentes y a las creyentes, con la misma recompensa."},
+{t:"tf",q:"Según Corán 4:4, la dote (mahr) es un bien propio de la mujer.",a:true,e:"Sí. El texto manda entregarla como regalo a la esposa."},
+{t:"tf",q:"El Corán condena el infanticidio de niñas que se practicaba en algunos grupos antes del islam.",a:true,e:"Lo condenan pasajes como 81:8-9 y 16:58-59."},
+{t:"mc",q:"Jadiya fue…",o:["comerciante, primera esposa de Muhammad y primera en creer","soldado en la batalla de Badr","reina de Egipto","jueza de Medina"],e:"Era una mujer de negocios más rica y mayor que Muhammad, y lo apoyó desde el inicio."},
+{t:"mc",q:"Aisha es recordada porque…",o:["transmitió muchos hadices y enseñó a otros","fue la primera califa","construyó la Kaaba","escribió el Corán"],e:"Fue una de las principales fuentes de hadices y una maestra de su época."},
+{t:"mc",q:"El versículo 4:34 es muy debatido porque…",o:["palabras como qawwamun y daraba admiten traducciones distintas","fue borrado del Corán","solo existe en un manuscrito","no habla de matrimonio"],e:"Las traducciones y escuelas lo leen de maneras diferentes."},
+{t:"mc",q:"La separación estricta de espacios entre hombres y mujeres, que ya existía en sociedades vecinas, es un ejemplo de…",o:["costumbre que se sumó con el tiempo","versículo del Corán","hadiz auténtico","ley romana"],e:"Muchas prácticas vienen de costumbres sociales y no directamente del Corán."},
+{t:"tf",q:"Todos los países musulmanes tienen las mismas leyes sobre la mujer.",a:false,e:"Falso. Las leyes de familia y de derechos cambian mucho de un país a otro."},
+{t:"mc",q:"Las escuelas jurídicas (hanafí, maliki, shafií y hanbalí) se formaron…",o:["en los siglos VIII–IX y fijaron interpretaciones del derecho islámico","en el siglo XX","antes de Muhammad","en la Edad Moderna"],e:"Sus juristas interpretaron el Corán y los hadices, y esas lecturas pesaron mucho."},
+{t:"order",q:"Ordena de más antiguo a más reciente.",items:["Primera revelación a Muhammad (c. 610)","Hégira a Medina (622)","Colecciones de hadices de Bujari y Muslim (siglo IX)","Reformas de las leyes de familia en países musulmanes (siglo XX)"],e:"Revelación → Hégira → colecciones de hadices → reformas modernas."},
+{t:"mc",q:"El feminismo islámico busca…",o:["releer el Corán y las tradiciones desde la igualdad","abandonar el islam","prohibir el estudio del Corán","copiar el modelo de Roma"],e:"Autoras como Amina Wadud y Fatima Mernissi proponen nuevas lecturas de las fuentes."},
+{t:"mc",q:"¿Por qué no se puede decir que “el islam” subordina a la mujer sin matices?",o:["Porque las ideas vienen de varias fuentes (Corán, hadiz, juristas, costumbres y leyes) que cambian con la época y el país","Porque el Corán no menciona a las mujeres","Porque todos los países tienen leyes iguales","Porque no hay textos sobre el tema"],e:"Hay que distinguir qué viene del Corán, qué del hadiz y qué de la costumbre o la ley."}]},
+{n:"Origen del cristianismo y del islamismo",tag:"Estación 4",repaso:[
+"El cristianismo nació en Judea, provincia del Imperio romano, dentro del pensamiento judío. Jesús de Nazaret era judío, predicó en Galilea (c. años 28–30) y fue crucificado bajo Poncio Pilato.",
+"Sus primeros seguidores eran judíos. El nombre “cristianos” apareció en Antioquía (Hechos 11:26).",
+"Pablo de Tarso llevó el mensaje a pueblos no judíos (gentiles). Hacia el año 49, en Jerusalén, se discutió si debían circuncidarse.",
+"Hubo persecuciones (como la de Nerón, 64). El Edicto de Milán (313) dio libertad de culto; el Concilio de Nicea (325) discutió la doctrina; en 380 Teodosio hizo del cristianismo la religión oficial.",
+"El islamismo nació en la península arábiga. Muhammad nació en La Meca (c. 570). Hacia 610 recibió la primera revelación en la cueva de Hira.",
+"La Hégira (622) fue su emigración de La Meca a Medina; ese año inicia el calendario islámico. En 630 regresó a La Meca y en 632 murió.",
+"Cinco pilares del islam: profesión de fe (shahada), oración (salat), limosna (zakat), ayuno de Ramadán (sawm) y peregrinación a La Meca (hajj).",
+"Para el islam, Jesús (Isa) es un profeta importante, nacido de María, pero no es Hijo de Dios. Para el cristianismo, es el Mesías e Hijo de Dios.",
+"Principios comunes de judaísmo, cristianismo e islam: un solo Dios, descendencia espiritual de Abraham, libro sagrado, profetas y Jerusalén como ciudad santa."],
+qs:[
+{t:"mc",q:"Jesús de Nazaret era…",o:["judío y predicó en Galilea","romano y predicó en Roma","árabe y predicó en La Meca","griego y predicó en Atenas"],e:"Su mensaje nació dentro del pensamiento judío de su tiempo."},
+{t:"mc",q:"El cristianismo nació en…",o:["Judea, dentro del judaísmo","Arabia, dentro del politeísmo","Grecia, dentro de la filosofía","Egipto, dentro de la religión faraónica"],e:"Los primeros cristianos eran judíos que creían que Jesús era el Mesías."},
+{t:"tf",q:"Los primeros seguidores de Jesús eran judíos.",a:true,e:"Sí. Con el tiempo, el mensaje se abrió a otros pueblos."},
+{t:"mc",q:"Pablo de Tarso es importante porque…",o:["llevó el mensaje cristiano a pueblos no judíos","fundó el islam","escribió la Torá","fue emperador romano"],e:"Sus viajes y cartas ayudaron a expandir el cristianismo por el Imperio."},
+{t:"mc",q:"El Edicto de Milán (313) permitió…",o:["la libertad de culto, incluido el cristiano","que el cristianismo fuera religión obligatoria","la destrucción de los templos","el cierre de las iglesias"],e:"Lo firmaron Constantino y Licinio. La religión oficial llegó en 380 con Teodosio."},
+{t:"mc",q:"El islamismo nació en…",o:["la península arábiga","Judea","Egipto","Persia"],e:"Muhammad vivió en La Meca y en Medina."},
+{t:"mc",q:"La Hégira (622) fue…",o:["la emigración de Muhammad de La Meca a Medina, año 1 del calendario islámico","la conquista de España","la muerte de Muhammad","el Concilio de Nicea"],e:"Marca el inicio de la comunidad islámica y de su calendario."},
+{t:"mc",q:"¿Cuál NO es uno de los cinco pilares del islam?",o:["El bautismo","La oración","La limosna","La peregrinación a La Meca"],e:"El bautismo es un rito cristiano. Los pilares: shahada, salat, zakat, sawm y hajj."},
+{t:"tf",q:"Para el islam, Jesús (Isa) es un profeta importante, pero no el Hijo de Dios.",a:true,e:"Así lo creen los musulmanes. Para los cristianos, Jesús es Hijo de Dios."},
+{t:"mc",q:"Un principio común del judaísmo, el cristianismo y el islamismo es…",o:["creer en un solo Dios","creer en muchos dioses","adorar al Sol","no tener libros sagrados"],e:"Las tres son religiones monoteístas y se vinculan con la figura de Abraham."},
+{t:"order",q:"Ordena de más antiguo a más reciente.",items:["Jesús predica en Galilea (c. año 30)","Edicto de Milán (313)","Primera revelación a Muhammad (c. 610)","Hégira a Medina (622)"],e:"Jesús → Edicto de Milán → revelación → Hégira."},
+{t:"tf",q:"El Corán forma parte de la Biblia.",a:false,e:"Falso. El Corán es el libro del islam; la Biblia es el del cristianismo, y la Torá, el del judaísmo."},
+{t:"mc",q:"Una ciudad santa para las tres religiones es…",o:["Jerusalén","La Meca","Atenas","Babilonia"],e:"Judíos, cristianos y musulmanes la consideran sagrada. La Meca lo es solo para el islam."},
+{t:"mc",q:"Decir que el cristianismo nació “dentro del pensamiento judío” significa que…",o:["Jesús y sus primeros seguidores eran judíos y partían de las Escrituras y el monoteísmo judío","fue una religión traída de Roma","nació en Arabia","surgió de la filosofía griega"],e:"Luego se abrió a otros pueblos, pero su origen es judío."}]}
+]};
+
+</script>
+<script>
+var app=document.getElementById("app");
+var NQ=10;
+var S={name:"",curso:"",res:[],att:[],cur:null};
+try{S.name=localStorage.getItem("qn-name-"+DATA.id)||"";S.curso=localStorage.getItem("qn-curso-"+DATA.id)||""}catch(e){}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function sh(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function fm(x){return (Math.round(x*10)/10).toFixed(1).replace(".",",")}
+function lvl(x){if(x>=9)return["Domina los aprendizajes requeridos (DA)","s-hi"];if(x>=7)return["Alcanza los aprendizajes requeridos (AA)","s-hi"];if(x>4)return["Próximo a alcanzar los aprendizajes (PAA)","s-mid"];return["No alcanza los aprendizajes requeridos (NAA)","s-lo"]}
+function stamp(){var d=new Date();function z(n){return(n<10?"0":"")+n}return z(d.getDate())+"/"+z(d.getMonth()+1)+"/"+d.getFullYear()+" · "+z(d.getHours())+":"+z(d.getMinutes())}
+function save(){try{localStorage.setItem("qn-name-"+DATA.id,S.name);localStorage.setItem("qn-curso-"+DATA.id,S.curso)}catch(e){}}
+function head(){return'<p class="tag">'+DATA.nombre+" · "+DATA.curso+"</p>"}
+function home(msg){
+ var h=head()+"<h1>"+esc(DATA.titulo)+"</h1><p class=\"muted\">"+esc(DATA.sub)+"</p>";
+ h+='<div class="card"><label for="nm">Nombre y apellido</label><input type="text" id="nm" autocomplete="name" value="'+esc(S.name)+'"><label for="cu">Curso y paralelo (ej.: 2 BGU A)</label><input type="text" id="cu" value="'+esc(S.curso)+'">';
+ if(msg)h+='<p style="color:var(--bad);font-weight:700">'+msg+"</p>";
+ h+="</div>";
+ h+='<p class="small muted">Cada estación vale 10 puntos: 10 preguntas al azar de un banco de 14. Puedes repasar la ficha antes de empezar y repetir las veces que quieras. Al final de cada estación aparece tu nota para capturarla y enviarla por la plataforma.</p>';
+ DATA.st.forEach(function(s,i){
+  var r=S.res[i];
+  h+='<div class="card st"><div><p class="tag">'+s.tag+"</p><h3>"+esc(s.n)+'</h3><p class="small muted">'+(r!=null?"Mejor nota: "+fm(r)+" / 10 · Intentos: "+S.att[i]:"Aún sin intentar")+'</p></div><button class="pri" data-i="'+i+'" data-a="go">'+(r!=null?"Repetir":"Entrar")+"</button></div>"});
+ h+='<div class="row"><button class="pri" data-a="sum">Ver resumen de mis notas</button></div>';
+ app.innerHTML=h;
+ app.querySelectorAll("[data-a=go]").forEach(function(b){b.onclick=function(){
+  S.name=document.getElementById("nm").value.trim();S.curso=document.getElementById("cu").value.trim();save();
+  if(!S.name||!S.curso){home("Escribe tu nombre y tu curso para entrar. Aparecerán en tu nota.");return}
+  intro(+b.getAttribute("data-i"))}});
+ app.querySelector("[data-a=sum]").onclick=function(){S.name=document.getElementById("nm").value.trim();S.curso=document.getElementById("cu").value.trim();save();summary()};
+ window.scrollTo(0,0)}
+function intro(i){
+ var s=DATA.st[i];
+ var h=head()+'<p class="tag">'+s.tag+"</p><h1>"+esc(s.n)+"</h1>";
+ h+='<details open><summary>Repasa antes de empezar</summary><ul>'+s.repaso.map(function(x){return"<li>"+esc(x)+"</li>"}).join("")+"</ul></details>";
+ h+='<p class="small muted">Son 10 preguntas con retroalimentación inmediata. Cada una vale 1 punto.</p><div class="row"><button class="pri" data-a="start">Comenzar</button><button data-a="back">Volver</button></div>';
+ app.innerHTML=h;
+ app.querySelector("[data-a=start]").onclick=function(){start(i)};
+ app.querySelector("[data-a=back]").onclick=function(){home()};
+ window.scrollTo(0,0)}
+function start(i){
+ var qs=sh(DATA.st[i].qs).slice(0,NQ);
+ S.cur={i:i,qs:qs,k:0,pts:0,miss:[],done:false};ask()}
+function ask(){
+ var c=S.cur,q=c.qs[c.k];c.done=false;c.sel=[];
+ var h=head()+'<p class="tag">'+DATA.st[c.i].tag+" · Pregunta "+(c.k+1)+" de "+c.qs.length+'</p><div class="bar"><i style="width:'+Math.round(c.k/c.qs.length*100)+'%"></i></div><h2>'+esc(q.q)+"</h2>";
+ if(q.t==="mc"){c.opts=sh(q.o.map(function(t,ix){return{t:t,ok:ix===0}}));h+=c.opts.map(function(o,ix){return'<button class="op" data-o="'+ix+'">'+esc(o.t)+"</button>"}).join("")}
+ else if(q.t==="tf"){h+='<div class="tfrow"><button data-v="1">Verdadero</button><button data-v="0">Falso</button></div>'}
+ else{c.shuf=sh(q.items.map(function(t,ix){return{t:t,ix:ix}}));h+='<p class="small muted">Toca los hechos en el orden correcto, del primero al último. Toca uno de tu lista para quitarlo.</p><div class="seq" id="seq"></div><div class="chips" id="chips"></div><div class="row"><button class="pri" id="chk" disabled>Comprobar</button></div>'}
+ h+='<div id="fb"></div>';
+ app.innerHTML=h;
+ if(q.t==="mc")app.querySelectorAll(".op").forEach(function(b){b.onclick=function(){answerMc(+b.getAttribute("data-o"))}});
+ else if(q.t==="tf")app.querySelectorAll("[data-v]").forEach(function(b){b.onclick=function(){answerTf(b.getAttribute("data-v")==="1")}});
+ else drawOrder();
+ window.scrollTo(0,0)}
+function finishQ(ok,exp){
+ var c=S.cur,q=c.qs[c.k];c.done=true;if(ok)c.pts++;else c.miss.push(q);
+ var fb=document.getElementById("fb");
+ fb.innerHTML='<div class="fb '+(ok?"ok":"bad")+'"><b>'+(ok?"¡Correcto!":"Revisa esto.")+"</b> "+esc(exp)+'</div><div class="row"><button class="pri" id="nx">'+(c.k+1<c.qs.length?"Siguiente":"Ver mi nota")+"</button></div>";
+ var nx=document.getElementById("nx");nx.onclick=function(){c.k++;if(c.k<c.qs.length)ask();else result()};nx.focus()}
+function answerMc(ix){var c=S.cur,q=c.qs[c.k];if(c.done)return;
+ app.querySelectorAll(".op").forEach(function(b,j){b.disabled=true;if(c.opts[j].ok)b.classList.add("ok");else if(j===ix)b.classList.add("bad")});
+ finishQ(c.opts[ix].ok,q.e)}
+function answerTf(v){var c=S.cur,q=c.qs[c.k];if(c.done)return;
+ app.querySelectorAll("[data-v]").forEach(function(b){b.disabled=true;var bv=b.getAttribute("data-v")==="1";if(bv===q.a)b.classList.add("op","ok");else if(bv===v)b.classList.add("op","bad")});
+ finishQ(v===q.a,(v===q.a?"":"La respuesta es "+(q.a?"Verdadero":"Falso")+". ")+q.e)}
+function drawOrder(){
+ var c=S.cur,seq=document.getElementById("seq"),ch=document.getElementById("chips"),chk=document.getElementById("chk");
+ seq.innerHTML=c.sel.map(function(ix,p){return'<button data-r="'+p+'">'+esc(c.qs[c.k].items[ix])+"</button>"}).join("");
+ ch.innerHTML=c.shuf.filter(function(o){return c.sel.indexOf(o.ix)<0}).map(function(o){return'<button data-a="'+o.ix+'">'+esc(o.t)+"</button>"}).join("");
+ chk.disabled=c.sel.length!==c.shuf.length;
+ ch.querySelectorAll("button").forEach(function(b){b.onclick=function(){if(c.done)return;c.sel.push(+b.getAttribute("data-a"));drawOrder()}});
+ seq.querySelectorAll("button").forEach(function(b){b.onclick=function(){if(c.done)return;c.sel.splice(+b.getAttribute("data-r"),1);drawOrder()}});
+ chk.onclick=function(){if(c.done)return;var ok=c.sel.every(function(v,p){return v===p});
+  seq.querySelectorAll("button").forEach(function(b){b.disabled=true});chk.disabled=true;
+  var q=c.qs[c.k];finishQ(ok,(ok?"":"El orden correcto es: "+q.items.map(function(t,p){return(p+1)+") "+t}).join(" · ")+". ")+q.e)}}
+function result(){
+ var c=S.cur,i=c.i,sc=c.pts;
+ S.att[i]=(S.att[i]||0)+1;S.res[i]=S.res[i]==null?sc:Math.max(S.res[i],sc);
+ var L=lvl(sc);
+ var h='<p class="tag">'+DATA.st[i].tag+" · Resultado</p>";
+ h+='<div class="cap"><p class="tag">'+DATA.nombre+" · "+DATA.curso+"</p><h2>"+esc(DATA.st[i].n)+'</h2><p><b>Estudiante:</b> '+esc(S.name)+"<br><b>Curso:</b> "+esc(S.curso)+"<br><b>Fecha y hora:</b> "+stamp()+"<br><b>Intento:</b> "+S.att[i]+'</p><div class="big">'+sc+' <span style="font-size:.4em">/ 10</span></div><p><span class="lv '+L[1]+'">'+L[0]+"</span></p></div>";
+ h+='<div class="alert">Toma una captura de pantalla de esta nota (con tu nombre, la fecha y la hora) y envíala por la plataforma.</div>';
+ if(c.miss.length){h+="<h3>Para repasar ("+c.miss.length+")</h3><div class=\"card\">"+c.miss.map(function(q){var r=q.t==="mc"?q.o[0]:q.t==="tf"?(q.a?"Verdadero":"Falso"):q.items.map(function(t,p){return(p+1)+") "+t}).join(" · ");return'<div class="miss"><b>'+esc(q.q)+"</b><br>Respuesta: "+esc(r)+"<br><span class=\"muted\">"+esc(q.e)+"</span></div>"}).join("")+"</div>"}
+ else h+='<p><b>Sin errores.</b> Excelente repaso.</p>';
+ h+='<div class="row"><button class="pri" id="rt">Repetir con otras preguntas</button><button id="rv">Repasar la ficha</button><button id="hm">Volver a las estaciones</button></div>';
+ app.innerHTML=h;
+ document.getElementById("rt").onclick=function(){start(i)};
+ document.getElementById("rv").onclick=function(){intro(i)};
+ document.getElementById("hm").onclick=function(){home()};
+ window.scrollTo(0,0)}
+function summary(){
+ var done=0,tot=0;DATA.st.forEach(function(s,i){if(S.res[i]!=null){done++;tot+=S.res[i]}});
+ var h=head()+"<h1>Resumen de mis notas</h1>";
+ h+='<div class="cap"><p><b>Estudiante:</b> '+esc(S.name||"—")+"<br><b>Curso:</b> "+esc(S.curso||"—")+"<br><b>Fecha y hora:</b> "+stamp()+'</p><table><thead><tr><th>Estación</th><th class="n">Mejor nota</th><th class="n">Intentos</th></tr></thead><tbody>'+DATA.st.map(function(s,i){return"<tr><td>"+esc(s.n)+'</td><td class="n">'+(S.res[i]!=null?fm(S.res[i])+" / 10":"—")+'</td><td class="n">'+(S.att[i]||0)+"</td></tr>"}).join("")+"</tbody></table>"+(done?'<p><b>Promedio de las estaciones hechas ('+done+" de "+DATA.st.length+"):</b> "+fm(tot/done)+" / 10</p>":"<p class=\"muted\">Aún no has hecho ninguna estación.</p>")+"</div>";
+ h+='<div class="alert">Toma una captura de pantalla de cada estación al terminarla y envíala por la plataforma. Este resumen es solo para ti.</div><div class="row"><button class="pri" id="hm">Volver a las estaciones</button></div>';
+ app.innerHTML=h;document.getElementById("hm").onclick=function(){home()};window.scrollTo(0,0)}
+home();
+
+</script>
+</body>
+</html>
