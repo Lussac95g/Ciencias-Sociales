@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Estaciones de Historia 3 BGU</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+/* Layout: una estación por pantalla, pestañas arriba con el puntaje de cada una; resultado final sobre 10. */
+:root{
+  --bg:#EEF3EE; --surface:#FFFFFF; --ink:#14231B; --muted:#4A5F54; --line:#C9D7CE;
+  --accent:#1F6F54; --accent-ink:#FFFFFF; --accent-soft:#D9EBE2;
+  --ochre:#8A5A08; --ochre-soft:#F6E7C8;
+  --bad:#A93A2A; --bad-soft:#F7DDD8; --ok:#1B6E44; --ok-soft:#D8EEDF;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A14; --surface:#17241D; --ink:#E6EFE9; --muted:#9FB5A8; --line:#2C3F34;
+  --accent:#5CC29A; --accent-ink:#0B1A12; --accent-soft:#1E3A2E;
+  --ochre:#E3A94A; --ochre-soft:#3A2E14;
+  --bad:#EE9484; --bad-soft:#41211C; --ok:#6FD39A; --ok-soft:#1B3A2A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A14; --surface:#17241D; --ink:#E6EFE9; --muted:#9FB5A8; --line:#2C3F34;
+  --accent:#5CC29A; --accent-ink:#0B1A12; --accent-soft:#1E3A2E;
+  --ochre:#E3A94A; --ochre-soft:#3A2E14;
+  --bad:#EE9484; --bad-soft:#41211C; --ok:#6FD39A; --ok-soft:#1B3A2A; color-scheme:dark}
+*{box-sizing:border-box}
+html{font-size:clamp(17px,.5vw + 14px,22px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.5;
+  padding-block:0 3rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:56rem;margin:0 auto}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:2.2rem;font-weight:800}h2{font-size:1.6rem;font-weight:800;margin-bottom:.4rem}h3{font-size:1.1rem;font-weight:600}
+p{margin:.3rem 0 .7rem}
+button,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:.7rem .5rem;display:flex;gap:.4rem;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.tab{border:2px solid var(--line);background:var(--surface);border-radius:.7rem;padding:.35rem .7rem;font-weight:700;font-size:.85rem;display:flex;flex-direction:column;align-items:center;line-height:1.2;min-width:4.4rem}
+.tab small{font-weight:400;color:var(--muted)}
+.tab.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}.tab.on small{color:var(--accent-ink)}
+.tab.done{border-color:var(--accent)}
+.tag{display:inline-block;font:600 .78rem var(--display);letter-spacing:.08em;text-transform:uppercase;background:var(--accent-soft);color:var(--accent);padding:.25rem .7rem;border-radius:999px;margin:1rem 0 .5rem}
+.lead{font-size:1.1rem;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:.9rem;padding:1rem 1.2rem;margin-block:.8rem}
+.panel.warn{background:var(--ochre-soft);border-color:transparent}
+.grid{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))}.grid>*{min-width:0}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:.6rem;padding:.6rem 1.2rem;font-weight:700}
+.btn.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+.note{font-size:.88rem;color:var(--muted)}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:.9rem;padding:1rem 1.2rem;margin-block:.9rem}
+.q .qn{font:600 .78rem var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.q .qt{font-weight:700;margin-bottom:.6rem}
+.q .ctx{background:var(--accent-soft);border-radius:.6rem;padding:.6rem .8rem;margin-bottom:.7rem;font-size:.95rem}
+.opts{display:grid;gap:.45rem}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:.7rem;padding:.55rem .85rem;text-align:left}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.crow{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;justify-content:space-between;padding:.5rem 0;border-top:1px solid var(--line)}
+.crow:first-of-type{border-top:0}
+.crow .tx{flex:1 1 16rem;min-width:0}
+.seg{display:flex;gap:.35rem;flex-wrap:wrap}
+.seg button{border:2px solid var(--line);background:var(--surface);border-radius:.6rem;padding:.3rem .7rem;font-weight:700;font-size:.9rem}
+.seg button.sel{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.seg button.right{background:var(--ok);color:#fff;border-color:var(--ok)}.seg button.wrong{background:var(--bad);color:#fff;border-color:var(--bad)}
+.cx{flex-basis:100%;font-size:.85rem;color:var(--muted)}
+select{width:100%;border:2px solid var(--line);background:var(--surface);border-radius:.6rem;padding:.45rem .6rem}
+select.right{border-color:var(--ok);background:var(--ok-soft)}select.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.slot{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr);gap:.6rem;align-items:center;margin-block:.4rem}
+.slot .cx{grid-column:1/-1}
+textarea{width:100%;min-height:5.5rem;border:2px solid var(--line);background:var(--surface);border-radius:.6rem;padding:.5rem .7rem;resize:vertical}
+.model{display:none;margin-top:.6rem;background:var(--ochre-soft);border-radius:.7rem;padding:.7rem .9rem}.model.show{display:block}
+.model label{display:flex;gap:.5rem;align-items:flex-start;margin-block:.3rem}
+.model input{width:1.2rem;height:1.2rem;margin-top:.2rem;flex:none}
+.fb{margin-top:.6rem;font-size:.95rem}.fb .ok{color:var(--ok);font-weight:700}.fb .no{color:var(--bad);font-weight:700}
+.result{margin-top:1rem;padding:1rem 1.2rem;border-radius:.9rem;background:var(--accent-soft);display:none}.result.show{display:block}
+.big{font:800 3rem var(--display);line-height:1}
+.bar{height:.9rem;background:var(--line);border-radius:999px;overflow:hidden;margin:.3rem 0 .6rem}.bar i{display:block;height:100%;background:var(--accent)}
+.view{display:none}.view.on{display:block}
+.srow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.2rem .8rem;align-items:center}
+@media(max-width:560px){.slot{grid-template-columns:1fr}h1{font-size:1.8rem}h2{font-size:1.35rem}}
+.info{margin-block:.5rem}
+details{background:var(--surface);border:1px solid var(--line);border-radius:.8rem;padding:.2rem 1rem;margin-block:.45rem}
+summary{cursor:pointer;font-weight:700;padding:.55rem 0}
+details p,details li{font-size:.97rem}details ul{padding-left:1.2rem;margin:.2rem 0 .7rem}
+.idrow{display:grid;gap:.6rem;grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+input[type=text]{width:100%;font:inherit;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:.6rem;padding:.5rem .7rem}
+.shot{margin-top:.8rem;padding:.8rem 1rem;border:2px dashed var(--accent);border-radius:.8rem;background:var(--surface)}
+.shot b{color:var(--accent)}
+.idmsg{color:var(--bad);font-weight:700;margin:.4rem 0;display:none}
+@media(max-width:560px){.idrow{grid-template-columns:1fr}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+ <div class="tabs" id="tabs"></div>
+
+ <section class="view" id="v0">
+  <span class="tag">3 BGU · Historia · Primer trimestre</span>
+  <h1>Estaciones del conocimiento: estudia y gana nota</h1>
+  <p class="lead">Cinco estaciones de estudio. Cada una tiene una guía para repasar y 10 preguntas, y se califica sobre 10. Con tu nota de cada estación enviarás una captura por la plataforma.</p>
+  <div class="panel"><h3>Tus datos</h3>
+   <p class="note">Aparecerán en la captura de tu nota.</p>
+   <div class="idrow"><input type="text" id="nom" placeholder="Nombres y apellidos" autocomplete="name" aria-label="Nombres y apellidos"><input type="text" id="cur" placeholder="Curso (ej. 3BA)" aria-label="Curso"></div>
+   <div class="idmsg" id="idmsg">Escribe tu nombre y tu curso antes de calificar.</div>
+  </div>
+  <div class="grid" id="intro"></div>
+  <div class="panel"><h3>Cómo funciona</h3>
+   <ol><li>Abre la estación y lee la guía «Para estudiar».</li><li>Responde las 10 preguntas. Cada una vale 1 punto, y algunas dan puntaje parcial.</li><li>Pulsa «Calificar estación». Verás tu nota sobre 10 y las explicaciones.</li><li>Toma una captura de pantalla de tu nota y envíala por la plataforma. Haz esto en cada estación.</li></ol>
+   <p class="note">Puedes reintentar una estación; en la captura se ve el número de intento. Revisa también tu cuaderno y las diapositivas de clase: aquí hay temas que amplían lo visto.</p></div>
+  <button class="btn" id="start">Comenzar con la estación 1</button>
+ </section>
+
+ <div id="views"></div>
+
+ <section class="view" id="vR">
+  <span class="tag">Resumen</span>
+  <h2>Tus notas por estación</h2>
+  <div class="panel"><div class="big" id="tot">0,00</div><p class="note">promedio sobre 10 de las cinco estaciones. Las estaciones sin calificar cuentan 0.</p><p id="verdict"></p></div>
+  <div id="sum"></div>
+  <div class="shot"><b>Recuerda:</b> toma una captura de pantalla de la nota de cada estación (la tarjeta que aparece al calificar) y envíala por la plataforma.</div>
+  <div class="row" style="margin-top:1rem"><button class="btn ghost" id="reset">Borrar todo y empezar de nuevo</button></div>
+ </section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const fmt=n=>n.toFixed(2).replace('.',',');
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const E=[
+{n:1,nombre:'La cultura y sus huellas',eval:'Estación 1 · Cultura',
+ repasa:'producción material y simbólica, patrimonio, cambios culturales, fuentes primarias y secundarias y cómo contrastarlas.',
+ info:[
+ ['¿Qué es la cultura?','<p>Es el conjunto de saberes, creencias, costumbres, lenguas, técnicas, normas y objetos que una sociedad crea, comparte y transmite de una generación a otra. No es fija: cambia cuando los pueblos se encuentran, comercian o se enfrentan.</p>'],
+ ['Producción material y simbólica','<ul><li><b>Material:</b> objetos, técnicas y espacios (herramientas, ropa, viviendas, alimentos, edificios).</li><li><b>Simbólica:</b> significados (idioma, mitos, religión, música, valores, normas de convivencia).</li></ul><p>Casi siempre van juntas: un anillo de matrimonio es un objeto material y, a la vez, símbolo de un compromiso.</p>'],
+ ['Identidad, diversidad y respeto','<ul><li><b>Identidad cultural:</b> sentido de pertenencia a un grupo.</li><li><b>Diversidad cultural:</b> existencia de muchas culturas.</li><li><b>Interculturalidad:</b> diálogo respetuoso e igualitario entre culturas.</li><li><b>Etnocentrismo:</b> juzgar a otras culturas solo con los valores de la propia.</li><li><b>Relativismo cultural:</b> comprender una práctica desde su propio contexto.</li></ul>'],
+ ['Cómo cambian las culturas','<ul><li><b>Difusión:</b> un rasgo cultural se extiende de un pueblo a otro.</li><li><b>Aculturación:</b> un grupo adopta rasgos de otro, muchas veces bajo presión o dominación.</li><li><b>Transculturación o sincretismo:</b> la mezcla crea algo nuevo (por ejemplo, un estilo musical que une ritmos de distintos continentes).</li><li><b>Globalización cultural:</b> circulación mundial de modas, medios y costumbres.</li></ul><p>Tras 1492, la papa, el maíz, el tomate y el cacao llegaron a Europa; el trigo, la caña de azúcar y el caballo llegaron a América.</p>'],
+ ['Patrimonio cultural','<p><b>Tangible:</b> monumentos, edificios, objetos, documentos. <b>Intangible:</b> tradiciones orales, danzas, saberes, gastronomía y fiestas. La UNESCO protege el patrimonio mundial (convención de 1972) y el inmaterial (convención de 2003).</p>'],
+ ['Fuentes históricas y cómo contrastarlas','<ul><li><b>Primarias:</b> creadas en la época del hecho (cartas, diarios, fotos, leyes, objetos, entrevistas a testigos).</li><li><b>Secundarias:</b> interpretan el pasado después (libros de historia, artículos, documentales).</li></ul><p>Para <b>contrastar</b> pregunta: ¿quién la escribió?, ¿cuándo?, ¿para quién?, ¿con qué propósito?, ¿qué deja fuera? <b>Relativizar</b> es leerla con sentido crítico, sin aceptarla ni descartarla sin más.</p>']],
+ qs:[
+ {t:'mc',q:'¿Qué definición se acerca más a «cultura»?',o:['Solo las obras de arte de un museo','Los saberes, creencias, costumbres y objetos que un grupo crea y transmite','Únicamente las tradiciones muy antiguas','Las leyes que dicta un gobierno'],c:1,e:'La cultura es amplia: incluye lo material y lo simbólico, y cambia con el tiempo.'},
+ {t:'cat',q:'Clasifica: M si es producción material, S si es simbólica.',b:['M','S'],items:[
+  ['Una catedral gótica',0,'Es una construcción, es decir, algo material.'],
+  ['El idioma que habla un pueblo',1,'La lengua es un sistema de significados.'],
+  ['El arado de madera',0,'Es un objeto y una técnica.'],
+  ['Un mito sobre cómo se creó el mundo',1,'Es una creencia que da sentido.'],
+  ['El traje que se usa en una fiesta',0,'Es un objeto material (aunque su uso tenga significado).'],
+  ['La norma de saludar con respeto a los mayores',1,'Es una norma social, un valor.']]},
+ {t:'cat',q:'¿Patrimonio tangible (T) o intangible (I)?',b:['T','I'],items:[
+  ['Una pirámide antigua',0,'Es un monumento físico.'],
+  ['Una danza tradicional',1,'Se transmite practicándola.'],
+  ['Un manuscrito del siglo XVII',0,'Es un objeto o documento.'],
+  ['Leyendas contadas de forma oral',1,'Son tradiciones orales.'],
+  ['Un saber de medicina natural enseñado de abuelos a nietos',1,'Es un conocimiento que pasa de generación en generación.']]},
+ {t:'mc',q:'¿Cuál es un ejemplo de etnocentrismo?',o:['Aprender de las costumbres de otro pueblo','Pensar que las costumbres propias son superiores y las ajenas son atrasadas','Estudiar la historia de varias culturas','Respetar una fiesta distinta a la propia'],c:1,e:'El etnocentrismo juzga a otros con los valores propios como única medida.'},
+ {t:'mc',q:'Un estilo musical nuevo surge de mezclar ritmos de África, Europa y América. Este proceso se llama…',o:['Aislamiento cultural','Transculturación o sincretismo','Etnocentrismo','Patrimonio tangible'],c:1,e:'En la transculturación la mezcla produce algo nuevo y distinto.'},
+ {t:'mc',q:'¿Cuál de estos productos NO existía en Europa antes de 1492?',o:['El trigo','La papa','La vid','El olivo'],c:1,e:'La papa es de origen americano; el trigo, la vid y el olivo eran europeos o del Mediterráneo.'},
+ {t:'cat',q:'Fuente primaria (P) o secundaria (S).',b:['P','S'],items:[
+  ['El diario de un soldado escrito durante una guerra',0,'Fue creado por un testigo en la época.'],
+  ['Un manual escolar sobre la guerra',1,'Interpreta el hecho tiempo después.'],
+  ['Una fotografía tomada durante el acontecimiento',0,'Es un registro de la época.'],
+  ['Un documental actual sobre la Edad Media',1,'Es una interpretación posterior.'],
+  ['Una ley firmada en el siglo XIX',0,'Es un documento de su tiempo.']]},
+ {t:'mc',q:'Para analizar una fuente, ¿qué preguntas ayudan más?',o:['¿Tiene fotos bonitas y es larga?','¿Quién la escribió, cuándo, para quién y con qué propósito?','¿Cuántas personas la compartieron?','¿Está escrita con palabras difíciles?'],c:1,e:'Autor, fecha, público y propósito permiten detectar sesgos.'},
+ {t:'mc',ctx:'Fuente A: un cronista europeo del siglo XVI describe como «bárbaras» las costumbres de un pueblo americano. Fuente B: una investigación arqueológica reciente muestra que ese pueblo tenía un sistema agrícola muy desarrollado.',q:'¿Qué conclusión es la más prudente?',o:['Creer solo a la Fuente A porque es más antigua','El cronista escribía desde su mirada y su propósito; conviene contrastarlo con la evidencia arqueológica','Descartar ambas fuentes','Creer solo a la Fuente B porque es más nueva'],c:1,e:'Ninguna fuente se acepta o se descarta sin contraste: se relativizan y se comparan.'},
+ {t:'sel',q:'Relaciona cada concepto con su definición.',opts:['Sentido de pertenencia a un grupo','Existencia de muchas culturas en el mundo','Diálogo respetuoso e igualitario entre culturas'],slots:[
+  ['Identidad cultural','Sentido de pertenencia a un grupo','Es lo que nos hace sentir parte de una comunidad.'],
+  ['Diversidad cultural','Existencia de muchas culturas en el mundo','Describe la variedad de culturas.'],
+  ['Interculturalidad','Diálogo respetuoso e igualitario entre culturas','Va más allá de convivir: propone intercambio en igualdad.']]}
+ ]},
+
+{n:2,nombre:'América antes y después del mercantilismo',eval:'Estación 2 · Precolombino y mercantilismo',
+ repasa:'economía de las sociedades precolombinas, características del mercantilismo y sus consecuencias en la colonización.',
+ info:[
+ ['América antes de 1492','<p>No era un solo mundo: había sociedades muy distintas, como las mesoamericanas (mexicas, mayas) y las andinas (incas y culturas anteriores). La agricultura fue su base: <b>milpa</b> (maíz, frijol y calabaza juntos), <b>chinampas</b> (cultivo sobre el agua en lagos poco profundos), <b>terrazas</b> en laderas, riego y almacenes. Cultivos: maíz, papa, quinua, tomate, cacao, algodón, yuca. Animales: llama, alpaca, cuy, pavo. No había caballos, vacas ni cerdos.</p>'],
+ ['Minería, metalurgia y manufactura','<p>Trabajaron oro, plata, cobre y bronce. La orfebrería tenía sobre todo valor ceremonial y simbólico, no era dinero como en Europa. Los textiles (algodón, lana de camélidos) eran muy valiosos: servían para el uso diario, la religión y el tributo.</p>'],
+ ['Cómo se organizaba el trabajo y el intercambio','<ul><li><b>Ayllu:</b> comunidad andina de familias.</li><li><b>Ayni:</b> ayuda recíproca entre familias; <b>minka:</b> trabajo colectivo para la comunidad.</li><li><b>Mita inca:</b> turnos de trabajo para el Estado, con alimentos y festejos como retribución.</li><li><b>Pisos ecológicos:</b> acceso a productos de distintas alturas.</li><li><b>Quipu:</b> cuerdas anudadas para registrar datos.</li><li><b>Mesoamérica:</b> tributo, mercados grandes (Tlatelolco), comerciantes <i>pochteca</i> y granos de cacao usados como moneda.</li></ul><p>Predominaban la <b>reciprocidad</b> y la <b>redistribución</b>, aunque también existía el intercambio a larga distancia.</p>'],
+ ['El mercantilismo (siglos XVI al XVIII)','<ul><li><b>Metalismo:</b> la riqueza se mide por el oro y la plata acumulados.</li><li><b>Balanza comercial favorable:</b> exportar más de lo que se importa.</li><li><b>Proteccionismo:</b> aranceles para encarecer productos extranjeros.</li><li><b>Estado fuerte</b> que regula la economía (por ejemplo, Colbert en Francia).</li><li><b>Monopolio colonial:</b> las colonias solo comercian con su metrópoli; en España, la Casa de Contratación de Sevilla (1503).</li><li>Las colonias aportan <b>materias primas</b> y compran <b>manufacturas</b>.</li></ul>'],
+ ['Consecuencias en América','<ul><li>Minería de plata (Potosí desde 1545, Zacatecas) con trabajo forzado: mita minera colonial, encomienda.</li><li>Haciendas, obrajes (talleres textiles) y plantaciones.</li><li>Fuerte caída de la población por epidemias, guerra y explotación.</li><li>La plata americana circuló por Europa y Asia, y contribuyó al alza de precios en Europa («revolución de los precios»).</li></ul>'],
+ ['Comparación rápida','<p>Mundo precolombino: producir para la comunidad y el Estado, reciprocidad y redistribución. Mercantilismo colonial: producir para el comercio y la ganancia de la metrópoli, con trabajo forzado y control del comercio.</p>']],
+ qs:[
+ {t:'cat',q:'P (precolombino), M (mercantilismo) o A (ambos).',b:['P','M','A'],items:[
+  ['Terrazas de cultivo en las laderas',0,'Son técnicas agrícolas precolombinas.'],
+  ['Aranceles para encarecer los productos extranjeros',1,'Es proteccionismo mercantilista.'],
+  ['Cultivo de maíz como base de la dieta',0,'El maíz fue central en América antes de 1492.'],
+  ['Intercambio de productos valiosos a larga distancia',2,'Existió en ambos mundos.'],
+  ['Uso de metales preciosos en adornos y ofrendas religiosas',0,'Era un uso ceremonial.'],
+  ['Colonias obligadas a vender solo a su metrópoli',1,'Es el monopolio colonial.']]},
+ {t:'mc',q:'La milpa es…',o:['Un tipo de moneda','Un cultivo asociado de maíz, frijol y calabaza','Una ruta comercial','Un impuesto colonial'],c:1,e:'Sembrar los tres juntos aprovecha mejor el suelo.'},
+ {t:'mc',q:'El ayni era…',o:['Un tributo en oro al Estado','La ayuda recíproca entre familias de una comunidad','Un tipo de barco','La moneda del Imperio inca'],c:1,e:'Hoy ayudo en tu cosecha y mañana tú en la mía.'},
+ {t:'mc',q:'¿Qué diferencia hay entre la mita inca y la mita minera colonial?',o:['Ninguna, eran idénticas','La inca era un turno de trabajo para el Estado con retribución de comida y fiesta; la colonial se destinó sobre todo a extraer plata en condiciones muy duras','La inca se pagaba en plata y la colonial no','La colonial era voluntaria'],c:1,e:'Se reutilizó el nombre, pero cambió el fin: la plata para la Corona y los empresarios.'},
+ {t:'mc',q:'«Balanza comercial favorable» significa…',o:['Importar más de lo que se exporta','Exportar más de lo que se importa','No comerciar con nadie','Comerciar solo con productos locales'],c:1,e:'Así entraban metales a un reino, según la lógica mercantilista.'},
+ {t:'mc',q:'El monopolio colonial establecía que…',o:['Las colonias podían comerciar con cualquier país','Las colonias solo podían comerciar con su metrópoli','Solo las colonias podían exportar','Había libre comercio total'],c:1,e:'La metrópoli controlaba lo que se compraba y se vendía.'},
+ {t:'mc',q:'¿Qué función cumplía la Casa de Contratación de Sevilla?',o:['Era una escuela de navegantes de América','Controlaba el comercio y la navegación entre España y América','Cobraba el ayni','Fabricaba telas'],c:1,e:'Fue el organismo del monopolio comercial español.'},
+ {t:'mc',ctx:'Un reino exporta muchas más mercancías de las que importa y guarda en sus arcas todo el oro y la plata que recibe.',q:'¿Qué idea mercantilista aplica?',o:['Reciprocidad','Balanza comercial favorable y metalismo','Librecambio total','Economía de autoconsumo'],c:1,e:'Acumular metales y vender más de lo que se compra era la meta.'},
+ {t:'sel',q:'Relaciona cada elemento con su descripción.',opts:['Minería de plata colonial','Cultivo sobre el agua en lagos poco profundos','Registro de datos con cuerdas anudadas'],slots:[
+  ['Potosí','Minería de plata colonial','Fue el gran centro de plata del siglo XVI.'],
+  ['Chinampas','Cultivo sobre el agua en lagos poco profundos','Se usaron en el valle de México.'],
+  ['Quipu','Registro de datos con cuerdas anudadas','Era un sistema andino de registro.']]},
+ {t:'mc',q:'¿Cuál fue un efecto de la llegada de tanta plata americana a Europa?',o:['Bajaron todos los precios','Aumentó el metal circulante y contribuyó a una subida general de precios','Se terminó el comercio','Desaparecieron las monedas'],c:1,e:'Más dinero circulando, pero no más bienes: los precios subieron.'}
+ ]},
+
+{n:3,nombre:'El circuito del capital',eval:'Estación 3 · Economía triangular',
+ repasa:'circuito triangular, trata de personas esclavizadas, acumulación originaria y fases del capitalismo.',
+ info:[
+ ['El circuito triangular','<ul><li><b>Europa → África:</b> manufacturas (telas, armas de fuego, alcohol, abalorios).</li><li><b>África → América:</b> personas esclavizadas, en el «pasaje intermedio» (Middle Passage).</li><li><b>América → Europa:</b> azúcar, algodón, tabaco, café, cacao y plata.</li></ul><p>Puertos clave: Liverpool, Bristol, Nantes, Lisboa y Ámsterdam en Europa; ciudades del Caribe, Brasil y el continente en América.</p>'],
+ ['Un sistema de trabajo forzado','<p>Se estima que entre los siglos XVI y XIX más de 12 millones de personas africanas fueron embarcadas a la fuerza hacia América, y muchas murieron en la travesía. Trabajaron en plantaciones de azúcar, algodón y tabaco y en minas. Hubo resistencia constante: cimarronaje, rebeliones y la Revolución haitiana (1791–1804).</p>'],
+ ['Acumulación originaria de capital','<p>Concepto de Marx: la riqueza inicial (comercio colonial, esclavitud, saqueo, expulsión de campesinos) que permitió reunir el capital antes de la industria. Eric Williams (<i>Capitalismo y esclavitud</i>, 1944) sostuvo que las ganancias del comercio esclavista ayudaron a financiar la industrialización británica.</p><p><b>Matiz:</b> los historiadores discuten cuánto pesó, porque también influyeron el carbón, la agricultura, la ciencia y los mercados internos.</p>'],
+ ['Fin de la trata y la esclavitud','<p>Gran Bretaña prohibió la trata en 1807 y abolió la esclavitud en su imperio en 1833. Cuba la abolió en 1886 y Brasil, en 1888, fue el último país de América. Las ganancias y las desigualdades que dejó el sistema continuaron mucho después.</p>'],
+ ['Fases del capitalismo','<ul><li><b>Comercial o mercantil</b> (siglos XV–XVIII): comercio colonial, metales, plantaciones, compañías comerciales.</li><li><b>Industrial</b> (finales del XVIII–XIX): fábricas, máquinas y trabajo asalariado.</li><li><b>Financiero o monopolista</b> (finales del XIX–XX): grandes bancos, bolsas y empresas gigantes.</li><li><b>Digital o informacional</b> (finales del XX–hoy): redes, plataformas, datos y comercio global.</li></ul>']],
+ qs:[
+ {t:'sel',q:'¿Qué papel cumplía cada región en el circuito?',opts:['Aportaba mano de obra esclavizada','Producía materias primas con trabajo esclavizado','Concentraba el capital y fabricaba manufacturas'],slots:[
+  ['África','Aportaba mano de obra esclavizada','De allí fueron arrancadas millones de personas.'],
+  ['América','Producía materias primas con trabajo esclavizado','Plantaciones y minas para el mercado europeo.'],
+  ['Europa','Concentraba el capital y fabricaba manufacturas','Allí se acumuló buena parte de la ganancia.']]},
+ {t:'cat',q:'¿En qué tramo viajaba cada cosa?',b:['Europa → África','África → América','América → Europa'],items:[
+  ['Alcohol y abalorios',0,'Se intercambiaban en la costa africana.'],
+  ['Barcos con personas cautivas',1,'Es el pasaje intermedio.'],
+  ['Tabaco',2,'Era una materia prima americana.'],
+  ['Café y azúcar',2,'Productos de plantación enviados a Europa.']]},
+ {t:'mc',q:'El «pasaje intermedio» (Middle Passage) fue…',o:['El camino de los barcos europeos hacia África con manufacturas','La travesía forzada de personas esclavizadas de África a América','La ruta de la plata hacia Europa','Un canal construido en Panamá'],c:1,e:'Fue el tramo central del circuito, con enorme mortalidad.'},
+ {t:'mc',q:'La «acumulación originaria de capital» se refiere a…',o:['El ahorro de las familias modernas','La riqueza inicial obtenida con comercio colonial, esclavitud y extracción, que permitió reunir capital antes de la industria','Un impuesto europeo','El dinero guardado en los bancos actuales'],c:1,e:'Es el concepto usado por Marx para explicar el origen del capital.'},
+ {t:'mc',q:'¿Qué sostuvo Eric Williams en «Capitalismo y esclavitud»?',o:['Que la esclavitud no tuvo ninguna relación con la industria','Que las ganancias del comercio esclavista ayudaron a financiar la industrialización británica','Que la esclavitud empezó con la Revolución Industrial','Que Gran Bretaña nunca participó en la trata'],c:1,e:'Es una tesis influyente, aunque debatida por otros historiadores.'},
+ {t:'mc',q:'¿Qué matiz hacen hoy los historiadores sobre esa relación?',o:['Que fue el único factor','Que pesó, pero también influyeron el carbón, la agricultura, la ciencia y los mercados internos','Que no pesó nada','Que solo influyó la plata'],c:1,e:'Se evita explicar un proceso complejo con una sola causa.'},
+ {t:'mc',q:'Según lo estudiado, ¿cuál es el orden de las fases del capitalismo?',o:['Industrial, comercial, digital, financiero','Comercial, industrial, financiero, digital','Financiero, digital, comercial, industrial','Digital, financiero, industrial, comercial'],c:1,e:'De la acumulación comercial a la economía de datos.'},
+ {t:'cat',q:'¿A qué fase del capitalismo corresponde cada rasgo?',b:['Comercial','Industrial','Financiero','Digital'],items:[
+  ['Compañías comerciales y monopolio con las colonias',0,'Es el capitalismo mercantil.'],
+  ['Fábricas con máquinas y trabajo asalariado',1,'Es el capitalismo industrial.'],
+  ['Grandes bancos y bolsas de valores dominan la economía',2,'Es el capitalismo financiero.'],
+  ['Plataformas en línea que usan datos como recurso clave',3,'Es el capitalismo digital.'],
+  ['Comercio de azúcar y plata con las colonias',0,'Es propio de la etapa mercantil.'],
+  ['Comercio electrónico a escala mundial',3,'Corresponde a la etapa digital.']]},
+ {t:'mc',q:'La Revolución haitiana (1791–1804) es importante porque…',o:['Fue una guerra entre dos imperios europeos','Personas esclavizadas se rebelaron, derrotaron a sus amos y fundaron un Estado independiente','Fue una reforma de impuestos','Terminó la trata en todo el mundo'],c:1,e:'Fue la primera independencia lograda por personas esclavizadas en América.'},
+ {t:'mc',ctx:'Un comerciante europeo del siglo XVIII invierte las ganancias de la venta de azúcar en una fábrica textil.',q:'¿Qué proceso ilustra mejor?',o:['El paso del capital comercial al capital industrial','El regreso al trueque','La reciprocidad andina','La abolición de la esclavitud'],c:0,e:'Muestra cómo el capital acumulado en el comercio se invirtió en la industria.'}
+ ]},
+
+{n:4,nombre:'De la máquina de vapor a la inteligencia artificial',eval:'Estación 4 · Revoluciones industriales',
+ repasa:'las tres revoluciones industriales, sus tecnologías y sus impactos económicos, sociales y ambientales.',
+ info:[
+ ['Primera Revolución Industrial (c. 1760–1840)','<p>Comenzó en Gran Bretaña. Energía: <b>carbón y vapor</b>. Industria textil e hierro. Inventos: lanzadera volante (1733), <i>spinning jenny</i> (1764), mejoras de Watt a la máquina de vapor (1769), telar mecánico (1785), ferrocarril (línea Liverpool–Manchester, 1830). Nace la <b>fábrica</b> y el trabajo asalariado.</p><p><b>¿Por qué Gran Bretaña?</b> Tenía carbón y hierro, capital del comercio colonial, mercados, mejoras agrícolas y una población que migró a las ciudades.</p>'],
+ ['Segunda Revolución Industrial (c. 1870–1914)','<p>Energía: <b>electricidad y petróleo</b>. Acero, química, motor de combustión, telégrafo, teléfono (1876), bombilla (1879). Cadena de montaje de Ford (1913): producción en serie. Se suman Estados Unidos y Alemania. Crecen las grandes empresas y los bancos.</p>'],
+ ['Tercera Revolución Industrial (desde mediados del siglo XX)','<p>Electrónica, transistor (1947), computadoras, internet, telecomunicaciones, automatización y robótica, energía nuclear, biotecnología. La economía depende cada vez más del <b>conocimiento y la información</b>. Algunos autores hablan hoy de una Cuarta revolución (inteligencia artificial, datos masivos, internet de las cosas).</p>'],
+ ['Impactos económicos y sociales','<ul><li><b>Económicos:</b> producción masiva, mercado mundial, concentración de capital, nuevas profesiones y desempleo tecnológico.</li><li><b>Sociales:</b> urbanización, burguesía industrial y proletariado, trabajo infantil y jornadas largas en el siglo XIX, sindicatos y leyes laborales, luddismo (destrucción de máquinas por miedo a perder el empleo), mejoras de consumo y salud a largo plazo, brecha digital.</li></ul>'],
+ ['Impacto ambiental','<p>La quema de carbón y petróleo aumentó la contaminación del aire y del agua y las emisiones de gases de efecto invernadero. De ahí viene el debate actual sobre cambio climático y energías renovables.</p>']],
+ qs:[
+ {t:'cat',q:'¿A qué revolución industrial pertenece?',b:['I','II','III'],items:[
+  ['El telar mecánico',0,'Es de la primera: industria textil.'],
+  ['La bombilla eléctrica comercial',1,'Es de la segunda: electricidad.'],
+  ['El transistor y el microchip',2,'Es de la tercera: electrónica.'],
+  ['La cadena de montaje de Ford',1,'Producción en serie de la segunda.'],
+  ['La locomotora de vapor',0,'Es de la primera.'],
+  ['El robot industrial programable',2,'Es de la tercera: automatización.']]},
+ {t:'mc',q:'¿Por qué la Primera Revolución Industrial empezó en Gran Bretaña?',o:['Porque era el país más grande del mundo','Por la combinación de carbón y hierro, capital del comercio colonial, mercados y mejoras agrícolas','Porque no tenía colonias','Porque inventó la electricidad'],c:1,e:'Fue una combinación de factores, no una sola causa.'},
+ {t:'sel',q:'Relaciona cada revolución con su base energética o tecnológica.',opts:['Carbón y vapor','Electricidad y petróleo','Electrónica, informática y telecomunicaciones'],slots:[
+  ['Primera','Carbón y vapor','Movían máquinas y trenes.'],
+  ['Segunda','Electricidad y petróleo','Impulsaron fábricas, motores y alumbrado.'],
+  ['Tercera','Electrónica, informática y telecomunicaciones','Base de la economía de la información.']]},
+ {t:'mc',q:'Un efecto social del sistema fabril del siglo XIX fue…',o:['La desaparición de las ciudades','El crecimiento de ciudades y de una clase obrera con largas jornadas','El fin del trabajo asalariado','La abolición de los impuestos'],c:1,e:'Migró mucha gente del campo a la ciudad para trabajar en las fábricas.'},
+ {t:'mc',q:'El luddismo fue…',o:['Un movimiento de trabajadores que destruían máquinas por temor a perder sus empleos','Un tipo de motor','Una teoría económica de Adam Smith','Un impuesto a las fábricas'],c:0,e:'Fue una protesta ante los cambios que traían las máquinas.'},
+ {t:'mc',q:'¿Qué buscaba la cadena de montaje de Ford?',o:['Fabricar a mano cada auto','Producir en serie y más barato','Reducir la producción','Evitar el uso de petróleo'],c:1,e:'Dividió el trabajo en tareas repetidas y bajó los costos.'},
+ {t:'mc',q:'¿Qué impacto ambiental se asocia más a las dos primeras revoluciones industriales?',o:['Menos emisiones','Más contaminación y emisiones por el uso de carbón y petróleo','Ninguno','Más bosques'],c:1,e:'Los combustibles fósiles aumentaron las emisiones de gases de efecto invernadero.'},
+ {t:'cat',q:'Impacto económico (E), social (S) o ambiental (A).',b:['E','S','A'],items:[
+  ['Aumento de la producción de mercancías',0,'Es un impacto económico.'],
+  ['Ciudades con barrios obreros hacinados',1,'Es un impacto social.'],
+  ['Más emisiones de dióxido de carbono',2,'Es un impacto ambiental.'],
+  ['Aparición de sindicatos',1,'Es una respuesta social de los trabajadores.'],
+  ['Nuevos mercados a escala mundial',0,'Es un impacto económico.'],
+  ['Ríos contaminados por residuos de fábricas',2,'Es un impacto ambiental.']]},
+ {t:'mc',q:'La «brecha digital» es…',o:['Una falla de la red eléctrica','La desigualdad entre quienes tienen acceso a internet y dispositivos y quienes no','Un tipo de máquina','Un impuesto a internet'],c:1,e:'Las nuevas tecnologías crean oportunidades, pero también desigualdades.'},
+ {t:'mc',ctx:'Una empresa reemplaza a 50 trabajadores por robots y su producción aumenta.',q:'¿Qué impactos refleja?',o:['Mayor productividad y posible desempleo tecnológico','Menos producción y más empleo','Ningún cambio económico','Regreso al trabajo artesanal'],c:0,e:'La automatización aumenta la productividad, pero puede dejar sin empleo a quienes no se capacitan.'}
+ ]},
+
+{n:5,nombre:'Libertad, mercado y fronteras',eval:'Estación 5 · Capitalismo y liberalismo',
+ repasa:'liberalismo político y económico, revoluciones liberales, proteccionismo y librecambismo.',
+ info:[
+ ['El liberalismo','<p>Nace en la Ilustración. <b>Político:</b> libertad individual, igualdad ante la ley, derechos naturales (<b>Locke</b>: vida, libertad y propiedad), separación de poderes (<b>Montesquieu</b>), soberanía popular (<b>Rousseau</b>) y gobierno limitado por una constitución. <b>Económico:</b> propiedad privada, libre mercado y competencia (<b>Adam Smith</b>, <i>La riqueza de las naciones</i>, 1776: «mano invisible» y división del trabajo; <b>David Ricardo</b>, 1817: ventajas comparativas).</p>'],
+ ['Liberalismo y capitalismo','<p>El <b>capitalismo</b> es el sistema económico: propiedad privada de los medios de producción, trabajo asalariado, mercado y ganancia. El <b>liberalismo</b> aporta las ideas y políticas que lo justifican y protegen: libertad de comercio, seguridad de la propiedad y fin de los privilegios. Por eso la burguesía fue su gran impulsora.</p>'],
+ ['Revoluciones liberales','<ul><li><b>Independencia de EE.UU.</b> (1776): derechos naturales y constitución (1787).</li><li><b>Revolución francesa</b> (1789): Declaración de los Derechos del Hombre y del Ciudadano; fin de privilegios feudales.</li><li><b>Revolución haitiana</b> (1791–1804).</li><li><b>Independencias hispanoamericanas</b> (desde 1808–1810): fin del monopolio español y apertura comercial.</li><li>Oleadas liberales de <b>1820, 1830 y 1848</b> en Europa.</li></ul>'],
+ ['Proteccionismo y librecambismo','<ul><li><b>Proteccionismo:</b> aranceles, cuotas y subsidios para defender la producción nacional. Defensores: <b>Hamilton</b> (1791), <b>Friedrich List</b> (1841: proteger «industrias nacientes» temporalmente).</li><li><b>Librecambismo:</b> pocas barreras y comercio libre. Defensores: Smith, Ricardo. Gran Bretaña derogó las Leyes de Cereales en 1846.</li></ul><p>Los países ya industrializados suelen defender el libre comercio; los que inician su industria, la protección.</p>'],
+ ['Críticas y ajustes al liberalismo económico','<ul><li><b>Socialismo y marxismo:</b> Marx y Engels (<i>Manifiesto Comunista</i>, 1848) criticaron la desigualdad entre capital y trabajo.</li><li><b>Crisis de 1929:</b> llevó a Keynes y a una mayor intervención del Estado; después surgió el Estado de bienestar.</li><li><b>Neoliberalismo</b> (desde los años 70 y 80): menos Estado, privatizaciones y apertura (Hayek, Friedman).</li></ul>']],
+ qs:[
+ {t:'mc',q:'¿Cuál opción explica mejor la relación entre liberalismo y capitalismo?',o:['El liberalismo aporta ideas de libertad y propiedad que justifican y protegen el sistema capitalista','El liberalismo propone que el Estado sea dueño de las fábricas','El capitalismo apareció para destruir el liberalismo','Son sistemas sin relación'],c:0,e:'Las ideas liberales respaldaron el mercado libre y la propiedad privada.'},
+ {t:'cat',q:'Proteccionismo (P) o librecambismo (L).',b:['P','L'],items:[
+  ['Subsidios a las industrias nacionales',0,'Es una ayuda para proteger la producción local.'],
+  ['Eliminar los aranceles entre países',1,'Es la idea del libre comercio.'],
+  ['Hamilton y su informe sobre manufacturas',0,'Defendió proteger la industria de Estados Unidos.'],
+  ['Derogar las Leyes de Cereales en Gran Bretaña',1,'Fue una medida de apertura comercial.'],
+  ['Cuotas máximas a las importaciones',0,'Es una barrera para proteger.'],
+  ['Cada país se especializa en lo que produce con menor costo relativo (ventajas comparativas)',1,'Es el argumento de Ricardo.']]},
+ {t:'sel',q:'Relaciona cada pensador con su idea.',opts:['Derechos naturales y propiedad','Separación de poderes','La «mano invisible» del mercado'],slots:[
+  ['Locke','Derechos naturales y propiedad','Defendió vida, libertad y propiedad.'],
+  ['Montesquieu','Separación de poderes','Propuso dividir el poder para evitar abusos.'],
+  ['Adam Smith','La «mano invisible» del mercado','Pensó que la búsqueda de beneficio individual regula el mercado.']]},
+ {t:'mc',q:'¿Cuál es la secuencia cronológica correcta?',o:['Revolución francesa, independencia de EE.UU., Revolución haitiana, independencias hispanoamericanas','Independencia de EE.UU., Revolución francesa, Revolución haitiana, independencias hispanoamericanas','Revolución haitiana, Revolución francesa, independencia de EE.UU., independencias hispanoamericanas','Independencias hispanoamericanas, independencia de EE.UU., Revolución francesa, Revolución haitiana'],c:1,e:'1776, 1789, 1791 y desde 1808–1810.'},
+ {t:'mc',q:'La Declaración de los Derechos del Hombre y del Ciudadano (1789) proclamó…',o:['La igualdad ante la ley y los derechos de libertad y propiedad','El poder absoluto del rey','La propiedad colectiva de la tierra','El monopolio comercial'],c:0,e:'Fue un documento central de la Revolución francesa.'},
+ {t:'mc',ctx:'Un país inicia su industria textil, pero los tejidos británicos, más baratos, inundan su mercado.',q:'Según Friedrich List, ¿qué convendría?',o:['Eliminar todos los aranceles de inmediato','Proteger temporalmente la industria naciente hasta que sea competitiva','Cerrar las fábricas','Importar solo materias primas'],c:1,e:'List defendió la protección temporal de las industrias nacientes.'},
+ {t:'mc',q:'«Laissez faire» significa…',o:['Que el Estado controle los precios','Dejar hacer: mínima intervención del Estado en la economía','Impuestos altos','Producir solo para el consumo local'],c:1,e:'Es la idea de que el mercado se regula por sí mismo.'},
+ {t:'mc',q:'Tras la crisis de 1929, Keynes propuso que…',o:['El Estado no debía intervenir nunca','El Estado interviniera con gasto e inversión para reactivar la economía','Se eliminara el dinero','Se prohibiera el comercio'],c:1,e:'Su pensamiento inspiró políticas de intervención y el Estado de bienestar.'},
+ {t:'mc',q:'¿Por qué la burguesía apoyó el liberalismo?',o:['Quería mantener los privilegios de la nobleza','Quería libertad de comercio, seguridad para su propiedad y el fin de los privilegios feudales','Quería volver al trueque','Quería un rey absoluto'],c:1,e:'Le convenía un orden legal que protegiera su propiedad y sus negocios.'},
+ {t:'mc',ctx:'Un país pequeño elimina sus aranceles y entran productos importados más baratos.',q:'A corto plazo, ¿quién se beneficia y quién se perjudica más?',o:['Se benefician los consumidores; se perjudican los productores locales poco competitivos','Se benefician los productores locales; se perjudican los consumidores','Nadie cambia','Se benefician solo los gobiernos'],c:0,e:'Los precios bajan para los consumidores, pero la competencia golpea a la industria local.'}
+ ]}
+];
+
+const S=E.map(e=>({done:false,ans:e.qs.map(()=>null),score:0,att:0}));
+let cur=0;
+const tabs=$('#tabs'),views=$('#views');
+const mkTab=(label,sub,i)=>{const b=document.createElement('button');b.className='tab';b.innerHTML=`<span>${label}</span><small>${sub}</small>`;b.onclick=()=>go(i);tabs.appendChild(b);return b};
+mkTab('Inicio','',0);E.forEach(e=>mkTab('Est. '+e.n,'—',e.n));mkTab('Resumen','—',6);
+function go(i){cur=i;$$('.view').forEach(v=>v.classList.remove('on'));
+  (i===0?$('#v0'):i===6?$('#vR'):$('#v'+i)).classList.add('on');
+  $$('.tab').forEach((t,k)=>t.classList.toggle('on',k===i));
+  if(i===6)renderResult();
+  try{history.replaceState(null,'','#'+(i===0?'inicio':i===6?'resumen':'estacion-'+i))}catch(e){}
+  window.scrollTo(0,0)}
+const avg=()=>S.reduce((a,s)=>a+s.score,0)/S.length;
+function updTabs(){E.forEach((e,k)=>{const t=$$('.tab')[k+1];t.classList.toggle('done',S[k].done);t.querySelector('small').textContent=S[k].done?fmt(S[k].score)+'/10':'—'});
+  $$('.tab')[6].querySelector('small').textContent=fmt(avg())+'/10'}
+E.forEach(e=>{const d=document.createElement('div');d.className='panel';d.innerHTML=`<h3>${e.eval}</h3><p>${e.nombre}</p><p class="note">10 preguntas · 10 puntos</p>`;$('#intro').appendChild(d)});
+$('#start').onclick=()=>go(1);
+const stamp=()=>{const d=new Date();return d.toLocaleDateString('es',{day:'2-digit',month:'2-digit',year:'numeric'})+' '+d.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function build(k){
+  const e=E[k],st=S[k];
+  const sec=document.createElement('section');sec.className='view';sec.id='v'+e.n;
+  sec.innerHTML=`<span class="tag">${e.eval}</span><h2>${e.nombre}</h2><p class="note">10 preguntas · cada una vale 1 punto · nota sobre 10</p>`;
+  const inf=document.createElement('div');inf.className='info';
+  inf.innerHTML='<h3 style="margin-top:.6rem">Para estudiar</h3>'+e.info.map(x=>`<details><summary>${x[0]}</summary>${x[1]}</details>`).join('');
+  sec.appendChild(inf);
+  const qh=document.createElement('div');sec.appendChild(qh);
+  const ctrl=document.createElement('div');ctrl.className='row';ctrl.innerHTML='<button class="btn" data-a="g">Calificar estación</button><button class="btn ghost" data-a="r">Reintentar estación</button><button class="btn ghost" data-a="n">'+(e.n<5?'Ir a la estación '+(e.n+1):'Ver resumen')+'</button>';
+  sec.appendChild(ctrl);
+  const res=document.createElement('div');res.className='result';sec.appendChild(res);
+  views.appendChild(sec);
+  const qEls=[];
+  function render(){
+    qh.innerHTML='';qEls.length=0;
+    e.qs.forEach((q,i)=>{
+      const d=document.createElement('div');d.className='q';
+      d.innerHTML=`<div class="qn">Pregunta ${i+1} de ${e.qs.length}</div>`;
+      if(q.ctx){const c=document.createElement('div');c.className='ctx';c.textContent=q.ctx;d.appendChild(c)}
+      const t=document.createElement('div');t.className='qt';t.textContent=q.q;d.appendChild(t);
+      const fb=document.createElement('div');fb.className='fb';
+      if(q.t==='mc'){
+        q._ord=shuffle(q.o.map((_,j)=>j));
+        const o=document.createElement('div');o.className='opts';
+        q._ord.forEach(j=>{const b=document.createElement('button');b.className='opt';b.textContent=q.o[j];b.dataset.j=j;
+          b.onclick=()=>{if(st.done)return;st.ans[i]=j;[...o.children].forEach(x=>x.classList.toggle('sel',+x.dataset.j===j))};o.appendChild(b)});
+        d.appendChild(o);q._el=o;
+      }else if(q.t==='cat'){
+        q.items.forEach((it,r)=>{const row=document.createElement('div');row.className='crow';
+          row.innerHTML=`<div class="tx">${it[0]}</div>`;const seg=document.createElement('div');seg.className='seg';
+          q.b.forEach((lab,bi)=>{const b=document.createElement('button');b.textContent=lab;
+            b.onclick=()=>{if(st.done)return;st.ans[i]=st.ans[i]||{};st.ans[i][r]=bi;[...seg.children].forEach((x,xi)=>x.classList.toggle('sel',xi===bi))};seg.appendChild(b)});
+          row.appendChild(seg);const cx=document.createElement('div');cx.className='cx';row.appendChild(cx);d.appendChild(row)});
+      }else{
+        q.slots.forEach((sl,r)=>{const w=document.createElement('div');w.className='slot';
+          w.innerHTML=`<b>${sl[0]}</b>`;const s=document.createElement('select');s.setAttribute('aria-label',sl[0]);
+          s.innerHTML='<option value="">Elige…</option>'+shuffle(q.opts).map(o=>`<option>${o}</option>`).join('');
+          s.onchange=()=>{if(st.done)return;st.ans[i]=st.ans[i]||{};st.ans[i][r]=s.value};w.appendChild(s);
+          const cx=document.createElement('div');cx.className='cx';w.appendChild(cx);d.appendChild(w)});
+      }
+      d.appendChild(fb);qh.appendChild(d);qEls.push({d,fb});
+    });
+  }
+  function grade(){
+    const nom=$('#nom').value.trim(),cur2=$('#cur').value.trim();
+    if(!nom||!cur2){$('#idmsg').style.display='block';go(0);$('#nom').focus();return}
+    $('#idmsg').style.display='none';
+    let tot=0;
+    e.qs.forEach((q,i)=>{let f=0;const {d,fb}=qEls[i];
+      if(q.t==='mc'){const a=st.ans[i];f=(a===q.c)?1:0;
+        [...q._el.children].forEach(b=>{const j=+b.dataset.j;b.classList.remove('sel');if(j===q.c)b.classList.add('right');else if(j===a)b.classList.add('wrong')});
+        fb.innerHTML=(f?'<span class="ok">Correcto.</span> ':'<span class="no">'+(a==null?'Sin responder.':'Incorrecto.')+'</span> ')+q.e;
+      }else if(q.t==='cat'){let ok=0;const rows=d.querySelectorAll('.crow');
+        q.items.forEach((it,r)=>{const a=(st.ans[i]||{})[r];const good=a===it[1];if(good)ok++;
+          rows[r].querySelectorAll('.seg button').forEach((b,bi)=>{b.classList.remove('sel');if(bi===it[1])b.classList.add('right');else if(bi===a)b.classList.add('wrong')});
+          rows[r].querySelector('.cx').textContent=(good?'Correcto. ':(a==null?'Sin responder. ':'Incorrecto. '))+it[2]});
+        f=ok/q.items.length;fb.innerHTML=`<b>${ok} de ${q.items.length} bien.</b>`;
+      }else{let ok=0;const ws=d.querySelectorAll('.slot');
+        q.slots.forEach((sl,r)=>{const s=ws[r].querySelector('select');const a=(st.ans[i]||{})[r];const good=a===sl[1];if(good)ok++;
+          s.classList.remove('right','wrong');s.classList.add(good?'right':'wrong');s.disabled=true;
+          ws[r].querySelector('.cx').textContent=(good?'Correcto. ':'Respuesta: '+sl[1]+'. ')+sl[2]});
+        f=ok/q.slots.length;fb.innerHTML=`<b>${ok} de ${q.slots.length} bien.</b>`}
+      tot+=f});
+    st.score=tot;st.done=true;st.att++;
+    res.innerHTML=`<div class="tag" style="margin-top:0">Nota de la estación</div><div class="big">${fmt(st.score)} <span style="font-size:1.1rem">/ 10</span></div>
+      <p style="margin:.6rem 0 0"><b>${esc(nom)}</b> · ${esc(cur2)}<br>${e.eval} · Intento ${st.att} · ${stamp()}</p>
+      <p>Repasa: ${e.repasa}</p>
+      <div class="shot"><b>Toma una captura de pantalla de esta nota</b> (con tu nombre, la estación y la fecha) <b>y envíala por la plataforma.</b></div>`;
+    res.classList.add('show');
+    updTabs();res.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }
+  function reset(){st.done=false;st.score=0;st.ans=e.qs.map(()=>null);res.classList.remove('show');render();updTabs();window.scrollTo(0,0)}
+  ctrl.querySelector('[data-a=g]').onclick=()=>{if(!st.done)grade()};
+  ctrl.querySelector('[data-a=r]').onclick=reset;
+  ctrl.querySelector('[data-a=n]').onclick=()=>go(e.n<5?e.n+1:6);
+  sec._reset=()=>{st.att=0;reset()};render();
+}
+E.forEach((_,k)=>build(k));
+function renderResult(){
+  const t=avg();$('#tot').textContent=fmt(t);
+  const v=t>=9?'Excelente: dominas casi todo.':t>=7?'Muy bien. Revisa las estaciones con menos nota.':t>=4?'Vas en camino. Repasa tu cuaderno y las estaciones con menos nota, y reintenta.':'Necesitas estudiar más. Empieza por la estación con menos nota.';
+  $('#verdict').textContent=S.some(s=>s.done)?v:'Califica al menos una estación para ver tu resumen.';
+  $('#sum').innerHTML='';
+  E.forEach((e,k)=>{const s=S[k],p=$('#sum'),d=document.createElement('div');d.className='panel';
+    d.innerHTML=`<div class="srow"><h3>${e.eval}</h3><b>${s.done?fmt(s.score)+' / 10':'Sin calificar'}</b></div><div class="bar"><i style="width:${s.done?s.score*10:0}%"></i></div>${s.done&&s.score<7?'<p class="note">Conviene repasar: '+e.repasa+'</p>':''}`;
+    const b=document.createElement('button');b.className='btn ghost';b.textContent=s.done?'Volver a la estación':'Ir a la estación';b.onclick=()=>go(e.n);d.appendChild(b);p.appendChild(d)})}
+$('#reset').onclick=()=>{$$('#views .view').forEach(v=>v._reset());go(0)};
+updTabs();
+const h=location.hash;go(h==='#resumen'?6:(h.match(/^#estacion-([1-5])$/)||[])[1]?+h.slice(-1):0);
+</script>
+
+</body>
+</html>

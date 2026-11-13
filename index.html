@@ -106,17 +106,20 @@ const CURSOS = [
    1) Sube el archivo .html a la carpeta del curso en GitHub (ej. octavo/).
    2) Copia una línea y cambia título, fecha, tipo y archivo.
    paralelo: "A", "B" o "AB" (para ambos).
+   orden: número 1, 2, 3... para ordenar las actividades del curso (aparece delante del título).
    Las líneas con ejemplo:true son de muestra: bórralas al subir las reales.
    ===================================================================== */
 const ACTIVIDADES = {
   "octavo": [
-    { titulo:"La Batalla de Stalingrado", tipo:"Quiz", fecha:"2026-11-13", paralelo:"AB", archivo:"octavo/quiz-stalingrado.html" },
+    { orden:1, titulo:"La Batalla de Stalingrado", tipo:"Quiz", fecha:"2026-11-13", paralelo:"AB", archivo:"octavo/quiz-stalingrado.html" },
   ],
   "primero-historia": [],
   "primero-filosofia": [],
   "segundo-historia": [],
   "segundo-filosofia": [],
-  "tercero-historia": [],
+  "tercero-historia": [
+    { orden:1, titulo:"Estaciones de estudio para la evaluación sumativa", tipo:"Quiz", fecha:"2026-11-13", paralelo:"AB", archivo:"tercero-historia/01-estaciones-estudio-evaluacion.html" },
+  ],
 };
 
 /* ===================================================================== */
@@ -155,7 +158,7 @@ function inicio(){
 }
 
 function curso(c){
-  const todas = (ACTIVIDADES[c.id]||[]).slice().sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  const todas = (ACTIVIDADES[c.id]||[]).slice().sort((a,b)=>(a.orden||1e9)-(b.orden||1e9) || b.fecha.localeCompare(a.fecha));
   const lista = todas.filter(a => filtro==="todos" || a.paralelo.includes(filtro));
   app.innerHTML = `
     <div class="${c.clase}">
@@ -171,7 +174,7 @@ function curso(c){
           <article class="act">
             <div class="info">
               <span class="kind">${esc(a.tipo)}</span>${a.ejemplo?'<span class="ex">Ejemplo</span>':""}
-              <h3>${esc(a.titulo)}</h3>
+              <h3>${a.orden?a.orden+". ":""}${esc(a.titulo)}</h3>
               <span class="when">${fmt(a.fecha)} · ${a.paralelo==="AB"?"Paralelos A y B":"Paralelo "+a.paralelo}</span>
             </div>
             <a class="open" href="${esc(a.archivo)}" data-ej="${a.ejemplo?1:""}">Abrir</a>
