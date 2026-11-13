@@ -4,101 +4,136 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Rincón de Sociales</title>
+<meta name="theme-color" content="#ffcf33">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap">
 <style>
-/* Layout: cabecera tipo cuaderno, cursos agrupados por nivel en tarjetas grandes táctiles; cada curso abre su lista de actividades (#ruta) */
+/* Paisaje andino arriba, tarjetas-sticker por curso, dato curioso interactivo, progreso por estudiante */
 :root{
-  --bg:#f5f3ee; --surface:#ffffff; --ink:#1f2328; --muted:#5d6470; --line:#dcd8cf;
-  --hist:#b4472f; --hist-soft:#f6e3dd;
-  --filo:#3d4fa8; --filo-soft:#e2e5f6;
-  --soc:#1f7a5c;  --soc-soft:#dcefe7;
-  --flag:#f2c230;
-  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --bg:#fff8ec; --surface:#ffffff; --ink:#1d1b2f; --muted:#5f5b73; --line:#f0e3c8;
+  --sol:#ffcf33; --coral:#ff6b4a; --selva:#1fa96b; --pacifico:#1aa3c8; --uva:#7b5cd6; --rosa:#ff8fb1;
+  --sky1:#bfe9ff; --sky2:#fff3c4; --m1:#7fd3a8; --m2:#3fae80; --m3:#2b8a66; --snow:#ffffff;
+  --shadow:0 6px 0 rgba(29,27,47,.12);
+  --display:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --body:"Nunito","Segoe UI",system-ui,sans-serif;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#16181c; --surface:#20232a; --ink:#eceae4; --muted:#a3a9b3; --line:#343842;
-  --hist:#e8836b; --hist-soft:#3a2520; --filo:#97a6f0; --filo-soft:#23284a;
-  --soc:#5fc49f; --soc-soft:#183329; --flag:#f2c230; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#16181c; --surface:#20232a; --ink:#eceae4; --muted:#a3a9b3; --line:#343842;
-  --hist:#e8836b; --hist-soft:#3a2520; --filo:#97a6f0; --filo-soft:#23284a;
-  --soc:#5fc49f; --soc-soft:#183329; --flag:#f2c230; color-scheme:dark}
-
+@media (prefers-color-scheme: dark){:root{
+  --bg:#17152a; --surface:#221f3a; --ink:#f6f2ff; --muted:#b9b3d6; --line:#37325a;
+  --sky1:#2b2a5c; --sky2:#4a3a6b; --m1:#2f6f63; --m2:#245a50; --m3:#1b453e; --snow:#e8e6ff;
+  --shadow:0 6px 0 rgba(0,0,0,.35); color-scheme:dark}}
 *{box-sizing:border-box}
-body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.5}
-.wrap{max-width:880px; margin:0 auto; padding-block:20px 48px;
-  padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+html,body{margin:0}
+body{background:var(--bg); color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.5; overflow-x:hidden}
+.wrap{max-width:980px; margin:0 auto; padding-left:max(16px,env(safe-area-inset-left)); padding-right:max(16px,env(safe-area-inset-right))}
+button{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--uva); outline-offset:3px}
 
-header.top{display:flex; flex-direction:column; gap:6px; padding-block:12px 22px; border-bottom:2px solid var(--line); margin-bottom:22px}
-.tricolor{display:flex; height:6px; width:84px; border-radius:3px; overflow:hidden}
-.tricolor i{flex:2; background:var(--flag)} .tricolor i:nth-child(2){flex:1; background:#2b5aa8} .tricolor i:nth-child(3){flex:1; background:#c8323a}
-h1{font-family:var(--display); font-weight:800; font-size:clamp(2rem, 7vw, 3rem); line-height:1.05; margin:6px 0 0; text-wrap:balance; letter-spacing:-.01em}
-.sub{color:var(--muted); margin:0}
+/* ---------- Hero con paisaje ---------- */
+.hero{position:relative; background:linear-gradient(180deg,var(--sky1),var(--sky2)); overflow:hidden; border-bottom:6px solid var(--ink)}
+.hero svg.paisaje{position:absolute; left:0; right:0; bottom:0; width:100%; height:120px}
+.hero svg.solcito{position:absolute; top:14px; right:max(16px,4vw); width:clamp(70px,12vw,130px); height:auto}
+.hero .txt{position:relative; z-index:1; padding-block:26px 150px}
+.hero .txt .wrap{display:flex; flex-direction:column}
+.saludo{display:inline-flex; align-self:flex-start; gap:8px; align-items:center; background:var(--surface); border:3px solid var(--ink); border-radius:999px; padding:4px 14px; font-weight:800; font-size:.95rem; box-shadow:var(--shadow)}
+h1{font-family:var(--display); font-weight:700; font-size:clamp(2.2rem,8vw,4.2rem); line-height:1; margin:12px 0 6px; letter-spacing:-.01em; text-wrap:balance}
+h1 span{color:var(--coral); -webkit-text-stroke:0}
+.hero .sub{margin:0; font-weight:700; color:var(--ink); opacity:.8; max-width:36ch}
+.nube{animation:nube 38s linear infinite}
+.nube.b{animation-duration:55s; animation-delay:-20s}
+@keyframes nube{from{transform:translateX(-260px)}to{transform:translateX(1300px)}}
+.ave{animation:vuelo 16s ease-in-out infinite}
+@keyframes vuelo{0%{transform:translate(560px,150px)}50%{transform:translate(720px,135px)}100%{transform:translate(560px,150px)}}
+.ala{transform-origin:center; animation:aleteo 1.6s ease-in-out infinite}
+@keyframes aleteo{50%{transform:scaleY(.6)}}
+.sol{animation:latido 5s ease-in-out infinite; transform-box:fill-box; transform-origin:center}
+@keyframes latido{50%{transform:scale(1.07)}}
 
-.level{margin-bottom:26px}
-.level h2{font-family:var(--display); font-weight:600; font-size:.85rem; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:0 0 10px}
-.grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:12px}
+/* ---------- Dato curioso ---------- */
+.dato{margin-top:-46px; position:relative; z-index:2; display:flex; gap:16px; align-items:center; background:var(--sol); color:#1d1b2f; border:3px solid var(--ink); border-radius:22px; padding:16px 18px; box-shadow:var(--shadow); flex-wrap:wrap}
+.dato .ico{flex:none; width:56px; height:56px; border-radius:16px; background:#fff; border:3px solid #1d1b2f; display:grid; place-items:center}
+.dato .t{flex:1 1 240px; min-width:0}
+.dato b{font-family:var(--display); font-size:1.05rem; display:block}
+.dato p{margin:2px 0 0; font-weight:700}
+.dato button{cursor:pointer; background:#1d1b2f; color:#fff; border:0; border-radius:14px; padding:12px 18px; font-weight:800}
+.dato p.cambia{animation:entra .4s ease}
+@keyframes entra{from{opacity:0; transform:translateY(8px)}}
 
-.course{all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:center; gap:14px;
-  background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:16px 18px; min-height:84px;
-  transition:transform .15s, border-color .15s}
-.course:hover{border-color:var(--c); transform:translateY(-2px)}
-.course:focus-visible{outline:3px solid var(--c); outline-offset:2px}
-.badge{flex:none; width:52px; height:52px; border-radius:12px; display:grid; place-items:center;
-  background:var(--soft); color:var(--c); font-family:var(--display); font-weight:800; font-size:1.25rem}
-.course .t{display:flex; flex-direction:column; min-width:0}
-.course .subj{font-family:var(--display); font-weight:800; font-size:1.3rem; color:var(--c); line-height:1.15}
-.course .meta{color:var(--muted); font-size:.95rem}
-.hist{--c:var(--hist); --soft:var(--hist-soft)} .filo{--c:var(--filo); --soft:var(--filo-soft)} .soc{--c:var(--soc); --soft:var(--soc-soft)}
+/* ---------- Progreso general ---------- */
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:22px 0 4px}
+.stat{background:var(--surface); border:3px solid var(--ink); border-radius:18px; padding:12px 14px; box-shadow:var(--shadow); display:flex; align-items:center; gap:12px; min-width:0}
+.stat .n{font-family:var(--display); font-weight:700; font-size:1.8rem; line-height:1; font-variant-numeric:tabular-nums}
+.stat .l{font-size:.85rem; font-weight:800; color:var(--muted); line-height:1.2}
+.stat svg{flex:none}
+@media (max-width:560px){ .stats{grid-template-columns:1fr 1fr} .stat:last-child{grid-column:1/-1} }
 
-/* Vista de curso */
-.back{all:unset; cursor:pointer; display:inline-flex; align-items:center; gap:8px; font-weight:700; color:var(--ink);
-  padding:12px 18px; border-radius:999px; background:var(--surface); border:2px solid var(--line); margin-bottom:18px}
-.back:focus-visible{outline:3px solid var(--ink)}
-.chead{display:flex; align-items:center; gap:14px; margin-bottom:6px}
-.chead h1{font-size:clamp(1.8rem,6vw,2.6rem); color:var(--c); margin:0}
-.filters{display:flex; gap:8px; flex-wrap:wrap; margin:16px 0}
-.chip{all:unset; cursor:pointer; padding:10px 18px; border-radius:999px; border:2px solid var(--line); background:var(--surface); font-weight:700}
-.chip[aria-pressed="true"]{background:var(--c); border-color:var(--c); color:var(--surface)}
-.chip:focus-visible{outline:3px solid var(--c); outline-offset:2px}
+/* ---------- Cursos ---------- */
+.level{margin-top:26px}
+.level h2{font-family:var(--display); font-weight:600; font-size:1.1rem; margin:0 0 10px; display:flex; align-items:center; gap:10px}
+.level h2::after{content:""; flex:1; height:3px; border-radius:3px; background:var(--line)}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px}
+.course{cursor:pointer; text-align:left; position:relative; display:flex; gap:14px; align-items:center; background:var(--surface); border:3px solid var(--ink); border-radius:22px; padding:16px; box-shadow:var(--shadow); transition:transform .18s, box-shadow .18s; overflow:hidden}
+.course:hover{transform:translateY(-4px) rotate(-.6deg); box-shadow:0 10px 0 rgba(29,27,47,.14)}
+.course:active{transform:translateY(2px); box-shadow:0 2px 0 rgba(29,27,47,.14)}
+.course::before{content:""; position:absolute; right:-30px; top:-30px; width:120px; height:120px; border-radius:50%; background:var(--c); opacity:.14}
+.pic{flex:none; width:74px; height:74px; border-radius:20px; background:var(--c); border:3px solid var(--ink); display:grid; place-items:center; position:relative}
+.pic .num{position:absolute; bottom:-8px; right:-8px; background:var(--surface); border:3px solid var(--ink); border-radius:999px; min-width:32px; height:32px; display:grid; place-items:center; font-family:var(--display); font-weight:700; font-size:.95rem; padding:0 6px}
+.course .t{display:flex; flex-direction:column; gap:4px; min-width:0; flex:1}
+.course .subj{font-family:var(--display); font-weight:700; font-size:1.35rem; line-height:1.1}
+.course .meta{color:var(--muted); font-weight:700; font-size:.92rem}
+.bar{height:10px; border-radius:99px; background:var(--line); overflow:hidden; border:2px solid var(--ink)}
+.bar i{display:block; height:100%; background:var(--c); transition:width .5s}
+.soc{--c:var(--selva)} .hist{--c:var(--coral)} .filo{--c:var(--uva)}
 
-.list{display:flex; flex-direction:column; gap:12px}
-.act{display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; background:var(--surface); border:2px solid var(--line); border-radius:14px; padding:16px 18px}
-.act .info{flex:1 1 260px; min-width:0}
-.act .kind{display:inline-block; font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; padding:3px 10px; border-radius:6px; background:var(--soft); color:var(--c)}
-.act h3{font-family:var(--display); font-weight:600; font-size:1.2rem; margin:6px 0 2px; text-wrap:balance}
-.act .when{color:var(--muted); font-size:.95rem; font-variant-numeric:tabular-nums}
-.open{all:unset; cursor:pointer; text-align:center; background:var(--c); color:var(--surface); font-weight:700; font-size:1.1rem;
-  padding:14px 26px; border-radius:12px; flex:0 0 auto}
-.open:focus-visible{outline:3px solid var(--ink); outline-offset:2px}
-@media (max-width:520px){ .open{flex:1 1 100%} }
-.empty{color:var(--muted); background:var(--surface); border:2px dashed var(--line); border-radius:14px; padding:22px; text-align:center}
-.note{margin-top:28px; font-size:.92rem; color:var(--muted); border-top:1px solid var(--line); padding-top:14px}
-.ex{font-size:.75rem; font-weight:700; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:2px 8px; margin-left:6px; vertical-align:middle}
+/* ---------- Vista de curso ---------- */
+.banner{position:relative; background:var(--c); color:#fff; border-bottom:6px solid var(--ink); overflow:hidden}
+.banner .wrap{position:relative; z-index:1; padding-block:18px 26px}
+.banner svg.deco{position:absolute; right:-20px; bottom:-30px; width:260px; height:260px; opacity:.22}
+.back{cursor:pointer; display:inline-flex; align-items:center; gap:8px; background:var(--surface); color:var(--ink); border:3px solid var(--ink); border-radius:999px; padding:10px 18px; font-weight:800; box-shadow:var(--shadow)}
+.banner h1{color:#fff; margin-top:14px; text-shadow:0 3px 0 rgba(0,0,0,.18)}
+.banner .sub{margin:0; font-weight:800; opacity:.95}
+.ring{display:flex; align-items:center; gap:12px; margin-top:12px; font-weight:800}
+.filters{display:flex; gap:10px; flex-wrap:wrap; margin:20px 0 14px}
+.chip{cursor:pointer; padding:10px 18px; border-radius:999px; border:3px solid var(--ink); background:var(--surface); font-weight:800}
+.chip[aria-pressed="true"]{background:var(--c); color:#fff}
+.list{display:flex; flex-direction:column; gap:14px; padding-bottom:40px}
+.act{display:flex; flex-wrap:wrap; align-items:center; gap:14px 16px; background:var(--surface); border:3px solid var(--ink); border-radius:22px; padding:16px; box-shadow:var(--shadow)}
+.act .sticker{flex:none; width:58px; height:58px; border-radius:18px; background:var(--c); color:#fff; border:3px solid var(--ink); display:grid; place-items:center; font-family:var(--display); font-weight:700; font-size:1.6rem; transform:rotate(-6deg)}
+.act.hecha .sticker{background:var(--selva)}
+.act .info{flex:1 1 220px; min-width:0}
+.tags{display:flex; gap:6px; flex-wrap:wrap}
+.tag{font-size:.75rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; padding:3px 10px; border-radius:8px; border:2px solid var(--ink); background:var(--sky2); color:#1d1b2f}
+.tag.nuevo{background:var(--sol)}
+.tag.ok{background:#c9f2db}
+.act h3{font-family:var(--display); font-weight:600; font-size:1.25rem; line-height:1.2; margin:6px 0 2px; text-wrap:balance}
+.when{color:var(--muted); font-weight:700; font-size:.92rem}
+.open{flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; gap:8px; text-decoration:none; background:var(--sol); color:#1d1b2f; font-family:var(--display); font-weight:700; font-size:1.2rem; padding:14px 26px; border-radius:16px; border:3px solid var(--ink); box-shadow:var(--shadow); transition:transform .15s}
+.open:hover{transform:translateY(-3px)}
+@media (max-width:560px){ .open{flex:1 1 100%} }
+.empty{background:var(--surface); border:3px dashed var(--ink); border-radius:22px; padding:28px; text-align:center; font-weight:700; color:var(--muted)}
+.empty svg{display:block; margin:0 auto 8px}
 
-#toast{position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%);
-  background:var(--ink); color:var(--bg); padding:12px 18px; border-radius:12px; font-weight:700; max-width:calc(100% - 32px); text-align:center}
-@media (prefers-reduced-motion: reduce){ .course{transition:none} .course:hover{transform:none} }
+footer{margin:36px 0 0; padding-block:22px 34px; text-align:center; color:var(--muted); font-weight:700; font-size:.92rem}
+.tri{display:inline-flex; height:8px; width:90px; border-radius:4px; overflow:hidden; border:2px solid var(--ink); margin-bottom:8px}
+.tri i{flex:2; background:#ffd100}.tri i:nth-child(2){flex:1; background:#034ea2}.tri i:nth-child(3){flex:1; background:#ed1c24}
+
+#confeti{position:fixed; inset:0; pointer-events:none; z-index:50}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}
 </style>
 </head>
 <body>
-
-<div class="wrap" id="app"></div>
-<div id="toast" hidden></div>
-
+<div id="app"></div>
+<canvas id="confeti" aria-hidden="true"></canvas>
 <script>
 /* =====================================================================
    CURSOS. No hace falta tocarlos.
    ===================================================================== */
 const CURSOS = [
-  { id:"octavo",            nivel:"Educación General Básica", nombre:"8.º EGB",  materia:"Estudios Sociales", clase:"soc",  sigla:"8" },
-  { id:"primero-historia",  nivel:"Primero de Bachillerato",   nombre:"1.º BGU",  materia:"Historia",          clase:"hist", sigla:"1" },
-  { id:"primero-filosofia", nivel:"Primero de Bachillerato",   nombre:"1.º BGU",  materia:"Filosofía",         clase:"filo", sigla:"1" },
-  { id:"segundo-historia",  nivel:"Segundo de Bachillerato",   nombre:"2.º BGU",  materia:"Historia",          clase:"hist", sigla:"2" },
-  { id:"segundo-filosofia", nivel:"Segundo de Bachillerato",   nombre:"2.º BGU",  materia:"Filosofía",         clase:"filo", sigla:"2" },
-  { id:"tercero-historia",  nivel:"Tercero de Bachillerato",   nombre:"3.º BGU",  materia:"Historia",          clase:"hist", sigla:"3" },
+  { id:"octavo",            nivel:"Educación General Básica", nombre:"8.º EGB",  materia:"Estudios Sociales", clase:"soc",  sigla:"8", icono:"globo" },
+  { id:"primero-historia",  nivel:"Primero de Bachillerato",   nombre:"1.º BGU",  materia:"Historia",          clase:"hist", sigla:"1", icono:"reloj" },
+  { id:"primero-filosofia", nivel:"Primero de Bachillerato",   nombre:"1.º BGU",  materia:"Filosofía",         clase:"filo", sigla:"1", icono:"idea" },
+  { id:"segundo-historia",  nivel:"Segundo de Bachillerato",   nombre:"2.º BGU",  materia:"Historia",          clase:"hist", sigla:"2", icono:"columna" },
+  { id:"segundo-filosofia", nivel:"Segundo de Bachillerato",   nombre:"2.º BGU",  materia:"Filosofía",         clase:"filo", sigla:"2", icono:"idea" },
+  { id:"tercero-historia",  nivel:"Tercero de Bachillerato",   nombre:"3.º BGU",  materia:"Historia",          clase:"hist", sigla:"3", icono:"engranaje" },
 ];
 
 /* =====================================================================
@@ -132,70 +167,170 @@ const ACTIVIDADES = {
 };
 
 /* ===================================================================== */
+const DATOS = [
+  "En 1924, Matilde Hidalgo de Procel fue la primera mujer en votar en el Ecuador y en América Latina.",
+  "Quito y Cracovia fueron las primeras ciudades declaradas Patrimonio Cultural de la Humanidad por la UNESCO, en 1978.",
+  "La cumbre del Chimborazo es el punto de la superficie terrestre más alejado del centro de la Tierra.",
+  "La cultura Valdivia, en la costa ecuatoriana, elaboró una de las cerámicas más antiguas de América, hace más de 5 000 años.",
+  "En 2008, Ecuador fue el primer país del mundo en reconocer en su Constitución los derechos de la naturaleza.",
+  "Sumak Kawsay es una palabra kichwa que significa «buen vivir» y es un principio de la Constitución ecuatoriana.",
+  "Eugenio Espejo publicó en 1792 el primer periódico de Quito: «Primicias de la Cultura de Quito».",
+  "El 10 de agosto de 1809 se dio en Quito el Primer Grito de Independencia.",
+  "Charles Darwin visitó las islas Galápagos en 1835; lo que observó allí le ayudó a pensar su teoría de la evolución.",
+  "Sócrates nunca escribió un libro: conocemos sus ideas gracias a su alumno Platón.",
+  "A inicios del siglo XX, Ecuador fue uno de los mayores exportadores de cacao del mundo: el famoso «boom cacaotero».",
+  "La palabra «filosofía» viene del griego y significa «amor a la sabiduría».",
+  "La esclavitud se abolió en el Ecuador en 1851, durante el gobierno de José María Urbina."
+];
+
+const ICONOS = {
+  globo:`<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#1d1b2f" stroke-width="3"><circle cx="24" cy="24" r="17" fill="#fff"/><path d="M7 24h34M24 7c6 6 6 28 0 34M24 7c-6 6-6 28 0 34" /><path d="M11 14c5 3 21 3 26 0M11 34c5-3 21-3 26 0"/></svg>`,
+  reloj:`<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#1d1b2f" stroke-width="3" stroke-linejoin="round"><path d="M13 6h22M13 42h22" stroke-linecap="round"/><path d="M15 6c0 10 18 12 18 18S15 32 15 42h18c0-10-18-12-18-18S33 16 33 6z" fill="#fff"/><path d="M19 38h10l-5-5z" fill="#ffcf33"/></svg>`,
+  idea:`<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#1d1b2f" stroke-width="3" stroke-linejoin="round"><path d="M24 6a13 13 0 0 0-7 24c1 1 2 3 2 5h10c0-2 1-4 2-5A13 13 0 0 0 24 6z" fill="#ffcf33"/><path d="M19 40h10M21 44h6" stroke-linecap="round"/><path d="M24 14v8M20 18h8" stroke-linecap="round"/></svg>`,
+  columna:`<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#1d1b2f" stroke-width="3" stroke-linejoin="round"><path d="M8 12 24 5l16 7z" fill="#fff"/><rect x="9" y="12" width="30" height="5" fill="#fff"/><path d="M14 17v19M21 17v19M27 17v19M34 17v19"/><rect x="7" y="36" width="34" height="6" fill="#fff"/></svg>`,
+  engranaje:`<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="#1d1b2f" stroke-width="3" stroke-linejoin="round"><path d="M24 6l3 5 6-1 1 6 5 3-3 5 3 5-5 3-1 6-6-1-3 5-3-5-6 1-1-6-5-3 3-5-3-5 5-3 1-6 6 1z" fill="#fff"/><circle cx="24" cy="24" r="6" fill="#ffcf33"/></svg>`
+};
+
 const app = document.getElementById("app");
-const toast = document.getElementById("toast");
 let filtro = "todos";
 const MESES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
 const fmt = f => { const [y,m,d] = f.split("-"); return `${+d} ${MESES[+m-1]} ${y}`; };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const dias = f => (Date.now() - new Date(f+"T12:00:00")) / 864e5;
 
-function aviso(t){ toast.textContent=t; toast.hidden=false; clearTimeout(aviso.t); aviso.t=setTimeout(()=>toast.hidden=true,2600); }
+function leerAbiertas(){ try{ return JSON.parse(localStorage.getItem("rs-abiertas")||"[]"); }catch(e){ return []; } }
+function marcarAbierta(a){ const l=leerAbiertas(); if(!l.includes(a)){ l.push(a); try{ localStorage.setItem("rs-abiertas",JSON.stringify(l)); }catch(e){} } }
+const listaDe = id => (ACTIVIDADES[id]||[]);
+const hechasDe = id => { const ab=leerAbiertas(); return listaDe(id).filter(a=>ab.includes(a.archivo)).length; };
+
+function saludo(){
+  const h = new Date().getHours();
+  return h < 12 ? "¡Buenos días!" : h < 19 ? "¡Buenas tardes!" : "¡Buenas noches!";
+}
+
+const PAISAJE = `
+<svg class="solcito" viewBox="80 0 140 160" aria-hidden="true"><g class="sol"><circle cx="150" cy="80" r="46" fill="#ffcf33" stroke="#1d1b2f" stroke-width="4"/><g stroke="#ffb300" stroke-width="6" stroke-linecap="round"><path d="M150 14v-8M150 154v-8M84 80h-8M224 80h-8M104 34l-6-6M202 132l-6-6M104 126l-6 6M202 28l-6 6"/></g></g></svg>
+<svg class="paisaje" viewBox="0 120 1200 180" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+  <g class="nube"><ellipse cx="0" cy="150" rx="60" ry="18" fill="#fff" opacity=".9"/><ellipse cx="30" cy="138" rx="34" ry="18" fill="#fff" opacity=".9"/></g>
+  <g class="nube b"><ellipse cx="0" cy="175" rx="48" ry="14" fill="#fff" opacity=".8"/><ellipse cx="22" cy="165" rx="26" ry="14" fill="#fff" opacity=".8"/></g>
+  <g class="ave"><path class="ala" d="M-28 0q14-14 28 0q14-14 28 0" fill="none" stroke="#1d1b2f" stroke-width="5" stroke-linecap="round"/></g>
+  <path d="M0 300V190l120-60 110 50 150-110 120 90 90-50 170 100 140-130 160 120 140-70v170z" fill="var(--m1)" stroke="#1d1b2f" stroke-width="4"/>
+  <path d="M640 140l44-40 26 24-20 6-14-8-14 14z" fill="var(--snow)"/>
+  <path d="M380 70l34 25-14 4-10-8-12 10-14-6z" fill="var(--snow)"/>
+  <path d="M0 300V240l160-40 140 30 190-60 170 50 160-40 200 50 180-30v90z" fill="var(--m2)" stroke="#1d1b2f" stroke-width="4"/>
+  <path d="M0 300v-30l220-20 260 18 240-26 240 22 240-14v50z" fill="var(--m3)" stroke="#1d1b2f" stroke-width="4"/>
+</svg>`;
+
+function svgAnillo(p, c){
+  const r=20, L=2*Math.PI*r, off=L*(1-p);
+  return `<svg width="54" height="54" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="${r}" fill="none" stroke="var(--line)" stroke-width="7"/><circle cx="27" cy="27" r="${r}" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${L}" stroke-dashoffset="${off}" transform="rotate(-90 27 27)"/></svg>`;
+}
 
 function inicio(){
   const niveles = [...new Set(CURSOS.map(c=>c.nivel))];
+  const total = CURSOS.reduce((s,c)=>s+listaDe(c.id).length,0);
+  const hechas = CURSOS.reduce((s,c)=>s+hechasDe(c.id),0);
+  const nuevas = CURSOS.reduce((s,c)=>s+listaDe(c.id).filter(a=>dias(a.fecha)<=7).length,0);
   app.innerHTML = `
-    <header class="top">
-      <div class="tricolor" aria-hidden="true"><i></i><i></i><i></i></div>
-      <h1>Rincón de Sociales</h1>
-      <p class="sub">Quizzes y clases interactivas · U.E. Nuestra Señora del Rosario · Lic. Isaac Pérez</p>
+    <header class="hero">${PAISAJE}
+      <div class="txt"><div class="wrap">
+        <span class="saludo">${saludo()} 👋</span>
+        <h1>Rincón de <span>Sociales</span></h1>
+        <p class="sub">Estudia, juega y repasa. U.E. Nuestra Señora del Rosario · Lic. Isaac Pérez</p>
+      </div></div>
     </header>
-    ${niveles.map(n => `
-      <section class="level">
-        <h2>${n}</h2>
-        <div class="grid">
-          ${CURSOS.filter(c=>c.nivel===n).map(c => {
-            const k = (ACTIVIDADES[c.id]||[]).length;
-            return `<button class="course ${c.clase}" data-id="${c.id}">
-              <span class="badge" aria-hidden="true">${c.sigla}</span>
-              <span class="t"><span class="subj">${c.materia}</span>
-              <span class="meta">${c.nombre} · ${k} ${k===1?"actividad":"actividades"}</span></span>
-            </button>`;}).join("")}
-        </div>
-      </section>`).join("")}
-    <p class="note">Toca tu curso y luego “Abrir”. Funciona en celular y computadora, sin descargar nada.</p>`;
+    <main class="wrap">
+      <section class="dato" aria-live="polite">
+        <span class="ico" aria-hidden="true"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#1d1b2f" stroke-width="3" stroke-linecap="round"><circle cx="16" cy="13" r="8" fill="#ffcf33"/><path d="M13 25h6M14 29h4M16 9v5M16 17v.5"/></svg></span>
+        <div class="t"><b>¿Sabías que…?</b><p id="datoTxt"></p></div>
+        <button id="otroDato" type="button">Otro dato</button>
+      </section>
+      <section class="stats" aria-label="Tu avance">
+        <div class="stat">${svgAnillo(total?hechas/total:0,"var(--selva)")}<div><div class="n">${hechas}/${total}</div><div class="l">actividades que ya abriste</div></div></div>
+        <div class="stat"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="12" fill="var(--sol)" stroke="#1d1b2f" stroke-width="3"/><path d="M22 11l3 7 7 .6-5.4 4.6 1.7 7L22 26.5 15.7 30l1.7-7L12 18.6l7-.6z" fill="#fff" stroke="#1d1b2f" stroke-width="2.5" stroke-linejoin="round"/></svg><div><div class="n">${nuevas}</div><div class="l">nuevas esta semana</div></div></div>
+        <div class="stat"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="12" fill="var(--pacifico)" stroke="#1d1b2f" stroke-width="3"/><path d="M13 30V20M22 30V14M31 30v-7" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg><div><div class="n">${CURSOS.length}</div><div class="l">cursos y materias</div></div></div>
+      </section>
+      ${niveles.map(n => `
+        <section class="level">
+          <h2>${n}</h2>
+          <div class="grid">
+            ${CURSOS.filter(c=>c.nivel===n).map(c => {
+              const k = listaDe(c.id).length, h = hechasDe(c.id);
+              return `<button class="course ${c.clase}" data-id="${c.id}">
+                <span class="pic" aria-hidden="true">${ICONOS[c.icono]}<span class="num">${c.sigla}</span></span>
+                <span class="t"><span class="subj">${c.materia}</span>
+                  <span class="meta">${c.nombre} · ${k} ${k===1?"actividad":"actividades"}</span>
+                  <span class="bar" aria-label="${h} de ${k} abiertas"><i style="width:${k?h/k*100:0}%"></i></span></span>
+              </button>`;}).join("")}
+          </div>
+        </section>`).join("")}
+      <footer><div class="tri" aria-hidden="true"><i></i><i></i><i></i></div><br>Toca tu curso y luego «Abrir». Funciona en el celular, sin descargar nada.</footer>
+    </main>`;
   app.querySelectorAll(".course").forEach(b => b.onclick = () => { location.hash = b.dataset.id; });
+  let i = Math.floor(Math.random()*DATOS.length);
+  const t = document.getElementById("datoTxt");
+  const pon = () => { t.classList.remove("cambia"); void t.offsetWidth; t.textContent = DATOS[i]; t.classList.add("cambia"); };
+  pon();
+  document.getElementById("otroDato").onclick = () => { i = (i+1) % DATOS.length; pon(); };
 }
 
 function curso(c){
-  const todas = (ACTIVIDADES[c.id]||[]).slice().sort((a,b)=>(a.orden||1e9)-(b.orden||1e9) || b.fecha.localeCompare(a.fecha));
+  const todas = listaDe(c.id).slice().sort((a,b)=>(a.orden||1e9)-(b.orden||1e9) || b.fecha.localeCompare(a.fecha));
   const lista = todas.filter(a => filtro==="todos" || a.paralelo.includes(filtro));
+  const ab = leerAbiertas(), h = hechasDe(c.id), k = todas.length;
   app.innerHTML = `
     <div class="${c.clase}">
-      <button class="back" id="volver">← Todos los cursos</button>
-      <div class="chead"><span class="badge" aria-hidden="true">${c.sigla}</span>
-        <div><h1>${c.materia}</h1><p class="sub">${c.nombre} · ${c.nivel}</p></div></div>
-      <div class="filters" role="group" aria-label="Paralelo">
-        ${[["todos","Todos"],["A","Paralelo A"],["B","Paralelo B"]].map(([v,t]) =>
-          `<button class="chip" data-f="${v}" aria-pressed="${filtro===v}">${t}</button>`).join("")}
-      </div>
-      <div class="list">
-        ${lista.length ? lista.map(a => `
-          <article class="act">
-            <div class="info">
-              <span class="kind">${esc(a.tipo)}</span>${a.ejemplo?'<span class="ex">Ejemplo</span>':""}
-              <h3>${a.orden?a.orden+". ":""}${esc(a.titulo)}</h3>
-              <span class="when">${fmt(a.fecha)} · ${a.paralelo==="AB"?"Paralelos A y B":"Paralelo "+a.paralelo}</span>
-            </div>
-            <a class="open" href="${esc(a.archivo)}" data-ej="${a.ejemplo?1:""}">Abrir</a>
-          </article>`).join("")
-        : `<div class="empty">Todavía no hay actividades publicadas para este curso.</div>`}
-      </div>
+      <header class="banner"><svg class="deco" viewBox="0 0 48 48" aria-hidden="true">${ICONOS[c.icono].replace(/^<svg[^>]*>|<\/svg>$/g,"")}</svg>
+        <div class="wrap">
+          <button class="back" id="volver">← Todos los cursos</button>
+          <h1>${c.materia}</h1>
+          <p class="sub">${c.nombre} · ${c.nivel}</p>
+          <div class="ring">${svgAnillo(k?h/k:0,"#fff")}<span>${h} de ${k} actividades abiertas</span></div>
+        </div>
+      </header>
+      <main class="wrap">
+        <div class="filters" role="group" aria-label="Paralelo">
+          ${[["todos","Todos"],["A","Paralelo A"],["B","Paralelo B"]].map(([v,t]) =>
+            `<button class="chip" data-f="${v}" aria-pressed="${filtro===v}">${t}</button>`).join("")}
+        </div>
+        <div class="list">
+          ${lista.length ? lista.map((a,n) => { const hecha = ab.includes(a.archivo); return `
+            <article class="act ${hecha?"hecha":""}">
+              <span class="sticker" aria-hidden="true">${hecha?"✓":(a.orden||n+1)}</span>
+              <div class="info">
+                <div class="tags"><span class="tag">${esc(a.tipo)}</span>${dias(a.fecha)<=7?'<span class="tag nuevo">Nuevo</span>':""}${hecha?'<span class="tag ok">Ya la abriste</span>':""}</div>
+                <h3>${a.orden?a.orden+". ":""}${esc(a.titulo)}</h3>
+                <span class="when">${fmt(a.fecha)} · ${a.paralelo==="AB"?"Paralelos A y B":"Paralelo "+a.paralelo}</span>
+              </div>
+              <a class="open" href="${esc(a.archivo)}" data-a="${esc(a.archivo)}">Abrir <span aria-hidden="true">→</span></a>
+            </article>`; }).join("")
+          : `<div class="empty"><svg width="70" height="70" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="var(--sol)" stroke="#1d1b2f" stroke-width="3"/><circle cx="17" cy="20" r="2.5" fill="#1d1b2f"/><circle cx="31" cy="20" r="2.5" fill="#1d1b2f"/><path d="M16 31q8-5 16 0" fill="none" stroke="#1d1b2f" stroke-width="3" stroke-linecap="round"/></svg>Todavía no hay actividades publicadas para este curso.</div>`}
+        </div>
+      </main>
     </div>`;
   document.getElementById("volver").onclick = () => { location.hash = ""; };
   app.querySelectorAll(".chip").forEach(b => b.onclick = () => { filtro = b.dataset.f; curso(c); });
   app.querySelectorAll(".open").forEach(a => a.onclick = e => {
-    if (a.dataset.ej){ e.preventDefault(); aviso("Actividad de ejemplo: aquí se abrirá el quiz real."); }
+    marcarAbierta(a.dataset.a);
+    const r = a.getBoundingClientRect();
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches){
+      e.preventDefault(); confeti(r.left + r.width/2, r.top + r.height/2);
+      setTimeout(() => { location.href = a.getAttribute("href"); }, 650);
+    }
   });
+}
+
+function confeti(x, y){
+  const cv = document.getElementById("confeti"), ctx = cv.getContext("2d");
+  cv.width = innerWidth; cv.height = innerHeight;
+  const col = ["#ffcf33","#ff6b4a","#1fa96b","#1aa3c8","#7b5cd6","#ff8fb1"];
+  const P = Array.from({length:70}, () => ({x, y, vx:(Math.random()-.5)*12, vy:-Math.random()*12-3, s:Math.random()*7+5, c:col[Math.floor(Math.random()*col.length)], r:Math.random()*6}));
+  let t = 0;
+  (function paso(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    P.forEach(p => { p.x+=p.vx; p.y+=p.vy; p.vy+=.45; p.r+=.2; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2); ctx.restore(); });
+    if (++t < 60) requestAnimationFrame(paso); else ctx.clearRect(0,0,cv.width,cv.height);
+  })();
 }
 
 function ruta(){
@@ -204,6 +339,7 @@ function ruta(){
   window.scrollTo(0,0);
 }
 window.addEventListener("hashchange", ruta);
+window.addEventListener("pageshow", e => { if (e.persisted) ruta(); });
 ruta();
 </script>
 </body>
