@@ -94,6 +94,7 @@ input[type=text]{width:100%;font:inherit;border:2px solid var(--line);background
 @media(max-width:560px){.idrow{grid-template-columns:1fr}}
 </style>
 
+<script src="../js/registro.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -388,6 +389,7 @@ function build(k){
         f=ok/q.slots.length;fb.innerHTML=`<b>${ok} de ${q.slots.length} bien.</b>`}
       tot+=f});
     st.score=tot;st.done=true;st.att++;
+    try{if(window.registrarNota)registrarNota({curso:'3.º BGU Historia',grupo:cur2,evaluacion:e.eval,nombre:nom,nota:st.score,intento:st.att})}catch(_e){}
     res.innerHTML=`<div class="tag" style="margin-top:0">Nota de la estación</div><div class="big">${fmt(st.score)} <span style="font-size:1.1rem">/ 10</span></div>
       <p style="margin:.6rem 0 0"><b>${esc(nom)}</b> · ${esc(cur2)}<br>${e.eval} · Intento ${st.att} · ${stamp()}</p>
       <p>Repasa: ${e.repasa}</p>

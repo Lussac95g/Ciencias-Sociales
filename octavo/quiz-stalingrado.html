@@ -44,6 +44,7 @@ input{width:100%; font:inherit; font-size:1.1rem; padding:14px; border:2px solid
 .res li{margin-bottom:6px}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
 </style>
+<script src="../js/registro.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -88,16 +89,19 @@ const P = [
 ];
 
 const app = document.getElementById("app");
-let nombre = "", i = 0, aciertos = 0, fallos = [];
+let nombre = "", paralelo = "", intento = 0, i = 0, aciertos = 0, fallos = [];
 
 function inicio(){
   app.innerHTML = `<div class="card">
     <label for="nom">Escribe tu nombre y apellido</label>
     <input id="nom" autocomplete="name" placeholder="Ej.: Mateo Guamán">
+    <label for="par" style="margin-top:14px">Paralelo</label>
+    <select id="par" style="width:100%;font:inherit;font-size:1.1rem;padding:14px;border:2px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink)"><option value="">Elige tu paralelo…</option><option>A</option><option>B</option></select>
     <button class="btn" id="go" disabled>Empezar</button></div>`;
-  const inp = document.getElementById("nom"), go = document.getElementById("go");
-  inp.oninput = () => go.disabled = inp.value.trim().length < 3;
-  go.onclick = () => { nombre = inp.value.trim(); pregunta(); };
+  const inp = document.getElementById("nom"), par = document.getElementById("par"), go = document.getElementById("go");
+  const chk = () => go.disabled = inp.value.trim().length < 3 || !par.value;
+  inp.oninput = chk; par.onchange = chk;
+  go.onclick = () => { nombre = inp.value.trim(); paralelo = par.value; intento = 1; pregunta(); };
 }
 
 function pregunta(){
@@ -124,15 +128,16 @@ function responder(k){
 
 function final(){
   const nota = (aciertos / P.length * 10).toFixed(1).replace(".0","");
+  try{ if(window.registrarNota) registrarNota({curso:"8.º EGB", grupo:paralelo, evaluacion:"Quiz: La Batalla de Stalingrado", nombre, nota:aciertos/P.length*10, intento}); }catch(_e){}
   const msg = aciertos >= 9 ? "Excelente investigación." : aciertos >= 7 ? "Muy bien, ya tienes la base para el guion." : "Repasa las preguntas que fallaste antes de la próxima clase.";
   app.innerHTML = `<div class="card">
-    <span class="count">${nombre}</span>
+    <span class="count">${nombre} · 8.º ${paralelo} · Intento ${intento}</span>
     <div class="score">${nota}<span style="font-size:1.5rem">/10</span></div>
     <p><b>${aciertos} de ${P.length} correctas.</b> ${msg}</p>
     ${fallos.length ? `<p><b>Para repasar:</b></p><ul class="res">${fallos.map(n=>`<li>${P[n].q}<br><span style="color:var(--muted)">${P[n].o[P[n].c]}</span></li>`).join("")}</ul>` : ""}
     <p style="color:var(--muted)">Toma una captura de esta pantalla y envíala al docente.</p>
     <button class="btn" id="re">Intentar de nuevo</button></div>`;
-  document.getElementById("re").onclick = () => { i = 0; aciertos = 0; fallos = []; pregunta(); };
+  document.getElementById("re").onclick = () => { i = 0; aciertos = 0; fallos = []; intento++; pregunta(); };
   window.scrollTo(0,0);
 }
 inicio();

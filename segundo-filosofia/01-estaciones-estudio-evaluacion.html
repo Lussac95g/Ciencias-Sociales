@@ -47,6 +47,7 @@ table{width:100%;border-collapse:collapse;font-size:.92em}th,td{padding:.45em .5
 @media (min-width:700px){.chips button{flex:1 1 45%}}
 </style>
 
+<script src="../js/registro.js"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -230,6 +231,7 @@ function drawOrder(){
 function result(){
  var c=S.cur,i=c.i,sc=c.pts;
  S.att[i]=(S.att[i]||0)+1;S.res[i]=S.res[i]==null?sc:Math.max(S.res[i],sc);
+ try{if(window.registrarNota)registrarNota({curso:'2.º BGU Filosofía',grupo:S.curso,evaluacion:DATA.st[i].n,nombre:S.name,nota:sc,intento:S.att[i]})}catch(_e){}
  var L=lvl(sc);
  var h='<p class="tag">'+DATA.st[i].tag+" · Resultado</p>";
  h+='<div class="cap"><p class="tag">'+DATA.nombre+" · "+DATA.curso+"</p><h2>"+esc(DATA.st[i].n)+'</h2><p><b>Estudiante:</b> '+esc(S.name)+"<br><b>Curso:</b> "+esc(S.curso)+"<br><b>Fecha y hora:</b> "+stamp()+"<br><b>Intento:</b> "+S.att[i]+'</p><div class="big">'+sc+' <span style="font-size:.4em">/ 10</span></div><p><span class="lv '+L[1]+'">'+L[0]+"</span></p></div>";
