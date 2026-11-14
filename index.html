@@ -116,6 +116,16 @@ footer{margin:36px 0 0; padding-block:22px 34px; text-align:center; color:var(--
 .tri{display:inline-flex; height:8px; width:90px; border-radius:4px; overflow:hidden; border:2px solid var(--ink); margin-bottom:8px}
 .tri i{flex:2; background:#ffd100}.tri i:nth-child(2){flex:1; background:#034ea2}.tri i:nth-child(3){flex:1; background:#ed1c24}
 
+.ingresos{margin-top:22px; background:var(--surface); border:3px solid var(--ink); border-radius:22px; padding:16px 18px; box-shadow:var(--shadow)}
+.ingresos h2{font-family:var(--display); font-weight:600; font-size:1.15rem; margin:0 0 4px; display:flex; align-items:center; gap:10px}
+.ingresos .nota{margin:0 0 12px; color:var(--muted); font-weight:700; font-size:.88rem}
+.fila{display:grid; grid-template-columns:minmax(0,9.5rem) 1fr 3.2rem; gap:10px; align-items:center; margin:8px 0}
+.fila .nom{font-weight:800; font-size:.92rem; line-height:1.2; min-width:0}
+.fila .nom small{display:block; color:var(--muted); font-weight:700}
+.fila .pista{height:18px; border-radius:99px; background:var(--line); border:2px solid var(--ink); overflow:hidden}
+.fila .pista i{display:block; height:100%; width:0; background:var(--c); transition:width .8s}
+.fila .cnt{font-family:var(--display); font-weight:700; font-size:1.15rem; text-align:right; font-variant-numeric:tabular-nums}
+.vis{display:inline-flex; align-items:center; gap:4px}
 #confeti{position:fixed; inset:0; pointer-events:none; z-index:50}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}
 </style>
@@ -203,6 +213,36 @@ function marcarAbierta(a){ const l=leerAbiertas(); if(!l.includes(a)){ l.push(a)
 const listaDe = id => (ACTIVIDADES[id]||[]);
 const hechasDe = id => { const ab=leerAbiertas(); return listaDe(id).filter(a=>ab.includes(a.archivo)).length; };
 
+/* ---------- Contador de ingresos por materia ---------- */
+const API = "https://countapi.mileshilliard.com/api/v1";
+const NS = "rincon-sociales-lussac95g-";
+const VIS = {};
+async function pedir(url){
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 6000);
+  try { const r = await fetch(url, {signal: ctl.signal}); if (r.status === 404) return 0; if (!r.ok) return null; const j = await r.json(); const v = parseInt(j.value, 10); return isNaN(v) ? null : v; }
+  catch(e){ return null; } finally { clearTimeout(t); }
+}
+async function contarIngreso(id){
+  const marca = "rs-visto-" + id;
+  try { if (sessionStorage.getItem(marca)) return; sessionStorage.setItem(marca, "1"); } catch(e){}
+  let v = await pedir(API + "/hit/" + NS + id);
+  if (v === null) { new Image().src = API + "/hit/" + NS + id + "/shield"; }
+  else VIS[id] = v;
+}
+async function leerIngresos(){
+  await Promise.all(CURSOS.map(async c => { if (VIS[c.id] == null) { const v = await pedir(API + "/get/" + NS + c.id); if (v !== null) VIS[c.id] = v; } }));
+  pintarIngresos();
+}
+function pintarIngresos(){
+  const ok = CURSOS.some(c => VIS[c.id] != null);
+  const max = Math.max(1, ...CURSOS.map(c => VIS[c.id] || 0));
+  const total = CURSOS.reduce((s, c) => s + (VIS[c.id] || 0), 0);
+  const tot = document.getElementById("totalIngresos"); if (tot) tot.textContent = ok ? total.toLocaleString("es-EC") : "—";
+  document.querySelectorAll("[data-cnt]").forEach(e => { const v = VIS[e.dataset.cnt]; e.textContent = v == null ? "—" : v.toLocaleString("es-EC"); });
+  document.querySelectorAll("[data-bar]").forEach(e => { const v = VIS[e.dataset.bar] || 0; requestAnimationFrame(() => e.style.width = (v / max * 100) + "%"); });
+  document.querySelectorAll("[data-vis]").forEach(e => { const v = VIS[e.dataset.vis]; const largo = e.textContent.includes("ingresos"); e.textContent = v == null ? "" : "👁 " + v.toLocaleString("es-EC") + (largo || e.closest(".ring") ? " ingresos" : ""); });
+}
+
 function saludo(){
   const h = new Date().getHours();
   return h < 12 ? "¡Buenos días!" : h < 19 ? "¡Buenas tardes!" : "¡Buenas noches!";
@@ -248,7 +288,12 @@ function inicio(){
       <section class="stats" aria-label="Tu avance">
         <div class="stat">${svgAnillo(total?hechas/total:0,"var(--selva)")}<div><div class="n">${hechas}/${total}</div><div class="l">actividades que ya abriste</div></div></div>
         <div class="stat"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="12" fill="var(--sol)" stroke="#1d1b2f" stroke-width="3"/><path d="M22 11l3 7 7 .6-5.4 4.6 1.7 7L22 26.5 15.7 30l1.7-7L12 18.6l7-.6z" fill="#fff" stroke="#1d1b2f" stroke-width="2.5" stroke-linejoin="round"/></svg><div><div class="n">${nuevas}</div><div class="l">nuevas esta semana</div></div></div>
-        <div class="stat"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="12" fill="var(--pacifico)" stroke="#1d1b2f" stroke-width="3"/><path d="M13 30V20M22 30V14M31 30v-7" stroke="#fff" stroke-width="5" stroke-linecap="round"/></svg><div><div class="n">${CURSOS.length}</div><div class="l">cursos y materias</div></div></div>
+        <div class="stat"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="12" fill="var(--pacifico)" stroke="#1d1b2f" stroke-width="3"/><path d="M8 22s5-8 14-8 14 8 14 8-5 8-14 8-14-8-14-8z" fill="#fff" stroke="#1d1b2f" stroke-width="2.5"/><circle cx="22" cy="22" r="4" fill="#1d1b2f"/></svg><div><div class="n" id="totalIngresos">…</div><div class="l">ingresos a las materias</div></div></div>
+      </section>
+      <section class="ingresos" aria-label="Ingresos por materia">
+        <h2>Ingresos por materia</h2>
+        <p class="nota">Cuántas veces han entrado los estudiantes a cada curso.</p>
+        ${CURSOS.map(c => `<div class="fila ${c.clase}"><span class="nom">${c.materia}<small>${c.nombre}</small></span><span class="pista"><i data-bar="${c.id}"></i></span><span class="cnt" data-cnt="${c.id}">…</span></div>`).join("")}
       </section>
       ${niveles.map(n => `
         <section class="level">
@@ -259,7 +304,7 @@ function inicio(){
               return `<button class="course ${c.clase}" data-id="${c.id}">
                 <span class="pic" aria-hidden="true">${ICONOS[c.icono]}<span class="num">${c.sigla}</span></span>
                 <span class="t"><span class="subj">${c.materia}</span>
-                  <span class="meta">${c.nombre} · ${k} ${k===1?"actividad":"actividades"}</span>
+                  <span class="meta">${c.nombre} · ${k} ${k===1?"actividad":"actividades"} · <span class="vis" data-vis="${c.id}">👁 …</span></span>
                   <span class="bar" aria-label="${h} de ${k} abiertas"><i style="width:${k?h/k*100:0}%"></i></span></span>
               </button>`;}).join("")}
           </div>
@@ -285,7 +330,7 @@ function curso(c){
           <button class="back" id="volver">← Todos los cursos</button>
           <h1>${c.materia}</h1>
           <p class="sub">${c.nombre} · ${c.nivel}</p>
-          <div class="ring">${svgAnillo(k?h/k:0,"#fff")}<span>${h} de ${k} actividades abiertas</span></div>
+          <div class="ring">${svgAnillo(k?h/k:0,"#fff")}<span>${h} de ${k} actividades abiertas<br><span class="vis" data-vis="${c.id}">👁 … ingresos</span></span></div>
         </div>
       </header>
       <main class="wrap">
@@ -335,7 +380,7 @@ function confeti(x, y){
 
 function ruta(){
   const c = CURSOS.find(x => x.id === location.hash.slice(1));
-  if (c) curso(c); else inicio();
+  if (c) { curso(c); contarIngreso(c.id).then(leerIngresos); } else { inicio(); leerIngresos(); }
   window.scrollTo(0,0);
 }
 window.addEventListener("hashchange", ruta);
