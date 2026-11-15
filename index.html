@@ -126,12 +126,43 @@ footer{margin:36px 0 0; padding-block:22px 34px; text-align:center; color:var(--
 .fila .pista i{display:block; height:100%; width:0; background:var(--c); transition:width .8s}
 .fila .cnt{font-family:var(--display); font-weight:700; font-size:1.15rem; text-align:right; font-variant-numeric:tabular-nums}
 .vis{display:inline-flex; align-items:center; gap:4px}
+.tabs{display:flex; gap:8px; margin:20px 0 4px; background:var(--surface); border:3px solid var(--ink); border-radius:18px; padding:6px; box-shadow:var(--shadow)}
+.tab{flex:1; cursor:pointer; border:0; background:transparent; border-radius:12px; padding:12px 10px; font-family:var(--display); font-weight:700; font-size:1.1rem; display:flex; align-items:center; justify-content:center; gap:8px}
+.tab[aria-selected="true"]{background:var(--c); color:#fff}
+.tab .bub{min-width:26px; height:26px; padding:0 7px; border-radius:99px; background:var(--sol); color:#1d1b2f; border:2px solid var(--ink); display:inline-grid; place-items:center; font-size:.9rem}
+.tarea{background:var(--surface); border:3px solid var(--ink); border-radius:22px; box-shadow:var(--shadow); overflow:hidden}
+.tarea .top{display:flex; gap:12px; align-items:flex-start; padding:16px 16px 10px; flex-wrap:wrap}
+.tarea .cal{flex:none; width:62px; border:3px solid var(--ink); border-radius:14px; overflow:hidden; text-align:center; background:#fff; color:#1d1b2f}
+.tarea .cal b{display:block; background:var(--c); color:#fff; font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; padding:2px 0}
+.tarea .cal span{display:block; font-family:var(--display); font-weight:700; font-size:1.6rem; line-height:1.2}
+.tarea .info{flex:1 1 200px; min-width:0}
+.tarea h3{font-family:var(--display); font-weight:600; font-size:1.25rem; line-height:1.2; margin:6px 0 2px; text-wrap:balance}
+.estado{display:inline-block; font-size:.78rem; font-weight:800; padding:3px 10px; border-radius:8px; border:2px solid var(--ink)}
+.estado.ok{background:#c9f2db; color:#1d1b2f} .estado.pronto{background:var(--sol); color:#1d1b2f} .estado.hoy{background:var(--coral); color:#fff} .estado.cerrada{background:var(--line); color:var(--muted)}
+.tarea ol{margin:0; padding:4px 18px 4px 40px; font-weight:600}
+.tarea ol li{margin:6px 0}
+.tarea .pie{display:flex; flex-wrap:wrap; gap:10px; align-items:center; padding:12px 16px 16px}
+.tarea .prod{flex:1 1 220px; font-weight:700; color:var(--muted); font-size:.95rem}
+.runa{display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:.9rem; padding:8px 12px; border-radius:12px; background:var(--sky2); color:#1d1b2f; border:2px solid var(--ink)}
+.recurso{display:inline-flex; align-items:center; gap:6px; text-decoration:none; font-family:var(--display); font-weight:700; padding:10px 18px; border-radius:14px; background:var(--sol); color:#1d1b2f; border:3px solid var(--ink)}
+details.viejas{margin-top:6px}
+details.viejas summary{cursor:pointer; font-weight:800; padding:10px 4px; color:var(--muted)}
+details.viejas .list{padding-bottom:0; margin-top:8px}
+.entregas{margin-top:22px; background:var(--surface); border:3px solid var(--ink); border-radius:22px; padding:16px 18px; box-shadow:var(--shadow)}
+.entregas h2{font-family:var(--display); font-weight:600; font-size:1.15rem; margin:0 0 10px}
+.ent{display:flex; align-items:center; gap:12px; padding:10px 0; border-top:2px dashed var(--line); text-decoration:none; color:inherit}
+.ent:first-of-type{border-top:0}
+.ent .dot{flex:none; width:14px; height:14px; border-radius:50%; background:var(--c); border:2px solid var(--ink)}
+.ent .q{flex:1; min-width:0; font-weight:800; line-height:1.25}
+.ent .q small{display:block; color:var(--muted); font-weight:700}
+.sinTareas{font-weight:700; color:var(--muted); margin:0}
 #confeti{position:fixed; inset:0; pointer-events:none; z-index:50}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important; transition:none!important}}
 </style>
 </head>
 <body>
 <div id="app"></div>
+<script src="js/tareas.js"></script>
 <canvas id="confeti" aria-hidden="true"></canvas>
 <script>
 /* =====================================================================
@@ -211,6 +242,20 @@ const dias = f => (Date.now() - new Date(f+"T12:00:00")) / 864e5;
 function leerAbiertas(){ try{ return JSON.parse(localStorage.getItem("rs-abiertas")||"[]"); }catch(e){ return []; } }
 function marcarAbierta(a){ const l=leerAbiertas(); if(!l.includes(a)){ l.push(a); try{ localStorage.setItem("rs-abiertas",JSON.stringify(l)); }catch(e){} } }
 const listaDe = id => (ACTIVIDADES[id]||[]);
+const TAREAS = window.TAREAS || {};
+const hoyISO = () => { const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+const faltan = f => Math.round((new Date(f+"T00:00:00") - new Date(hoyISO()+"T00:00:00")) / 864e5);
+const tareasDe = id => (TAREAS[id]||[]);
+const pendientesDe = id => tareasDe(id).filter(t => faltan(t.entrega) >= 0);
+function estadoTarea(t){
+  const d = faltan(t.entrega);
+  if (d < 0) return ["cerrada","Plazo cerrado"];
+  if (d === 0) return ["hoy","Se entrega hoy"];
+  if (d === 1) return ["pronto","Se entrega mañana"];
+  if (d <= 3) return ["pronto","Faltan "+d+" días"];
+  return ["ok","Faltan "+d+" días"];
+}
+let pestana = "actividades";
 const hechasDe = id => { const ab=leerAbiertas(); return listaDe(id).filter(a=>ab.includes(a.archivo)).length; };
 
 /* ---------- Contador de ingresos por materia ---------- */
@@ -290,6 +335,12 @@ function inicio(){
         <div class="stat"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="12" fill="var(--sol)" stroke="#1d1b2f" stroke-width="3"/><path d="M22 11l3 7 7 .6-5.4 4.6 1.7 7L22 26.5 15.7 30l1.7-7L12 18.6l7-.6z" fill="#fff" stroke="#1d1b2f" stroke-width="2.5" stroke-linejoin="round"/></svg><div><div class="n">${nuevas}</div><div class="l">nuevas esta semana</div></div></div>
         <div class="stat"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="3" y="3" width="38" height="38" rx="12" fill="var(--pacifico)" stroke="#1d1b2f" stroke-width="3"/><path d="M8 22s5-8 14-8 14 8 14 8-5 8-14 8-14-8-14-8z" fill="#fff" stroke="#1d1b2f" stroke-width="2.5"/><circle cx="22" cy="22" r="4" fill="#1d1b2f"/></svg><div><div class="n" id="totalIngresos">…</div><div class="l">ingresos a las materias</div></div></div>
       </section>
+      <section class="entregas" aria-label="Próximas entregas">
+        <h2>📝 Próximas entregas de tareas</h2>
+        ${(() => { const L = CURSOS.flatMap(c => pendientesDe(c.id).map(t => ({c,t}))).sort((a,b)=>a.t.entrega.localeCompare(b.t.entrega)).slice(0,6);
+          return L.length ? L.map(({c,t}) => { const [k,txt] = estadoTarea(t); return `<a class="ent ${c.clase}" href="#${c.id}-tareas"><span class="dot" aria-hidden="true"></span><span class="q">${esc(t.titulo)}<small>${c.materia} · ${c.nombre}${t.paralelo&&t.paralelo!=="AB"?" "+t.paralelo:""} · entrega ${fmt(t.entrega)}</small></span><span class="estado ${k}">${txt}</span></a>`; }).join("")
+          : `<p class="sinTareas">No hay tareas pendientes por ahora. Cuando el docente envíe una, aparecerá aquí.</p>`; })()}
+      </section>
       <section class="ingresos" aria-label="Ingresos por materia">
         <h2>Ingresos por materia</h2>
         <p class="nota">Cuántas veces han entrado los estudiantes a cada curso.</p>
@@ -304,7 +355,7 @@ function inicio(){
               return `<button class="course ${c.clase}" data-id="${c.id}">
                 <span class="pic" aria-hidden="true">${ICONOS[c.icono]}<span class="num">${c.sigla}</span></span>
                 <span class="t"><span class="subj">${c.materia}</span>
-                  <span class="meta">${c.nombre} · ${k} ${k===1?"actividad":"actividades"} · <span class="vis" data-vis="${c.id}">👁 …</span></span>
+                  <span class="meta">${c.nombre} · ${k} ${k===1?"actividad":"actividades"}${pendientesDe(c.id).length?` · 📝 ${pendientesDe(c.id).length} ${pendientesDe(c.id).length===1?"tarea":"tareas"}`:""} · <span class="vis" data-vis="${c.id}">👁 …</span></span>
                   <span class="bar" aria-label="${h} de ${k} abiertas"><i style="width:${k?h/k*100:0}%"></i></span></span>
               </button>`;}).join("")}
           </div>
@@ -334,11 +385,15 @@ function curso(c){
         </div>
       </header>
       <main class="wrap">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" id="tabA" aria-selected="${pestana==="actividades"}">Actividades <span class="bub">${k}</span></button>
+          <button class="tab" role="tab" id="tabT" aria-selected="${pestana==="tareas"}">Tareas <span class="bub">${pendientesDe(c.id).length}</span></button>
+        </div>
         <div class="filters" role="group" aria-label="Paralelo">
           ${[["todos","Todos"],["A","Paralelo A"],["B","Paralelo B"]].map(([v,t]) =>
             `<button class="chip" data-f="${v}" aria-pressed="${filtro===v}">${t}</button>`).join("")}
         </div>
-        <div class="list">
+        ${pestana==="tareas" ? vistaTareas(c) : `<div class="list">
           ${lista.length ? lista.map((a,n) => { const hecha = ab.includes(a.archivo); return `
             <article class="act ${hecha?"hecha":""}">
               <span class="sticker" aria-hidden="true">${hecha?"✓":(a.orden||n+1)}</span>
@@ -350,10 +405,12 @@ function curso(c){
               <a class="open" href="${esc(a.archivo)}" data-a="${esc(a.archivo)}">Abrir <span aria-hidden="true">→</span></a>
             </article>`; }).join("")
           : `<div class="empty"><svg width="70" height="70" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="var(--sol)" stroke="#1d1b2f" stroke-width="3"/><circle cx="17" cy="20" r="2.5" fill="#1d1b2f"/><circle cx="31" cy="20" r="2.5" fill="#1d1b2f"/><path d="M16 31q8-5 16 0" fill="none" stroke="#1d1b2f" stroke-width="3" stroke-linecap="round"/></svg>Todavía no hay actividades publicadas para este curso.</div>`}
-        </div>
+        </div>`}
       </main>
     </div>`;
   document.getElementById("volver").onclick = () => { location.hash = ""; };
+  document.getElementById("tabA").onclick = () => { pestana = "actividades"; history.replaceState(null, "", "#" + c.id); curso(c); };
+  document.getElementById("tabT").onclick = () => { pestana = "tareas"; history.replaceState(null, "", "#" + c.id + "-tareas"); curso(c); };
   app.querySelectorAll(".chip").forEach(b => b.onclick = () => { filtro = b.dataset.f; curso(c); });
   app.querySelectorAll(".open").forEach(a => a.onclick = e => {
     marcarAbierta(a.dataset.a);
@@ -378,8 +435,40 @@ function confeti(x, y){
   })();
 }
 
+function tarjetaTarea(t){
+  const [k, txt] = estadoTarea(t);
+  const [y, m, d] = t.entrega.split("-");
+  return `<article class="tarea">
+    <div class="top">
+      <div class="cal" aria-label="Fecha de entrega ${fmt(t.entrega)}"><b>${MESES[+m-1]}</b><span>${+d}</span></div>
+      <div class="info">
+        <span class="estado ${k}">${txt}</span>
+        <h3>${esc(t.titulo)}</h3>
+        <span class="when">Enviada ${t.enviada ? fmt(t.enviada) : "—"} · Entrega ${fmt(t.entrega)} · ${(!t.paralelo || t.paralelo==="AB") ? "Paralelos A y B" : "Paralelo " + t.paralelo}</span>
+      </div>
+    </div>
+    ${(t.indicaciones||[]).length ? `<ol>${t.indicaciones.map(i => `<li>${esc(i)}</li>`).join("")}</ol>` : ""}
+    <div class="pie">
+      <span class="prod">${t.producto ? "Qué entregas: " + esc(t.producto) : ""}</span>
+      ${t.enlace ? `<a class="recurso" href="${esc(t.enlace.url)}">${esc(t.enlace.texto || "Abrir recurso")} →</a>` : ""}
+      <span class="runa">📤 Súbela en Runachay</span>
+    </div>
+  </article>`;
+}
+function vistaTareas(c){
+  const todas = tareasDe(c.id).filter(t => filtro==="todos" || !t.paralelo || t.paralelo.includes(filtro));
+  const pend = todas.filter(t => faltan(t.entrega) >= 0).sort((a,b) => a.entrega.localeCompare(b.entrega));
+  const viejas = todas.filter(t => faltan(t.entrega) < 0).sort((a,b) => b.entrega.localeCompare(a.entrega));
+  return `<div class="list">
+    ${pend.length ? pend.map(tarjetaTarea).join("") : `<div class="empty"><svg width="70" height="70" viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="6" width="30" height="36" rx="5" fill="var(--sol)" stroke="#1d1b2f" stroke-width="3"/><path d="M16 18h16M16 25h16M16 32h9" stroke="#1d1b2f" stroke-width="3" stroke-linecap="round"/></svg>No tienes tareas pendientes en esta materia. Cuando el docente envíe una, la verás aquí con sus indicaciones.</div>`}
+    ${viejas.length ? `<details class="viejas"><summary>Tareas anteriores (${viejas.length})</summary><div class="list">${viejas.map(tarjetaTarea).join("")}</div></details>` : ""}
+  </div>`;
+}
+
 function ruta(){
-  const c = CURSOS.find(x => x.id === location.hash.slice(1));
+  const h = location.hash.slice(1), quiereTareas = /-tareas$/.test(h);
+  const c = CURSOS.find(x => x.id === h.replace(/-tareas$/, ""));
+  if (c) pestana = quiereTareas ? "tareas" : "actividades";
   if (c) { curso(c); contarIngreso(c.id).then(leerIngresos); } else { inicio(); leerIngresos(); }
   window.scrollTo(0,0);
 }
