@@ -64,12 +64,31 @@ h1 span{color:var(--coral)}
 @keyframes latido{50%{transform:scale(1.07)}}
 .luna{animation:flota 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center}
 @keyframes flota{50%{transform:translateY(6px) rotate(-4deg)}}
-.virgen{fill:var(--est)}
 .hero.noche .virgen{filter:drop-shadow(0 0 6px #fff6c2) drop-shadow(0 0 14px #ffe27a)}
 .luces rect{fill:#ffd76a; opacity:0; animation:luz 4s ease-in-out infinite}
 .hero.noche .luces rect{opacity:.9}
+.hero:not(.noche) .luces{display:none}
 @keyframes luz{50%{opacity:.45}}
 .lugar{align-self:flex-start; margin-top:10px; cursor:pointer; background:rgba(255,255,255,.85); color:#1d1b2f; border:2px solid var(--ink); border-radius:999px; padding:6px 12px; font-weight:800; font-size:.88rem}
+.galeria{position:absolute; inset:0}
+.esc{position:absolute; inset:0; opacity:0; transition:opacity 1.2s ease}
+.esc.on{opacity:1}
+.esc:not(.on) *{animation-play-state:paused!important}
+.hero.noche .esc:not([data-id="panecillo"]) svg{filter:brightness(.6) saturate(.85)}
+.lugarbar{display:flex; align-items:center; gap:6px; margin-top:10px; flex-wrap:wrap}
+.lugarbar .lugar{margin-top:0}
+.lugar small{font-weight:800; opacity:.6; margin-left:4px}
+.flecha{cursor:pointer; width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:rgba(255,255,255,.85); color:#1d1b2f; font-size:1.3rem; font-weight:800; line-height:1}
+.tortuga{animation:camina 7s ease-in-out infinite}
+@keyframes camina{50%{transform:translateX(10px)}}
+.piquero .pata{animation:baile 1.2s ease-in-out infinite; transform-box:fill-box; transform-origin:right center}
+@keyframes baile{50%{transform:translateY(-6px) rotate(-12deg)}}
+.vuela1{animation:guaca1 14s linear infinite}
+.vuela2{animation:guaca2 18s linear infinite -6s}
+@keyframes guaca1{from{transform:translate(-60px,120px)}to{transform:translate(1260px,70px)}}
+@keyframes guaca2{from{transform:translate(1260px,100px) scaleX(-1)}to{transform:translate(-60px,140px) scaleX(-1)}}
+.neblina{animation:olas 9s ease-in-out infinite}
+.globo{animation:latido 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center}
 .ondea{animation:ondea 2.2s ease-in-out infinite}
 @keyframes ondea{50%{transform:skewY(-6deg) scaleX(.94)}}
 .palma{animation:mece 5s ease-in-out infinite}
@@ -451,12 +470,12 @@ function inicio(){
   const hechas = CURSOS.reduce((s,c)=>s+hechasDe(c.id),0);
   const nuevas = CURSOS.reduce((s,c)=>s+listaDe(c.id).filter(a=>dias(a.fecha)<=7).length,0);
   app.innerHTML = `
-    <header class="hero ${momento()}">${estrellas(momento()==="noche" ? 70 : 16)}${momento()==="noche" ? ASTRO.luna : ASTRO.sol}${(window.ESCENAS ? ESCENAS[momento()].svg() : paisaje())}
+    <header class="hero ${momento()}">${estrellas(momento()==="noche" ? 70 : 16)}${momento()==="noche" ? ASTRO.luna : ASTRO.sol}${window.ESCENAS ? `<div class="galeria">${ESCENAS.map((e, i) => `<div class="esc" data-id="${e.id}">${e.svg()}</div>`).join("")}</div>` : paisaje()}
       <div class="txt"><div class="wrap">
         <span class="saludo">${saludo()} 👋</span>
         <h1>Rincón de <span>Sociales</span></h1>
         <p class="sub">Estudia, juega y repasa. U.E. Nuestra Señora del Rosario · Mgs. Isaac Pérez</p>
-        ${window.ESCENAS ? `<button type="button" class="lugar" id="lugar">📍 ${ESCENAS[momento()].lugar}</button>` : ""}
+        ${window.ESCENAS ? `<div class="lugarbar"><button type="button" class="flecha" id="prevE" aria-label="Lugar anterior">‹</button><button type="button" class="lugar" id="lugar"></button><button type="button" class="flecha" id="nextE" aria-label="Lugar siguiente">›</button></div>` : ""}
       </div></div>
     </header>
     <main class="wrap">
@@ -503,11 +522,25 @@ function inicio(){
   const pon = () => { t.classList.remove("cambia"); void t.offsetWidth; t.textContent = DATOS[i]; t.classList.add("cambia"); };
   pon();
   document.getElementById("otroDato").onclick = () => { i = (i+1) % DATOS.length; pon(); };
-  const pj = document.querySelector("svg.paisaje");
-  const centra = () => { if (pj && window.ESCENAS) pj.setAttribute("viewBox", (innerWidth < 760 ? "120" : "0") + " 40 1200 260"); };
+  const centra = () => document.querySelectorAll("svg.paisaje").forEach(pj => pj.setAttribute("viewBox", (innerWidth < 760 ? "120" : "0") + " 40 1200 260"));
   centra(); window.onresize = centra;
   const lg = document.getElementById("lugar");
-  if (lg) lg.onclick = () => { t.classList.remove("cambia"); void t.offsetWidth; t.textContent = ESCENAS[momento()].dato; t.classList.add("cambia"); t.closest(".dato").scrollIntoView({behavior:"smooth", block:"center"}); };
+  if (lg && window.ESCENAS) {
+    const escs = [...document.querySelectorAll(".esc")];
+    let ei = Math.max(0, ESCENAS.findIndex(e => e.id === (window.ESCENA_INICIAL || {})[momento()]));
+    const mostrar = k => {
+      ei = (k + ESCENAS.length) % ESCENAS.length;
+      escs.forEach((e, j) => e.classList.toggle("on", j === ei));
+      lg.innerHTML = `📍 ${ESCENAS[ei].lugar} <small>${ei + 1}/${ESCENAS.length}</small>`;
+    };
+    mostrar(ei);
+    clearInterval(inicio.giro);
+    const reloj = () => { clearInterval(inicio.giro); if (!matchMedia("(prefers-reduced-motion: reduce)").matches) inicio.giro = setInterval(() => { if (!document.hidden && document.getElementById("lugar")) mostrar(ei + 1); }, 9000); };
+    reloj();
+    document.getElementById("prevE").onclick = () => { mostrar(ei - 1); reloj(); };
+    document.getElementById("nextE").onclick = () => { mostrar(ei + 1); reloj(); };
+    lg.onclick = () => { t.classList.remove("cambia"); void t.offsetWidth; t.textContent = ESCENAS[ei].dato; t.classList.add("cambia"); reloj(); t.closest(".dato").scrollIntoView({behavior:"smooth", block:"center"}); };
+  }
 }
 
 function curso(c){
