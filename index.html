@@ -69,10 +69,22 @@ h1 span{color:var(--coral)}
 .luces rect{fill:#ffd76a; opacity:0; animation:luz 4s ease-in-out infinite}
 .hero.noche .luces rect{opacity:.9}
 @keyframes luz{50%{opacity:.45}}
-.cartel{font:800 13px var(--body); fill:var(--txt); opacity:.75}
+.lugar{align-self:flex-start; margin-top:10px; cursor:pointer; background:rgba(255,255,255,.85); color:#1d1b2f; border:2px solid var(--ink); border-radius:999px; padding:6px 12px; font-weight:800; font-size:.88rem}
+.ondea{animation:ondea 2.2s ease-in-out infinite}
+@keyframes ondea{50%{transform:skewY(-6deg) scaleX(.94)}}
+.palma{animation:mece 5s ease-in-out infinite}
+@keyframes mece{50%{transform:rotate(1.6deg)}}
+.bote{animation:navega 40s linear infinite}
+@keyframes navega{from{transform:translateX(-60px)}to{transform:translateX(1260px)}}
+.olas{animation:olas 3s ease-in-out infinite}
+@keyframes olas{50%{transform:translateX(10px)}}
+.haz{animation:haz 3s ease-in-out infinite; transform-box:fill-box; transform-origin:left center}
+@keyframes haz{50%{opacity:.15}}
+.halo{animation:halo 4s ease-in-out infinite; transform-box:fill-box; transform-origin:center}
+@keyframes halo{50%{transform:scale(1.12); opacity:.7}}
 
 /* ---------- Dato curioso ---------- */
-.dato{margin-top:-46px; position:relative; z-index:2; display:flex; gap:16px; align-items:center; background:var(--sol); color:#1d1b2f; border:3px solid var(--ink); border-radius:22px; padding:16px 18px; box-shadow:var(--shadow); flex-wrap:wrap}
+.dato{margin-top:-20px; position:relative; z-index:2; display:flex; gap:16px; align-items:center; background:var(--sol); color:#1d1b2f; border:3px solid var(--ink); border-radius:22px; padding:16px 18px; box-shadow:var(--shadow); flex-wrap:wrap}
 .dato .ico{flex:none; width:56px; height:56px; border-radius:16px; background:#fff; border:3px solid #1d1b2f; display:grid; place-items:center}
 .dato .t{flex:1 1 240px; min-width:0}
 .dato b{font-family:var(--display); font-size:1.05rem; display:block}
@@ -192,6 +204,7 @@ details.viejas .list{padding-bottom:0; margin-top:8px}
 <body>
 <div id="app"></div>
 <script src="js/tareas.js"></script>
+<script src="js/escenas.js"></script>
 <canvas id="confeti" aria-hidden="true"></canvas>
 <script>
 /* =====================================================================
@@ -238,21 +251,50 @@ const ACTIVIDADES = {
 
 /* ===================================================================== */
 const DATOS = [
-  "En 1924, Matilde Hidalgo de Procel fue la primera mujer en votar en el Ecuador y en América Latina.",
-  "Quito y Cracovia fueron las primeras ciudades declaradas Patrimonio Cultural de la Humanidad por la UNESCO, en 1978.",
-  "La cumbre del Chimborazo es el punto de la superficie terrestre más alejado del centro de la Tierra.",
-  "La cultura Valdivia, en la costa ecuatoriana, elaboró una de las cerámicas más antiguas de América, hace más de 5 000 años.",
-  "En 2008, Ecuador fue el primer país del mundo en reconocer en su Constitución los derechos de la naturaleza.",
-  "Sumak Kawsay es una palabra kichwa que significa «buen vivir» y es un principio de la Constitución ecuatoriana.",
-  "Eugenio Espejo publicó en 1792 el primer periódico de Quito: «Primicias de la Cultura de Quito».",
-  "El 10 de agosto de 1809 se dio en Quito el Primer Grito de Independencia.",
-  "Charles Darwin visitó las islas Galápagos en 1835; lo que observó allí le ayudó a pensar su teoría de la evolución.",
-  "Sócrates nunca escribió un libro: conocemos sus ideas gracias a su alumno Platón.",
-  "A inicios del siglo XX, Ecuador fue uno de los mayores exportadores de cacao del mundo: el famoso «boom cacaotero».",
-  "La palabra «filosofía» viene del griego y significa «amor a la sabiduría».",
-  "La esclavitud se abolió en el Ecuador en 1851, durante el gobierno de José María Urbina.",
-  "La Virgen del Panecillo mide 41 metros con su base, está hecha con 7 400 piezas de aluminio y se terminó en 1975. Copia a la Virgen de Quito que Bernardo de Legarda talló en 1734.",
-  "El Panecillo es una loma de unos 200 metros de alto en el centro de Quito. Su nombre viene de su forma, parecida a un pan."
+ "En 1924, Matilde Hidalgo de Procel fue la primera mujer en votar en el Ecuador y en América Latina.",
+ "Quito y Cracovia fueron las primeras ciudades declaradas Patrimonio Cultural de la Humanidad por la UNESCO, en 1978.",
+ "Las islas Galápagos estuvieron entre los primeros sitios del mundo inscritos como Patrimonio de la Humanidad, en 1978.",
+ "La cumbre del Chimborazo es el punto de la superficie terrestre más alejado del centro de la Tierra.",
+ "El Cotopaxi, con unos 5 897 metros de altura, es uno de los volcanes activos más altos del mundo.",
+ "La cultura Valdivia, en la costa ecuatoriana, elaboró una de las cerámicas más antiguas de América, hace más de 5 000 años.",
+ "En 2008, Ecuador fue el primer país del mundo en reconocer en su Constitución los derechos de la naturaleza.",
+ "Sumak Kawsay es una expresión kichwa que significa «buen vivir» y es un principio de la Constitución ecuatoriana.",
+ "La Constitución de 2008 reconoce al kichwa y al shuar como idiomas oficiales de relación intercultural, junto al castellano.",
+ "Eugenio Espejo publicó en 1792 el primer periódico de Quito: «Primicias de la Cultura de Quito».",
+ "El 10 de agosto de 1809 se dio en Quito el Primer Grito de Independencia.",
+ "Guayaquil proclamó su independencia el 9 de octubre de 1820.",
+ "El 24 de mayo de 1822, en la Batalla de Pichincha, el ejército de Antonio José de Sucre selló la independencia de Quito. Allí se destacó el joven Abdón Calderón.",
+ "El 26 de julio de 1822, Simón Bolívar y José de San Martín se reunieron en la Entrevista de Guayaquil. El Hemiciclo de La Rotonda, en el Malecón, la recuerda.",
+ "En 1830 Ecuador se separó de la Gran Colombia. Su primera Constitución se aprobó ese año en Riobamba y Juan José Flores fue el primer presidente.",
+ "Manuela Sáenz, quiteña, fue llamada «Libertadora del Libertador» por Bolívar después de salvarle la vida en 1828.",
+ "Quito fue fundada por los españoles el 6 de diciembre de 1534, y Guayaquil tiene como fecha oficial de fundación el 25 de julio de 1538.",
+ "La Misión Geodésica Francesa llegó a la Real Audiencia de Quito en 1736 para medir la forma de la Tierra. De esa línea equinoccial viene el nombre de nuestro país.",
+ "Charles Darwin visitó las islas Galápagos en 1835; lo que observó allí le ayudó a pensar su teoría de la evolución.",
+ "La esclavitud se abolió en el Ecuador en 1851, durante el gobierno de José María Urbina.",
+ "A inicios del siglo XX, Ecuador fue uno de los mayores exportadores de cacao del mundo: el famoso «boom cacaotero».",
+ "Hoy Ecuador es el mayor exportador de banano del mundo.",
+ "La Revolución Liberal de 1895, liderada por Eloy Alfaro, impulsó la educación laica y la separación entre Iglesia y Estado.",
+ "El tren que une Guayaquil y Quito llegó a la capital en 1908, durante el gobierno de Eloy Alfaro. Su tramo más famoso es la Nariz del Diablo.",
+ "Dolores Cacuango ayudó a fundar en 1944 la Federación Ecuatoriana de Indios y abrió las primeras escuelas bilingües kichwa-castellano.",
+ "El sucre, moneda del Ecuador por más de un siglo, llevaba el nombre de Antonio José de Sucre. En el año 2000 el país adoptó el dólar.",
+ "El sombrero de paja toquilla es ecuatoriano, aunque en el mundo lo llamen «Panama hat». Su tejido es Patrimonio Cultural Inmaterial de la UNESCO desde 2012.",
+ "La Escuela Quiteña fue un gran movimiento de arte colonial. Bernardo de Legarda y Caspicara fueron dos de sus escultores más famosos.",
+ "El interior de la iglesia de La Compañía de Jesús, en Quito, está cubierto de pan de oro. Su construcción tomó más de 150 años.",
+ "Para llegar al faro del cerro Santa Ana, en Guayaquil, hay que subir 444 escalones.",
+ "El Hemiciclo de La Rotonda tiene diez pilares y diez columnas con las banderas de los países liberados por Bolívar y San Martín. Se inauguró en 1938.",
+ "El Palacio de Carondelet se construyó entre 1790 y 1801. Simón Bolívar lo nombró así en honor al Barón de Carondelet.",
+ "La Virgen de El Panecillo mide 41 metros con su base, está hecha con 7 400 piezas de aluminio y se terminó en 1975. Copia a la Virgen de Quito que Bernardo de Legarda talló en 1734.",
+ "El Panecillo es una loma de unos 200 metros de alto en el centro de Quito. Su nombre viene de su forma, parecida a un pan.",
+ "La letra del Himno Nacional es de Juan León Mera y la música de Antonio Neumane.",
+ "Ecuador tiene cuatro regiones naturales: Costa, Sierra, Amazonía y Región Insular.",
+ "Juan Montalvo, escritor ambateño, es uno de los grandes ensayistas de América Latina. Escribió «Las Catilinarias».",
+ "La palabra «filosofía» viene del griego y significa «amor a la sabiduría».",
+ "Tales de Mileto es considerado el primer filósofo de Occidente: buscó el origen de todo en el agua.",
+ "Sócrates nunca escribió un libro: conocemos sus ideas gracias a su alumno Platón.",
+ "La mayéutica de Sócrates significa «arte de ayudar a dar a luz»: con preguntas, ayudaba a otros a descubrir ideas. Su madre era partera.",
+ "Platón fundó en Atenas la Academia, una de las primeras escuelas de pensamiento de la historia.",
+ "Aristóteles afirmó que el ser humano es un «animal político»: necesita vivir en comunidad.",
+ "René Descartes resumió su búsqueda de certeza con la frase «Pienso, luego existo»."
 ];
 
 const FRASES = {
@@ -409,11 +451,12 @@ function inicio(){
   const hechas = CURSOS.reduce((s,c)=>s+hechasDe(c.id),0);
   const nuevas = CURSOS.reduce((s,c)=>s+listaDe(c.id).filter(a=>dias(a.fecha)<=7).length,0);
   app.innerHTML = `
-    <header class="hero ${momento()}">${estrellas(momento()==="noche" ? 70 : 16)}${momento()==="noche" ? ASTRO.luna : ASTRO.sol}${paisaje()}
+    <header class="hero ${momento()}">${estrellas(momento()==="noche" ? 70 : 16)}${momento()==="noche" ? ASTRO.luna : ASTRO.sol}${(window.ESCENAS ? ESCENAS[momento()].svg() : paisaje())}
       <div class="txt"><div class="wrap">
         <span class="saludo">${saludo()} 👋</span>
         <h1>Rincón de <span>Sociales</span></h1>
         <p class="sub">Estudia, juega y repasa. U.E. Nuestra Señora del Rosario · Mgs. Isaac Pérez</p>
+        ${window.ESCENAS ? `<button type="button" class="lugar" id="lugar">📍 ${ESCENAS[momento()].lugar}</button>` : ""}
       </div></div>
     </header>
     <main class="wrap">
@@ -460,6 +503,11 @@ function inicio(){
   const pon = () => { t.classList.remove("cambia"); void t.offsetWidth; t.textContent = DATOS[i]; t.classList.add("cambia"); };
   pon();
   document.getElementById("otroDato").onclick = () => { i = (i+1) % DATOS.length; pon(); };
+  const pj = document.querySelector("svg.paisaje");
+  const centra = () => { if (pj && window.ESCENAS) pj.setAttribute("viewBox", (innerWidth < 760 ? "120" : "0") + " 40 1200 260"); };
+  centra(); window.onresize = centra;
+  const lg = document.getElementById("lugar");
+  if (lg) lg.onclick = () => { t.classList.remove("cambia"); void t.offsetWidth; t.textContent = ESCENAS[momento()].dato; t.classList.add("cambia"); t.closest(".dato").scrollIntoView({behavior:"smooth", block:"center"}); };
 }
 
 function curso(c){
