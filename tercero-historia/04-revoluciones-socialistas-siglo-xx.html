@@ -1,0 +1,254 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<title>Revoluciones socialistas del siglo XX</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
+<style>
+:root{--bg:#FFF6E3;--surface:#FFFFFF;--ink:#1D1B3A;--muted:#55527A;--line:#E6D9BD;
+ --accent:#C92A2A;--accent2:#2B8A3E;--accent-ink:#FFFFFF;--accent-soft:#FFE3E3;
+ --ochre:#9A5B00;--ochre-soft:#FFEAB8;--bad:#C2255C;--bad-soft:#FFE0EB;--ok:#168A4A;--ok-soft:#D7F5E3;
+ --c1:#E8590C;--c2:#1C7ED6;--c3:#9C36B5;--c4:#2B8A3E;
+ --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;--body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}
+html{font-size:clamp(18px,1.1vw + 12px,26px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.45;padding-block:.5rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0}
+h1{font-size:2.4em;font-weight:800}h2{font-size:1.8em;font-weight:800;margin-bottom:.45em;color:var(--accent)}h3{font-size:1.12em;font-weight:800;margin-bottom:.25em}
+p{margin:.3em 0 .7em}button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent2);outline-offset:2px}
+.top{display:flex;gap:.6em;padding:.5em 1em;align-items:center;flex:none;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+.top .brand{white-space:nowrap;font:800 .8em var(--display);letter-spacing:.08em;text-transform:uppercase;margin-right:auto}
+.dots{display:flex;gap:.3em;flex-wrap:wrap}
+.dots button{border:2px solid #ffffffaa;background:transparent;color:#fff;border-radius:999px;min-width:1.9em;height:1.9em;font-weight:700;font-size:.78em;padding:0}
+.dots button.on{background:#fff;color:var(--accent);border-color:#fff}.dots button.done{background:#ffffff33}
+.top .btn.ghost{color:#fff;border-color:#fff}
+.paso{display:none}.paso.on{display:block}
+.split{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:1.1em;align-items:start}
+.art{border-radius:1em;overflow:hidden;border:3px solid var(--ink);box-shadow:.35em .35em 0 var(--ink);background:#fff}
+.art svg{display:block;width:100%;height:auto}
+.art figcaption{font-size:.72em;background:var(--ink);color:#fff;padding:.25em .7em}
+figure{margin:0}
+.tag{display:inline-block;font:800 .78em var(--display);letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:#fff;padding:.25em .8em;border-radius:999px;margin-bottom:.5em}
+.lead{font-size:1.2em;color:var(--muted)}
+.panel{background:var(--surface);border:2px solid var(--line);border-radius:1em;padding:.9em 1.2em;margin-block:.65em}
+.panel.hl{border-left:.5em solid var(--accent)}
+.panel.warn{background:var(--ochre-soft);border-color:#F2C45A}
+.grid{display:grid;gap:.7em;grid-template-columns:repeat(auto-fit,minmax(min(100%,13em),1fr))}.grid>*{min-width:0}
+.cards{display:grid;gap:.7em;grid-template-columns:repeat(auto-fit,minmax(min(100%,11em),1fr));margin-block:.6em}
+.card{border-radius:1em;padding:.8em 1em;color:#fff;box-shadow:0 .2em 0 #0003}
+.card h3{color:#fff}.card p{margin:.2em 0 0;font-size:.95em}
+.card:nth-child(4n+1){background:var(--c1)}.card:nth-child(4n+2){background:var(--c2)}.card:nth-child(4n+3){background:var(--c3)}.card:nth-child(4n+4){background:var(--c4)}
+.card .em{font-size:1.8em;line-height:1}
+.note{font-size:.9em;color:var(--muted)}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:.7em;padding:.55em 1.1em;font-weight:800;box-shadow:0 .18em 0 #0003}
+.btn.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent);box-shadow:none}
+.row{display:flex;flex-wrap:wrap;gap:.6em;align-items:center}
+.sort .pool,.sort .buckets{display:flex;flex-wrap:wrap;gap:.6em}
+.sort .pool{min-height:3em;padding:.6em;border:3px dashed var(--accent2);border-radius:.9em;margin-bottom:.8em;background:#fff8}
+.item{border:2px solid var(--ink);background:#FFE066;border-radius:.7em;padding:.45em .8em;text-align:left;max-width:100%;touch-action:manipulation;box-shadow:0 .15em 0 #0003;font-weight:700}
+.item.sel{background:var(--accent-soft);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.item.ok{border-color:var(--ok);background:var(--ok-soft);box-shadow:none}.item.bad{border-color:var(--bad);background:var(--bad-soft);box-shadow:none}
+.bucket{flex:1 1 13em;min-width:0;border:3px solid var(--bc,var(--accent));background:#fff;border-radius:.9em;padding:.6em;min-height:6.5em;cursor:pointer}
+.bucket:nth-child(4n+1){--bc:var(--c1)}.bucket:nth-child(4n+2){--bc:var(--c2)}.bucket:nth-child(4n+3){--bc:var(--c3)}.bucket:nth-child(4n+4){--bc:var(--c4)}
+.bucket h3{margin:0 0 .4em;color:var(--bc)}
+.bucket.over,.bucket.target{background:var(--accent-soft)}
+.bucket .in{display:flex;flex-direction:column;gap:.4em}
+.bucket .why{display:block;font-size:.85em;color:var(--muted);margin-top:.2em;font-weight:400}
+.score{font-weight:800;margin-top:.6em}
+.opts{display:grid;gap:.5em;margin-block:.6em}
+.opt{border:3px solid var(--line);background:#fff;border-radius:.8em;padding:.6em .9em;text-align:left;font-weight:700}
+.opt:hover{border-color:var(--accent2)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}.opt.x{opacity:.55}
+.fb{display:none;margin-top:.6em}.fb.show{display:block}
+.chip{border:3px solid var(--line);background:#fff;border-radius:.8em;padding:.45em .9em;font-weight:800}
+.chip.v{border-color:var(--ok)}.chip.a{border-color:#E6A100}.chip.r{border-color:var(--bad)}
+.chip.sel{color:#fff}.chip.v.sel{background:var(--ok)}.chip.a.sel{background:#E6A100}.chip.r.sel{background:var(--bad)}
+.rv{display:flex;gap:.8em;align-items:center;justify-content:space-between;flex-wrap:wrap}.rv p{margin:0;flex:1 1 18em}
+.ans{display:none;margin-top:.5em;width:100%}.panel.show .ans{display:block}
+.ord .pool{display:flex;flex-wrap:wrap;gap:.6em;margin-bottom:.8em}
+.ord .done{display:flex;flex-direction:column;gap:.35em}
+.ord .done div{background:var(--ok-soft);border:2px solid var(--ok);border-radius:.7em;padding:.3em .8em;display:flex;gap:.8em}
+.ord .done b{min-width:4.2em;font-family:var(--display)}.ord .item.no{border-color:var(--bad);background:var(--bad-soft)}
+table{border-collapse:collapse;width:100%;min-width:34em}
+th,td{border:1px solid var(--line);padding:.45em .6em;text-align:left;vertical-align:top;font-size:.88em}
+th{background:var(--accent);color:#fff}tbody th{background:var(--accent-soft);color:var(--ink)}
+.scroll{overflow-x:auto}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5em),1fr));gap:.6em;margin-block:.6em}
+.mini figure{border:3px solid var(--ink);border-radius:.8em;overflow:hidden;background:#fff}
+.mini svg{display:block;width:100%;height:auto}.mini figcaption{padding:.3em .5em;font-size:.78em;font-weight:800;text-align:center}
+.mini figcaption small{display:block;font-weight:400;color:var(--muted)}
+.nav{background:#fff;border-top:3px solid var(--ink);padding:.5em 1em;flex:none}
+.nav .in{display:flex;justify-content:space-between;gap:.6em;align-items:center}
+.nav .cnt{font-weight:800;color:var(--muted);font-size:.9em;text-align:center}
+.nav button:disabled{opacity:.4;cursor:default}
+@media (prefers-reduced-motion:no-preference){.paso.on{animation:in .25s ease-out}@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}}
+#shell{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:center;min-height:calc(100vh - 1rem)}
+#stage{width:min(100%,calc((100vh - 1rem)*16/9));aspect-ratio:16/9;container-type:inline-size;background:var(--bg);border:3px solid var(--ink);border-radius:.8rem;overflow:hidden}
+#frame{height:100%;display:flex;flex-direction:column;font-size:1.4cqw}
+.pasos{flex:1;min-height:0;overflow:auto;padding:.9em 1.6em}
+#shell:fullscreen{min-height:100vh}#shell:fullscreen #stage{width:min(100vw,calc(100vh*16/9));border:0;border-radius:0}
+h1{font-size:2.2em}h2{font-size:1.65em}
+@media(max-width:700px){
+ .split{grid-template-columns:1fr}.split .art{order:-1}
+ #stage{aspect-ratio:auto;container-type:normal;border:0;border-radius:0;overflow:visible}
+ #frame{height:auto;font-size:1rem;display:block}.pasos{overflow:visible;padding:.5rem 0 5.5rem}
+ .top{flex-wrap:wrap}.top .brand{white-space:normal;flex:1 1 100%}
+ .nav{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:.6rem max(16px,env(safe-area-inset-right,0px)) calc(.6rem + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+ h1{font-size:1.9rem}h2{font-size:1.5rem}}
+</style>
+</head><body>
+<div id="shell"><div id="stage"><div id="frame">
+ <div class="top"><span class="brand">3 BGU · Historia · Revoluciones socialistas</span><div class="dots" id="dots"></div><button class="btn ghost" id="fs" style="padding:.25em .7em;font-size:.8em">Pantalla completa</button></div>
+ <main class="pasos">
+<section class="paso" id="paso-1"><span class="tag">3 BGU · Historia · Clase 3 de 4</span><h2>Revoluciones socialistas del siglo XX</h2><div class="split"><div><p class="lead">Del tren de la revolución rusa a la Larga Marcha en China y a la isla de Cuba. Hoy estudiamos qué pasó en cada una. Trabajas de forma individual.</p><div class="panel hl"><h3>Hoy lograrás</h3><p>Identificar y caracterizar las revoluciones rusa, china, cubana y vietnamita, y compararlas.</p></div></div><figure class="art"><svg viewBox="0 0 400 240" role="img" aria-label="Locomotora de vapor entre nieve con estrella roja" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="s7" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B7C6D8"/><stop offset="1" stop-color="#EEF2F6"/></linearGradient></defs><rect width="400" height="240" fill="url(#s7)"/>
+<g fill="#fff"><circle cx="40" cy="40" r="2.6"/><circle cx="120" cy="70" r="2"/><circle cx="210" cy="30" r="2.6"/><circle cx="300" cy="64" r="2"/><circle cx="360" cy="30" r="2.6"/><circle cx="70" cy="120" r="2"/><circle cx="260" cy="110" r="2.6"/></g>
+<path d="M0 170 Q100 140 200 168 T400 160 V240 H0Z" fill="#fff"/><rect y="192" width="400" height="48" fill="#E3EAF2"/><rect y="204" width="400" height="6" fill="#7A8696"/>
+<g transform="translate(70 118)"><rect x="0" y="30" width="170" height="44" rx="6" fill="#2F3E4E"/><rect x="108" y="6" width="62" height="68" rx="4" fill="#D7373F"/><rect x="118" y="16" width="38" height="24" rx="3" fill="#BFE6FA"/>
+<rect x="12" y="8" width="30" height="26" fill="#2F3E4E"/><rect x="6" y="2" width="42" height="10" rx="3" fill="#1F2A36"/>
+<circle cx="30" cy="84" r="18" fill="#1F2A36" stroke="#E3EAF2" stroke-width="4"/><circle cx="78" cy="88" r="14" fill="#1F2A36" stroke="#E3EAF2" stroke-width="4"/><circle cx="130" cy="84" r="18" fill="#1F2A36" stroke="#E3EAF2" stroke-width="4"/>
+<path d="M170 60 l22 14 v6 h-22Z" fill="#6A7684"/><g transform="translate(70 40)"><path d="M0 -14 L4 -4 L15 -4 L6 3 L9 14 L0 7 L-9 14 L-6 3 L-15 -4 L-4 -4Z" fill="#FFD25A"/></g></g>
+<g fill="#D8DEE6" opacity=".95"><circle cx="108" cy="104" r="12"/><circle cx="92" cy="86" r="15"/><circle cx="70" cy="68" r="12"/></g>
+<rect x="320" y="120" width="3" height="76" fill="#5C3418"/><path d="M323 120 h48 q-10 14 0 28 h-48Z" fill="#D7373F"/>
+</svg><figcaption>Un tren y una bandera roja</figcaption></figure></div></section>
+<section class="paso" id="paso-2"><span class="tag">Para empezar · 3 minutos</span><h2>¿Qué es una revolución?</h2><p class="lead">Un cambio profundo y rápido en quién tiene el poder y cómo se organiza la sociedad.</p><div class="panel" id="pq0"></div><div class="cards"><div class="card"><div class="em">🇷🇺</div><h3>Rusia</h3><p>1917</p></div><div class="card"><div class="em">🇨🇳</div><h3>China</h3><p>1949</p></div><div class="card"><div class="em">🇨🇺</div><h3>Cuba</h3><p>1959</p></div><div class="card"><div class="em">🇻🇳</div><h3>Vietnam</h3><p>1945 y 1975</p></div></div></section>
+<section class="paso" id="paso-3"><span class="tag">Rusia · 1917</span><h2>Del zar a los soviets</h2><div class="split"><div><p>Rusia, con hambre y derrotas en la Primera Guerra Mundial, vio caer al zar en la Revolución de febrero de 1917. En octubre, los bolcheviques liderados por Lenin tomaron el poder con el lema «paz, pan y tierra». Siguió una guerra civil y en 1922 nació la Unión Soviética (URSS).</p><div id="pq3"></div></div><figure class="art"><svg viewBox="0 0 400 240" role="img" aria-label="Locomotora de vapor entre nieve con estrella roja" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="s7" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B7C6D8"/><stop offset="1" stop-color="#EEF2F6"/></linearGradient></defs><rect width="400" height="240" fill="url(#s7)"/>
+<g fill="#fff"><circle cx="40" cy="40" r="2.6"/><circle cx="120" cy="70" r="2"/><circle cx="210" cy="30" r="2.6"/><circle cx="300" cy="64" r="2"/><circle cx="360" cy="30" r="2.6"/><circle cx="70" cy="120" r="2"/><circle cx="260" cy="110" r="2.6"/></g>
+<path d="M0 170 Q100 140 200 168 T400 160 V240 H0Z" fill="#fff"/><rect y="192" width="400" height="48" fill="#E3EAF2"/><rect y="204" width="400" height="6" fill="#7A8696"/>
+<g transform="translate(70 118)"><rect x="0" y="30" width="170" height="44" rx="6" fill="#2F3E4E"/><rect x="108" y="6" width="62" height="68" rx="4" fill="#D7373F"/><rect x="118" y="16" width="38" height="24" rx="3" fill="#BFE6FA"/>
+<rect x="12" y="8" width="30" height="26" fill="#2F3E4E"/><rect x="6" y="2" width="42" height="10" rx="3" fill="#1F2A36"/>
+<circle cx="30" cy="84" r="18" fill="#1F2A36" stroke="#E3EAF2" stroke-width="4"/><circle cx="78" cy="88" r="14" fill="#1F2A36" stroke="#E3EAF2" stroke-width="4"/><circle cx="130" cy="84" r="18" fill="#1F2A36" stroke="#E3EAF2" stroke-width="4"/>
+<path d="M170 60 l22 14 v6 h-22Z" fill="#6A7684"/><g transform="translate(70 40)"><path d="M0 -14 L4 -4 L15 -4 L6 3 L9 14 L0 7 L-9 14 L-6 3 L-15 -4 L-4 -4Z" fill="#FFD25A"/></g></g>
+<g fill="#D8DEE6" opacity=".95"><circle cx="108" cy="104" r="12"/><circle cx="92" cy="86" r="15"/><circle cx="70" cy="68" r="12"/></g>
+<rect x="320" y="120" width="3" height="76" fill="#5C3418"/><path d="M323 120 h48 q-10 14 0 28 h-48Z" fill="#D7373F"/>
+</svg><figcaption>Revolución rusa</figcaption></figure></div></section>
+<section class="paso" id="paso-4"><span class="tag">Rusia · La URSS</span><h2>Planificación, industria y costos</h2><p>Con Stalin se impusieron los planes quinquenales (desde 1928) y la colectivización del campo. La URSS se industrializó rápido y se volvió potencia. Pero hubo hambrunas, represión política y falta de libertades.</p><h3>Reto con el puntero: ¿logro o costo?</h3><div class="sort" id="sort4"></div></section>
+<section class="paso" id="paso-5"><span class="tag">China · 1949</span><h2>La Larga Marcha y la República Popular</h2><div class="split"><div><p>En China, el Partido Comunista de Mao Zedong y el gobierno nacionalista libraron una guerra civil. La Larga Marcha (1934–1935) fue una retirada de miles de kilómetros. El 1 de octubre de 1949 se proclamó la República Popular China. Hubo reforma agraria y planificación; el Gran Salto Adelante (1958–1962) terminó en una hambruna. Desde 1978 se abrió a reformas de mercado.</p><div id="pq5"></div></div><figure class="art"><svg viewBox="0 0 400 240" role="img" aria-label="Montañas, terrazas de arroz y una larga marcha dibujada con línea punteada" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="s8" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFB88C"/><stop offset="1" stop-color="#FFF1C2"/></linearGradient></defs><rect width="400" height="240" fill="url(#s8)"/>
+<circle cx="300" cy="64" r="34" fill="#FF6B4A"/>
+<path d="M0 150 L70 70 L120 120 L190 50 L260 130 L320 90 L400 150Z" fill="#A9B8C9"/><path d="M0 170 L90 100 L150 150 L230 84 L320 160 L400 120 V240 H0Z" fill="#7C9A8A"/>
+<path d="M-20 150 Q200 132 420 150" fill="none" stroke="#7BC47F" stroke-width="10" opacity=".95"/><path d="M-12 164 Q200 146 412 164" fill="none" stroke="#5DAF68" stroke-width="10" opacity=".95"/><path d="M-4 178 Q200 160 404 178" fill="none" stroke="#7BC47F" stroke-width="10" opacity=".95"/><path d="M4 192 Q200 174 396 192" fill="none" stroke="#5DAF68" stroke-width="10" opacity=".95"/>
+<path d="M30 226 Q120 196 190 214 T330 186" fill="none" stroke="#B3262E" stroke-width="4" stroke-dasharray="3 9" stroke-linecap="round"/>
+<g fill="#B3262E"><circle cx="30" cy="226" r="5"/><circle cx="330" cy="186" r="5"/></g>
+<rect x="350" y="150" width="3" height="60" fill="#5C3418"/><path d="M353 150 h40 v26 h-40Z" fill="#D7373F"/><path d="M366 158 l3 7 l7 0 l-6 4 l2 7 l-6 -4 l-6 4 l2 -7 l-6 -4 l7 0Z" fill="#FFD25A"/>
+</svg><figcaption>Montañas, arrozales y la Larga Marcha</figcaption></figure></div></section>
+<section class="paso" id="paso-6"><span class="tag">Cuba · 1959</span><h2>La revolución en el Caribe</h2><div class="split"><div><p>Fidel Castro, Ernesto «Che» Guevara y sus compañeros derrocaron al dictador Fulgencio Batista y entraron a La Habana en enero de 1959. Hubo reforma agraria y nacionalizaciones. Estados Unidos impuso un embargo y Cuba se acercó a la URSS. En 1962 la crisis de los misiles puso al mundo al borde de una guerra nuclear.</p><div id="pq6"></div></div><figure class="art"><svg viewBox="0 0 400 240" role="img" aria-label="Costa caribeña con palmas, caña y un barco" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="s9" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CD0F5"/><stop offset="1" stop-color="#FFE8A8"/></linearGradient></defs><rect width="400" height="240" fill="url(#s9)"/>
+<circle cx="90" cy="70" r="30" fill="#FFC53D"/>
+<rect y="170" width="400" height="30" fill="#1FA3C7"/><path d="M0 178 q25 -8 50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 t50 0 V200 H0Z" fill="#46BEE0"/>
+<path d="M0 200 H400 V240 H0Z" fill="#E8C98A"/>
+<g stroke="#4FA35F" stroke-width="6"><path d="M200 214 l6 -34 M214 214 l6 -40 M228 214 l6 -34 M242 214 l6 -40 M256 214 l6 -34"/></g>
+<g transform="translate(300 210) scale(1.1)"><path d="M0 0 Q6 -40 0 -80" stroke="#7A4A22" stroke-width="7" fill="none"/><g fill="#2F9E52" stroke="#1F6F3A" stroke-width="1.5"><path d="M0 -80 q-40 -10 -52 14 q30 -4 52 -14Z"/><path d="M0 -80 q40 -10 52 14 q-30 -4 -52 -14Z"/><path d="M0 -80 q-22 -34 -48 -30 q22 8 48 30Z"/><path d="M0 -80 q22 -34 48 -30 q-22 8 -48 30Z"/><path d="M0 -80 q-2 -34 4 -44 q8 20 -4 44Z"/></g></g><g transform="translate(350 210) scale(0.8)"><path d="M0 0 Q6 -40 0 -80" stroke="#7A4A22" stroke-width="7" fill="none"/><g fill="#2F9E52" stroke="#1F6F3A" stroke-width="1.5"><path d="M0 -80 q-40 -10 -52 14 q30 -4 52 -14Z"/><path d="M0 -80 q40 -10 52 14 q-30 -4 -52 -14Z"/><path d="M0 -80 q-22 -34 -48 -30 q22 8 48 30Z"/><path d="M0 -80 q22 -34 48 -30 q-22 8 -48 30Z"/><path d="M0 -80 q-2 -34 4 -44 q8 20 -4 44Z"/></g></g><g transform="translate(70 210) scale(0.9)"><path d="M0 0 Q6 -40 0 -80" stroke="#7A4A22" stroke-width="7" fill="none"/><g fill="#2F9E52" stroke="#1F6F3A" stroke-width="1.5"><path d="M0 -80 q-40 -10 -52 14 q30 -4 52 -14Z"/><path d="M0 -80 q40 -10 52 14 q-30 -4 -52 -14Z"/><path d="M0 -80 q-22 -34 -48 -30 q22 8 48 30Z"/><path d="M0 -80 q22 -34 48 -30 q-22 8 -48 30Z"/><path d="M0 -80 q-2 -34 4 -44 q8 20 -4 44Z"/></g></g>
+<g transform="translate(150 196)"><path d="M0 0 H60 L52 14 H8Z" fill="#8A4B2A"/><rect x="29" y="-30" width="3" height="30" fill="#5C3418"/><path d="M32 -30 l22 18 h-22Z" fill="#fff"/></g>
+</svg><figcaption>Costa de Cuba</figcaption></figure></div></section>
+<section class="paso" id="paso-7"><span class="tag">Vietnam · 1945 a 1975</span><h2>Independencia y guerra</h2><div class="split"><div><p>Ho Chi Minh proclamó la independencia en 1945 frente al dominio colonial francés. Tras la derrota francesa (1954) el país se dividió. La guerra con Estados Unidos terminó en 1975 con la reunificación bajo un gobierno socialista. Fue una guerra por poderes de la Guerra Fría.</p><div id="pq7"></div></div><figure class="art"><svg viewBox="0 0 120 90" role="img" aria-label="Bandera roja" xmlns="http://www.w3.org/2000/svg"><rect width="120" height="90" rx="10" fill="#FDE3E3"/><rect x="30" y="14" width="5" height="64" fill="#5C3418"/><path d="M35 14 h54 q-12 16 0 32 h-54Z" fill="#D7373F"/><g transform="translate(60 31)" fill="#FFD25A"><circle r="7"/><circle r="3" fill="#D7373F"/></g></svg><figcaption>Bandera roja</figcaption></figure></div></section>
+<section class="paso" id="paso-8"><span class="tag">Comparamos · Reto</span><h2>¿Qué revolución es?</h2><div class="scroll"><table><tr><th></th><th>Rusia</th><th>China</th><th>Cuba</th></tr><tr><th>Año</th><td>1917</td><td>1949</td><td>1959</td></tr><tr><th>Líder</th><td>Lenin</td><td>Mao Zedong</td><td>Fidel Castro</td></tr><tr><th>Contexto</th><td>Guerra y crisis del zar</td><td>Guerra civil</td><td>Dictadura de Batista</td></tr></table></div><h3>Reto con el puntero</h3><div class="sort" id="sort8"></div></section>
+<section class="paso" id="paso-9"><span class="tag">Reto · Línea del tiempo</span><h2>Ordena los hechos</h2><p>Pulsa los hechos del más antiguo al más reciente.</p><div class="ord" id="ord"></div></section>
+<section class="paso" id="paso-10"><span class="tag">Cierre · Individual</span><h2>Mirada crítica</h2><div class="panel warn"><h3>Dos miradas</h3><p>Estas revoluciones lograron cambios sociales en educación, salud y tierras, pero muchos regímenes limitaron libertades políticas y de expresión. Evaluar con evidencia ayuda a no idealizar ni demonizar.</p></div><div class="panel hl"><h3>En tu cuaderno</h3><p>Escribe: una semejanza y una diferencia entre dos de las revoluciones, y un logro y un problema de una de ellas.</p></div><div class="panel"><h3>Semáforo: ¿cómo voy?</h3><div id="sem"></div></div></section>
+<section class="paso" id="paso-11"><span class="tag">Quiz final · Individual</span><h2><span id="qt">Quiz</span></h2><p class="note" id="qn"></p><div class="opts" id="qo"></div><div class="panel fb" id="qe"></div><div class="row"><button class="btn" id="qnext">Siguiente pregunta</button><span class="score" id="qs"></span></div></section>
+ </main>
+<div class="nav"><div class="in"><button class="btn ghost" id="prev">← Anterior</button><span class="cnt" id="cnt"></span><button class="btn" id="next">Siguiente →</button></div></div>
+</div></div></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pasos=$$('.paso');let cur=0;const seen=new Set();const dots=$('#dots');
+pasos.forEach((_,i)=>{const b=document.createElement('button');b.textContent=i+1;b.setAttribute('aria-label','Paso '+(i+1));b.onclick=()=>go(i);dots.appendChild(b)});
+function go(n){cur=Math.max(0,Math.min(pasos.length-1,n));seen.add(cur);
+ pasos.forEach((p,i)=>p.classList.toggle('on',i===cur));
+ [...dots.children].forEach((d,i)=>{d.classList.toggle('on',i===cur);d.classList.toggle('done',i!==cur&&seen.has(i))});
+ $('#prev').disabled=cur===0;$('#next').disabled=cur===pasos.length-1;$('#cnt').textContent='Paso '+(cur+1)+' de '+pasos.length;
+ try{history.replaceState(null,'','#paso-'+(cur+1))}catch(e){}
+ window.scrollTo(0,0);$('.pasos').scrollTop=0}
+$('#prev').onclick=()=>go(cur-1);$('#next').onclick=()=>go(cur+1);
+$('#fs').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await $('#shell').requestFullscreen()}catch(e){$('#fs').textContent='No disponible aquí'}};
+document.addEventListener('fullscreenchange',()=>{$('#fs').textContent=document.fullscreenElement?'Salir':'Pantalla completa'});
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown')go(cur+1);if(e.key==='ArrowLeft'||e.key==='PageUp')go(cur-1)});
+// clasificar (toque o arrastre)
+function sortGame(host,buckets,items){
+  const H=$(host);let sel=null;const place={};
+  H.innerHTML='<div class="pool" data-b="-1"></div><div class="buckets"></div><div class="row" style="margin-top:.8rem"><button class="btn" data-a="chk">Revisar</button><button class="btn ghost" data-a="rst">Reiniciar</button></div><div class="score"></div>';
+  const pool=H.querySelector('.pool'),bk=H.querySelector('.buckets'),sc=H.querySelector('.score');
+  const els=items.map((it,i)=>{const b=document.createElement('button');b.className='item';b.textContent=it[0];b.draggable=true;
+    b.onclick=e=>{e.stopPropagation();sel=(sel===i?null:i);paint()};
+    b.ondragstart=e=>{e.dataTransfer.setData('text/plain',String(i));sel=i;paint()};return b});
+  const bEls=buckets.map((t,j)=>{const d=document.createElement('div');d.className='bucket';d.innerHTML=`<h3>${t}</h3><div class="in"></div>`;
+    d.onclick=()=>{if(sel!==null){place[sel]=j;sel=null;sc.textContent='';paint()}};
+    d.ondragover=e=>{e.preventDefault();d.classList.add('over')};d.ondragleave=()=>d.classList.remove('over');
+    d.ondrop=e=>{e.preventDefault();d.classList.remove('over');const i=+e.dataTransfer.getData('text/plain');place[i]=j;sel=null;sc.textContent='';paint()};
+    bk.appendChild(d);return d});
+  pool.onclick=()=>{if(sel!==null){delete place[sel];sel=null;paint()}};
+  pool.ondragover=e=>e.preventDefault();
+  pool.ondrop=e=>{e.preventDefault();delete place[+e.dataTransfer.getData('text/plain')];sel=null;paint()};
+  function paint(){
+    pool.innerHTML='';bEls.forEach(d=>{d.querySelector('.in').innerHTML='';d.classList.toggle('target',sel!==null)});
+    els.forEach((b,i)=>{b.classList.toggle('sel',sel===i);b.classList.remove('ok','bad');const old=b.querySelector('.why');if(old)old.remove();
+      (place[i]===undefined?pool:bEls[place[i]].querySelector('.in')).appendChild(b)});
+    if(!els.some((_,i)=>place[i]===undefined))pool.innerHTML='<span class="note">Todas las frases están ubicadas. Pulsa Revisar.</span>';}
+  H.querySelector('[data-a=chk]').onclick=()=>{let ok=0;
+    els.forEach((b,i)=>{const good=place[i]===items[i][1];if(good)ok++;b.classList.remove('ok','bad');b.classList.add(place[i]===undefined?'bad':(good?'ok':'bad'));
+      const old=b.querySelector('.why');if(old)old.remove();const w=document.createElement('span');w.className='why';w.textContent=(good?'Correcto. ':'Mira otra vez. ')+items[i][2];b.appendChild(w)});
+    sc.textContent=`Aciertos: ${ok} de ${items.length}`};
+  H.querySelector('[data-a=rst]').onclick=()=>{Object.keys(place).forEach(k=>delete place[k]);sel=null;sc.textContent='';paint()};
+  paint();
+}
+
+function pqList(host,arr){arr.forEach(q=>{const w=document.createElement('div');w.className='panel';
+ w.innerHTML=`<div class="rv"><p><b>${q[0]}</b></p><button class="btn ghost">Mostrar respuesta</button></div><div class="ans">${q[1]}</div>`;
+ const b=w.querySelector('button');b.onclick=()=>{w.classList.toggle('show');b.textContent=w.classList.contains('show')?'Ocultar':'Mostrar respuesta'};$(host).appendChild(w)})}
+function orderGame(host,items){const H0=$(host);H0.innerHTML='<div class="pool"></div><div class="done"></div><div class="score"></div><div class="row" style="margin-top:.6rem"><button class="btn ghost">Reiniciar</button></div>';
+ const pool=H0.querySelector('.pool'),dn=H0.querySelector('.done'),sc=H0.querySelector('.score');let nxt=0,err=0;
+ function start(){nxt=0;err=0;pool.innerHTML='';dn.innerHTML='';sc.textContent='Hechos ordenados: 0 de '+items.length;
+  shuffle(items.map((x,i)=>i)).forEach(i=>{const b=document.createElement('button');b.className='item';b.textContent=items[i][0];
+   b.onclick=()=>{if(i===nxt){b.remove();const d=document.createElement('div');d.innerHTML=`<b>${items[i][1]}</b><span>${items[i][0]}. ${items[i][2]}</span>`;dn.appendChild(d);nxt++;
+    sc.textContent=nxt===items.length?`¡Línea completa! Errores: ${err}.`:`Hechos ordenados: ${nxt} de ${items.length}`}
+   else{err++;b.classList.add('no');setTimeout(()=>b.classList.remove('no'),700)}};pool.appendChild(b)})}
+ H0.querySelector('button.ghost').onclick=start;start()}
+function semaforo(host,arr){arr.forEach(t=>{const w=document.createElement('div');w.className='row';w.style.marginBlock='.3rem';w.innerHTML=`<b style="flex:1 1 14em">${t}</b>`;
+ [['v','Lo entiendo'],['a','Dudas'],['r','Repasar']].forEach(([c,l])=>{const b=document.createElement('button');b.className='chip '+c;b.textContent=l;
+  b.onclick=()=>{[...w.querySelectorAll('.chip')].forEach(x=>x.classList.remove('sel'));b.classList.add('sel')};w.appendChild(b)});$(host).appendChild(w)})}
+function quiz(Q,msg){let qi=0,sc=0,ans=false;
+ function loadQ(){const q=Q[qi];ans=false;$('#qn').textContent=`Pregunta ${qi+1} de ${Q.length}`;$('#qt').textContent=q[0];
+  const o=$('#qo');o.innerHTML='';shuffle(q[1].map((t,i)=>[t,i])).forEach(([t,i],k)=>{const b=document.createElement('button');b.className='opt';b.textContent='abcd'[k]+') '+t;b.dataset.i=i;
+   b.onclick=()=>{if(ans)return;ans=true;if(i===q[2])sc++;$('#qs').textContent='Aciertos: '+sc;
+    [...o.children].forEach(c=>c.classList.add(+c.dataset.i===q[2]?'right':(c===b?'wrong':'x')));
+    $('#qe').innerHTML='<h3>'+(i===q[2]?'Correcto':'Incorrecto')+'</h3><p>'+q[1][q[2]]+'. '+q[3]+'</p>';$('#qe').classList.add('show')};o.appendChild(b)});
+  $('#qe').classList.remove('show');$('#qnext').textContent=qi===Q.length-1?'Ver resultado':'Siguiente pregunta'}
+ $('#qnext').onclick=()=>{if(!ans&&qi<Q.length){}if(qi<Q.length-1){qi++;loadQ()}else{
+  $('#qt').textContent=`Resultado: ${sc} de ${Q.length}`;$('#qn').textContent='';$('#qo').innerHTML='';
+  $('#qe').innerHTML='<h3>Para seguir</h3><p>'+msg+'</p>';$('#qe').classList.add('show');
+  $('#qnext').textContent='Reiniciar quiz';$('#qnext').onclick=()=>location.reload()}};
+ loadQ()}
+
+
+pqList('#pq0',[['En tu cuaderno: nombra un cambio que consideres «revolucionario» en tu vida o en tu país.','Los cambios profundos suelen alterar quién decide y cómo se reparten los recursos.']]);
+pqList('#pq3',[['¿Qué significó «paz, pan y tierra»?','Salir de la guerra, resolver el hambre y repartir la tierra: las demandas de la población.'],['¿Qué fue la URSS?','La Unión de Repúblicas Socialistas Soviéticas, creada en 1922 y disuelta en 1991.']]);
+sortGame('#sort4',['Logro','Costo'],[
+ ['Industrialización rápida',0,'La URSS se volvió potencia industrial.'],
+ ['Hambrunas durante la colectivización',1,'Fue un costo humano grave.'],
+ ['Alfabetización y educación masivas',0,'Fue un logro social.'],
+ ['Represión política y partido único',1,'Limitó las libertades.'],
+ ['Pleno empleo declarado',0,'Se planteó como logro del sistema.'],
+ ['Falta de libertad de prensa',1,'Fue una crítica central.']]);
+pqList('#pq5',[['¿Qué fue la Larga Marcha?','Una retirada de los comunistas chinos de unos 9000 km (1934–1935) que fortaleció el liderazgo de Mao.'],['¿Qué cambió en 1978?','China empezó reformas de mercado y apertura al comercio mundial.']]);
+pqList('#pq6',[['¿Por qué Cuba se acercó a la URSS?','Por el embargo de Estados Unidos y la necesidad de aliados y mercados.'],['¿Qué fue la crisis de los misiles (1962)?','Un enfrentamiento entre EE. UU. y la URSS por misiles nucleares soviéticos en Cuba.']]);
+pqList('#pq7',[['¿Por qué se dice que fue una guerra por poderes?','Porque cada superpotencia apoyó a un bando sin enfrentarse directamente.']]);
+sortGame('#sort8',['Rusia','China','Cuba'],[
+ ['Bolcheviques y Lenin toman el poder',0,'Revolución de octubre de 1917.'],
+ ['Larga Marcha y República Popular en 1949',1,'Es la revolución de Mao.'],
+ ['Se derroca a Batista y se entra a La Habana',2,'Revolución de 1959.'],
+ ['Planes quinquenales y URSS',0,'Etapa soviética.'],
+ ['Gran Salto Adelante',1,'Política de 1958 a 1962.'],
+ ['Crisis de los misiles de 1962',2,'Ocurrió en Cuba.']]);
+orderGame('#ord',[['Revolución rusa de octubre','1917','Los bolcheviques toman el poder.'],['Se funda la URSS','1922','Une varias repúblicas soviéticas.'],['Larga Marcha','1934','Retirada de los comunistas chinos.'],['Proclamación de la República Popular China','1949','Triunfo de Mao.'],['Triunfo de la Revolución Cubana','1959','Cae Batista.'],['Fin de la guerra de Vietnam y reunificación','1975','Gobierno socialista en todo el país.'],['Reformas de mercado en China','1978','Apertura económica.'],['Disolución de la URSS','1991','Fin de la Guerra Fría.']]);
+semaforo('#sem',['Revolución rusa','La URSS','Revolución china','Revolución cubana','Vietnam','Semejanzas y diferencias']);
+quiz([
+ ['El líder de los bolcheviques en 1917 fue…',['Lenin','Mao','Castro','Ho Chi Minh'],0,'Tomó el poder en octubre.'],
+ ['La URSS se creó en…',['1922','1949','1959','1991'],0,'Surgió tras la guerra civil rusa.'],
+ ['La Larga Marcha fue…',['Una retirada de los comunistas chinos','Una huelga en Guayaquil','Un tratado','Una guerra en Cuba'],0,'Ocurrió en 1934–1935.'],
+ ['La República Popular China se proclamó en…',['1949','1917','1978','1962'],0,'El 1 de octubre.'],
+ ['La revolución cubana derrocó a…',['Batista','Stalin','Nicolás II','Chiang Kai-shek'],0,'Fue en 1959.'],
+ ['¿Qué ocurrió en China desde 1978?',['Reformas de mercado y apertura','El regreso del imperio','La disolución del país','La colonización'],0,'Con Deng Xiaoping se abrió la economía.'],
+ ['La guerra de Vietnam se considera una guerra por poderes porque…',['Cada superpotencia apoyó un bando','Solo participó Europa','No hubo armas','Fue una huelga'],0,'EE. UU. apoyó a un lado y la URSS y China a otro.'],
+ ['Una crítica frecuente a los regímenes socialistas del siglo XX fue…',['Limitaron libertades políticas y de expresión','Que no tuvieran Estado','Que eliminaran la escuela','Que no tuvieran líderes'],0,'Es una crítica central que convive con logros sociales.']],
+ 'Repasa en tu cuaderno los temas en rojo o amarillo. En la próxima clase hacemos un balance y comparamos modelos.');
+
+const hh=(location.hash.match(/^#paso-(\d+)$/)||[])[1];go(hh?Math.min(+hh,pasos.length)-1:0);
+</script></body></html>
